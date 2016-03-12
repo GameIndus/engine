@@ -39,6 +39,16 @@ SoundsManager.prototype = {
 			that.loadSound(soundsObj);
 		}
 	},
+	loadSoundFromBase64: function(name, data){
+		var that  = this;
+		var sound = new Sound().fromBase64(data);
+
+		sound.audio.onloadeddata = function(){
+			that.soundsLoaded++;
+			sound.setName(name);
+			that.registerSound(sound);
+		}
+	},
 
 	getSound: function(name){
 		for(var i=0;i<this.sounds.length;i++){

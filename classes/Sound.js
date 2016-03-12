@@ -15,6 +15,11 @@ function Sound(path){
 
 Sound.prototype = {
 
+	fromBase64: function(data){
+		this.audio.src = data;
+		return this;
+	},
+
 	setName: function(name){
 		this.name = name;
 	},
