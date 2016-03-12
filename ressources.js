@@ -71,6 +71,34 @@ Ressources.prototype = {
 			}
 		}
 	},
+	loadRessourceFromBase64: function(name, data){
+		var that = this;
+		var obj =  {type: "img", src: undefined};
+
+		this.ressourcesNum++;
+
+		var img = new Image();
+		img.src = data;
+		img.onload = function(){
+			obj.data = this;
+			that.ressources[name] = obj;
+			that.ressourcesLoaded++;
+
+			if(that.ressourcesLoaded>=that.ressourcesNum){
+				if(!that.eventDispatched){
+					that.eventDispatched = true;
+					Game.events.dispatch("loadedRessources", {ressources: that.ressources, num: that.ressourcesNum});
+				}
+				Game.events.dispatch("asyncLoadedRessources", {ressources: that.ressources, num: that.ressourcesNum});
+			}
+		}
+
+		img.onerror = function(){
+			Game.events.dispatch("errorLoadingRessource", {ressource: this.src});
+		}
+
+		this.data[name] = obj;
+	},
 
 	getRessource: function(name) {
 		if(this.ressources[name]!=null)
