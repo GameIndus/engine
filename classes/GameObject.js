@@ -37,49 +37,26 @@ function GameObject(size){
 
 GameObject.prototype = {
 
-	/**
-	 * Getting ID of the gameobject
-	 * @return {Integer} ID of the gameobject
-	 */
-	getID: function(){
-		return this.ID;
-	},
-
-
-	getPosition: function(){
-		return this.position;
-	},
-	/**
-	 * Setting the position of a gameobject
-	 * @param {Integer} x The X position
-	 * @param {Integer} y The Y position
-	 */
-	setPosition: function(x, y){
-		this.position.set(x, y);
-
-		if(this.renderer != null && this.renderer.objPos != null) this.renderer.objPos = this.position;
-	},
-
 	getCenter: function(){
 		return this.renderer.getCenter();
 	},
-
-	/**
-	 * Getting the size of the gameobject
-	 * @return {Object} An object with thr size (x & y)
-	 */
+	getID: function(){
+		return this.ID;
+	},
+	getPosition: function(){
+		return this.position;
+	},
+	getRenderer: function(){
+		if(this.renderer == null)
+			console.error("Renderer is not defined for gameobject #"+this.ID);
+		return this.renderer;
+	},
 	getSize: function(){
 		var sizeW = this.size[0] * this.scale;
 		var sizeH = this.size[1] * this.scale;
 
 		return {w: sizeW, h: sizeH};
 	},
-
-	setSize: function(w, h){
-		this.size = [w, h];
-		if(this.renderer!=null) this.renderer.size = [w, h];
-	},
-
 	getTilePositions: function(border){
 		var scene = Game.getCurrentScene();
 		if(scene.getTileMap()==null||scene.getTileMap().getFirstTile()==null) return null;
@@ -100,48 +77,19 @@ GameObject.prototype = {
 
 		return {x: x, y: y};
 	},
-
-	/**
-	 * Define a renderer for the gameobject
-	 * @param {Renderer} renderer The renderer instance
-	 */
-	setRenderer: function(renderer){
-		this.renderer = renderer;
-		this.renderer.setGameObject(this);
-	},
-
-	/**
-	 * Getting the gameobject renderer
-	 * @return {Renderer} The renderer (null is not exists)
-	 */
-	getRenderer: function(){
-		if(this.renderer == null)
-			console.error("Renderer is not defined for gameobject #"+this.ID);
-		return this.renderer;
-	},
-
-	/**
-	 * Setting a physic engine
-	 * @param {PhysicEngine} physicEngine The physicEngine
-	 */
-	setPhysicEngine: function(physicEngine){
-		physicEngine.gameobject = this;
-		this.physicEngine = physicEngine;
-	},
-
-	/**
-	 * Setting the gameobject velocity
-	 * @param {Vector2} vector A vector2 object
-	 */
-	setVelocity: function(vector){
-		this.velocity = vector;
+	getVelocity: function(){
+		return this.velocity;
 	},
 
 
-	/**
-	 * Setting the layer of the gameobject
-	 * @param {Integer} layer The layer number (0 to 9)
-	 */
+	setBehavior: function(behavior){
+		this.behavior = behavior;
+		
+		if(this.behavior != null) this.behavior.run(this);
+	},
+	setJailed: function(jailed){
+		this.jailed = jailed;
+	},
 	setLayer: function(layer){
 		if(layer > Config.layers - 1){
 			console.error("Layer "+layer+" is too high ! Max: "+(Config.layers-1));
@@ -149,51 +97,40 @@ GameObject.prototype = {
 		}
 		this.layer = layer;
 	},
-
-	/**
-	 * Setting the scale
-	 * @param {Float} scale The scale (0 to 10)
-	 */
-	setScale: function(scale){
-		this.scale = scale;
-	},
-
-	/**
-	 * Setting the rotation
-	 * @param {Float} rotation The rotation (in degree)
-	 */
-	rotate: function(angle){
-		this.angle = angle;
-	},
-
-	/**
-	 * Setting the life of the gameobject
-	 * @param {Integer} life Life in ms
-	 */
 	setLife: function(life){
 		this.life = life;
 	},
-
-	// Jailed
-	setJailed: function(jailed){
-		this.jailed = jailed;
-	},
-
-	/**
-	 * Setting the gameobject opacity
-	 * @param {Float} opacity Gameobject opacity (0 to 1)
-	 */
 	setOpacity: function(opacity){
 		this.opacity = opacity;
 	},
-
-	setBehavior: function(behavior){
-		this.behavior = behavior;
-		
-		if(this.behavior != null) this.behavior.run(this);
+	setPhysicEngine: function(physicEngine){
+		physicEngine.gameobject = this;
+		this.physicEngine = physicEngine;
 	},
+	setPosition: function(x, y){
+		this.position.set(x, y);
 
+		if(this.renderer != null && this.renderer.objPos != null) this.renderer.objPos = this.position;
+	},
+	setRenderer: function(renderer){
+		this.renderer = renderer;
+		this.renderer.setGameObject(this);
+	},
+	setScale: function(scale){
+		this.scale = scale;
+	},
+	setSize: function(w, h){
+		this.size = [w, h];
+		if(this.renderer!=null) this.renderer.size = [w, h];
+	},
+	setVelocity: function(vector){
+		this.velocity = vector;
+	},
+	
 
+	rotate: function(angle){
+		this.angle = angle;
+	},
 
 	// Animations
 	setAnimated: function(bool){
