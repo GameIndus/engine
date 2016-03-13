@@ -65,7 +65,7 @@ GameObject.prototype = {
 
 		var x = Math.floor((this.position.getX()+this.size[0]*this.scale/2)/ft.objSize[0]);
 		var y = Math.floor((this.position.getY()+this.size[1]*this.scale/2)/ft.objSize[1]);	
-
+		
 		if(border !== undefined && border == "top")
 			y = Math.floor(this.position.getY() / ft.objSize[1]);
 		else if(border !== undefined && border == "right")
@@ -74,6 +74,19 @@ GameObject.prototype = {
 			y = Math.floor((this.position.getY() + this.size[1]*this.scale) / ft.objSize[1]);
 		else if(border !== undefined && border == "left")
 			x = Math.floor(this.position.getX() / ft.objSize[0]);
+		else if(border !== undefined && (border == "topleft" || border == "lefttop")){
+			x = Math.floor(this.position.getX() / ft.objSize[0]);
+			y = Math.floor(this.position.getY() / ft.objSize[1]);
+		}else if(border !== undefined && (border == "topright" || border == "righttop")){
+			x = Math.floor((this.position.getX() + this.size[0]*this.scale) / ft.objSize[0]);
+			y = Math.floor(this.position.getY() / ft.objSize[1]);
+		}else if(border !== undefined && (border == "bottomright" || border == "rightbottom")){
+			x = Math.floor((this.position.getX() + this.size[0]*this.scale) / ft.objSize[0]);
+			y = Math.floor((this.position.getY() + this.size[1]*this.scale) / ft.objSize[1]);
+		}else if(border !== undefined && (border == "bottomleft" || border == "leftbottom")){
+			x = Math.floor(this.position.getX() / ft.objSize[0]);
+			y = Math.floor((this.position.getY() + this.size[1]*this.scale) / ft.objSize[1]);
+		}
 
 		return {x: x, y: y};
 	},
@@ -226,43 +239,43 @@ GameObject.prototype = {
 		if(this.life == 0) scene.removeGameObject(this);
 	},
 
-	fixPosition: function(){
-		var scene  = Game.getCurrentScene();
+	// fixPosition: function(){
+	// 	var scene  = Game.getCurrentScene();
 
-		if(scene.getTileMap()!==null){
+	// 	if(scene.getTileMap()!==null){
 
-			var pos    = this.getTilePositions();
-			if(pos==null) return false;
-			var bottomTile = scene.getTileMap().getTileAt(pos.x, pos.y+1);
-			if(bottomTile==null) return false;
+	// 		var pos    = this.getTilePositions();
+	// 		if(pos==null) return false;
+	// 		var bottomTile = scene.getTileMap().getTileAt(pos.x, pos.y+1);
+	// 		if(bottomTile==null) return false;
 
-			var y      = this.getTopBorder().y;
-			var fixedY = (bottomTile.objPos.y * bottomTile.objSize[1]) - (this.size[1] * this.scale);
+	// 		var y      = this.getTopBorder().y;
+	// 		var fixedY = (bottomTile.objPos.y * bottomTile.objSize[1]) - (this.size[1] * this.scale);
 
-			this.position.setY(fixedY - 0.5);
+	// 		this.position.setY(fixedY - 0.5);
 
-		}else{
+	// 	}else{
 
-			var scene = Game.getCurrentScene();
-			var pos   = this.getCenter();
-			var sides = Game.collisionsManager.getSidesCollided(this);
+	// 		var scene = Game.getCurrentScene();
+	// 		var pos   = this.getCenter();
+	// 		var sides = Game.collisionsManager.getSidesCollided(this);
 
-			for(var key in sides){
-				var side = sides[key];
+	// 		for(var key in sides){
+	// 			var side = sides[key];
 
-				if(side=="bottom"){
-					var bottomObj = scene.getObjectAt(pos.x, this.getBottomBorder().y+1, undefined, this);
-					if(bottomObj==null) continue ;
-					this.position.setY(bottomObj.getCenter().y - bottomObj.size[1] / 2 - this.size[1]);
-				}else if(side=="top"){
-					var topObj = scene.getObjectAt(pos.x, this.getTopBorder().y-1, undefined, this);
-					if(topObj==null) continue ;
-					this.position.setY(topObj.getCenter().y + topObj.size[1] / 2);
-				}
-			}
+	// 			if(side=="bottom"){
+	// 				var bottomObj = scene.getObjectAt(pos.x, this.getBottomBorder().y+1, undefined, this);
+	// 				if(bottomObj==null) continue ;
+	// 				this.position.setY(bottomObj.getCenter().y - bottomObj.size[1] / 2 - this.size[1]);
+	// 			}else if(side=="top"){
+	// 				var topObj = scene.getObjectAt(pos.x, this.getTopBorder().y-1, undefined, this);
+	// 				if(topObj==null) continue ;
+	// 				this.position.setY(topObj.getCenter().y + topObj.size[1] / 2);
+	// 			}
+	// 		}
 
-		}
-	},
+	// 	}
+	// },
 
 
 	// Custom events (only gameobject)

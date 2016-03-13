@@ -49,7 +49,7 @@ CollisionsManager.prototype = {
 				var tileAt   = actor.getTilePositions();
    			 	var tileSize = tilemap.getFirstTile().size;
     
-   				actor.setPosition(tileAt.x * tileSize[0], tileAt.y * tileSize[1]);
+   				// actor.setPosition(tileAt.x * tileSize[0], tileAt.y * tileSize[1]);
 				return true;
 			}
 		}

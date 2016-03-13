@@ -22,8 +22,6 @@ Box2DPhysicEngine.prototype = {
 	setGameObject: function(gameobject){
 		this.gameobject = gameobject;
 		this.collideBounds = new Rectangle(0, 0, Game.getSize().getWidth(), Game.getSize().getHeight());
-
-		console.log(this.collideBounds);
 	},
 
 	update: function(){
@@ -34,58 +32,68 @@ Box2DPhysicEngine.prototype = {
 			this.gameobject.getVelocity().addY(this.mass * this.gravity);
 		}
 
-		if(this.mass > 0) console.log(this.gameobject.getVelocity().getY());
-
 		// Friction
 		this.gameobject.getVelocity().setX(this.gameobject.getVelocity().getX() - this.gameobject.getVelocity().getX() * this.friction);
 	},
 
 	checkForCollisions: function(){
+		function checkRectangleCollision(gameobject, rectangle, checkCollision, bounce, elasticity){
+			if(checkCollision.up && gameobject.getPosition().getY() <= rectangle.getTop()){
+				if(bounce){
+					if(gameobject.getVelocity().getY() < 0)
+						gameobject.getVelocity().setY(-gameobject.getVelocity().getY() * elasticity); 
+				}else{
+					gameobject.getVelocity().setY(0);
+					gameobject.getPosition().setY(rectangle.getTop());
+				}
+
+				return true;
+			}
+			if(checkCollision.right && gameobject.getPosition().getX() + gameobject.getSize().w >= rectangle.getRight()){
+				if(bounce){
+					if(gameobject.getVelocity().getX() > 0) 
+						gameobject.getVelocity().setX(-gameobject.getVelocity().getX() * elasticity);
+				}else{
+					gameobject.getVelocity().setX(0);
+					gameobject.getPosition().setX(rectangle.getRight() - gameobject.getSize().w);
+				}
+
+				return true;
+			}
+			if(checkCollision.down && gameobject.getPosition().getY() + gameobject.getSize().h >= rectangle.getBottom()){
+				if(bounce){
+					if(gameobject.getVelocity().getY() > 0) 
+						gameobject.getVelocity().setY(-gameobject.getVelocity().getY() * elasticity);
+				}else{
+					gameobject.getVelocity().setY(0);
+					gameobject.getPosition().setY(rectangle.getBottom() - gameobject.getSize().h);
+				}
+
+				return true;
+			}
+			if(checkCollision.left && gameobject.getPosition().getX() <= rectangle.getLeft()){
+				if(bounce){
+					if(gameobject.getVelocity().getX() < 0) 
+						gameobject.getVelocity().setX(-gameobject.getVelocity().getX() * elasticity);
+				}else{
+					gameobject.getVelocity().setX(0);
+					gameobject.getPosition().setX(rectangle.getLeft());
+				}
+
+				return true;
+			}
+		}
 		// Check world collisions
-		if(this.checkCollision.up && this.gameobject.getPosition().getY() <= this.collideBounds.getTop()){
-			if(this.bounce){
-				if(this.gameobject.getVelocity().getY() < 0)
-					this.gameobject.getVelocity().setY(-this.gameobject.getVelocity().getY() * this.elasticity); 
-			}else{
-				this.gameobject.getVelocity().setY(0);
-				this.gameobject.getPosition().setY(this.collideBounds.getTop());
-			}
+		if(checkRectangleCollision(this.gameobject, this.collideBounds, this.checkCollision, this.bounce, this.elasticity)) return true;
 
-			return true;
-		}
-		if(this.checkCollision.right && this.gameobject.getPosition().getX() + this.gameobject.getSize().w >= this.collideBounds.getRight()){
-			if(this.bounce){
-				if(this.gameobject.getVelocity().getX() > 0) 
-					this.gameobject.getVelocity().setX(-this.gameobject.getVelocity().getX() * this.elasticity);
-			}else{
-				this.gameobject.getVelocity().setX(0);
-				this.gameobject.getPosition().setX(this.collideBounds.getRight() - this.gameobject.getSize().w);
-			}
+		// Check others objects collisions
+		// for(var i = 0; i < Game.getCurrentScene().gameobjects.length; i++){
+		// 	var go = Game.getCurrentScene().gameobjects[i];
+		// 	if(go.physicEngine == null) continue;
+		// 	if(go.getID() == this.gameobject.getID()) continue;
 
-			return true;
-		}
-		if(this.checkCollision.down && this.gameobject.getPosition().getY() + this.gameobject.getSize().h >= this.collideBounds.getBottom()){
-			if(this.bounce){
-				if(this.gameobject.getVelocity().getY() > 0) 
-					this.gameobject.getVelocity().setY(-this.gameobject.getVelocity().getY() * this.elasticity);
-			}else{
-				this.gameobject.getVelocity().setY(0);
-				this.gameobject.getPosition().setY(this.collideBounds.getBottom() - this.gameobject.getSize().h);
-			}
 
-			return true;
-		}
-		if(this.checkCollision.left && this.gameobject.getPosition().getX() <= this.collideBounds.getLeft()){
-			if(this.bounce){
-				if(this.gameobject.getVelocity().getX() < 0) 
-					this.gameobject.getVelocity().setX(-this.gameobject.getVelocity().getX() * this.elasticity);
-			}else{
-				this.gameobject.getVelocity().setX(0);
-				this.gameobject.getPosition().setX(this.collideBounds.getLeft());
-			}
-
-			return true;
-		}
+		// }
 
 		return false;
 	},

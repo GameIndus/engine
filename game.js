@@ -191,6 +191,21 @@ function loop(){
 		if(Game.loader.isLoaded)
 			Game.spectrometer.render();
 
+		if(window.lastTest){
+			var lt = window.lastTest;
+
+			var ctx = Game.getContext();
+			ctx.fillStyle = "rgba(102,51,153,0.5)";
+
+			for(var i = 0; i < lt.x.length; i++){
+				for(var j = 0; j < lt.y.length; j++){
+					var couple = [lt.x[i], lt.y[j]];
+					
+					ctx.fillRect(couple[0] * lt.cell[0], couple[1] * lt.cell[1], lt.cell[0], lt.cell[1]);
+				}
+			}
+		}
+
 		lastTime = now;
 	}
 	
