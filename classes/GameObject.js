@@ -104,7 +104,7 @@ GameObject.prototype = {
 		this.opacity = opacity;
 	},
 	setPhysicEngine: function(physicEngine){
-		physicEngine.gameobject = this;
+		physicEngine.setGameObject(this);
 		this.physicEngine = physicEngine;
 	},
 	setPosition: function(x, y){
@@ -191,8 +191,8 @@ GameObject.prototype = {
 		if(this.behavior != null)
 			this.behavior.loop(this);
 
-		this.position.addX(this.velocity.getX() * Game.delta * 2);
-		this.position.addY(this.velocity.getY() * Game.delta * 2);
+		this.position.addX(this.velocity.getX());
+		this.position.addY(this.velocity.getY());
 
 		// Check if the gameobject is hidden (or not)
 		if(this.events["hidden"].length > 0){
