@@ -98,7 +98,7 @@ RpgPhysicEngine.prototype = {
 
 		}
 
-		window.lastTest = {x: xArr, y: yArr, cell: cell};
+		if(Game.debugMode) window.debugRpgCollisions = {x: xArr, y: yArr, cell: cell};
 		this.lastSidesCollided = sides;
 	},
 

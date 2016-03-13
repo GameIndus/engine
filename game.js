@@ -191,8 +191,8 @@ function loop(){
 		if(Game.loader.isLoaded)
 			Game.spectrometer.render();
 
-		if(window.lastTest){
-			var lt = window.lastTest;
+		if(Game.debugMode){
+			var lt = window.debugRpgCollisions;
 
 			var ctx = Game.getContext();
 			ctx.fillStyle = "rgba(102,51,153,0.5)";
