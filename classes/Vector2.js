@@ -23,6 +23,13 @@ Vector2.prototype = {
 		return this.y;
 	},
 
+	addX: function(x){
+		this.x += x;
+	},
+	addY: function(y){
+		this.y += y;
+	},
+
 	setAngle: function(angle){
 		var length = this.getLength();
 
