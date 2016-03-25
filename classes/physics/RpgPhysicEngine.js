@@ -77,14 +77,14 @@ RpgPhysicEngine.prototype = {
 		for(var i = 0; i < tiles.length; i++){
 			var tile = tiles[i];
 			
-			if(this.gameobject.getBorder("top") < tile[1] * cell[1] + cell[1] && this.direction == "up" && sides.indexOf("left") > -1)
-				this.gameobject.getPosition().setX(tile[0] * cell[0] + cell[0]);
-			if(this.gameobject.getBorder("bottom") > tile[1] * cell[1] && this.direction == "down" && sides.indexOf("left") > -1)
-				this.gameobject.getPosition().setX(tile[0] * cell[0] + cell[0]);
-			if(this.gameobject.getBorder("top") < tile[1] * cell[1] + cell[1] && this.direction == "up" && sides.indexOf("right") > -1)
-				this.gameobject.getPosition().setX(tile[0] * cell[0] - this.gameobject.getSize().w - 2);
-			if(this.gameobject.getBorder("bottom") > tile[1] * cell[1] && this.direction == "down" && sides.indexOf("right") > -1)
-				this.gameobject.getPosition().setX(tile[0] * cell[0] - this.gameobject.getSize().w - 2);
+			// if(this.gameobject.getBorder("top") < tile[1] * cell[1] + cell[1] && this.direction == "up" && sides.indexOf("left") > -1)
+			// 	this.gameobject.getPosition().setX(tile[0] * cell[0] + cell[0]);
+			// if(this.gameobject.getBorder("bottom") > tile[1] * cell[1] && this.direction == "down" && sides.indexOf("left") > -1)
+			// 	this.gameobject.getPosition().setX(tile[0] * cell[0] + cell[0]);
+			// if(this.gameobject.getBorder("top") < tile[1] * cell[1] + cell[1] && this.direction == "up" && sides.indexOf("right") > -1)
+			// 	this.gameobject.getPosition().setX(tile[0] * cell[0] - this.gameobject.getSize().w - 2);
+			// if(this.gameobject.getBorder("bottom") > tile[1] * cell[1] && this.direction == "down" && sides.indexOf("right") > -1)
+			// 	this.gameobject.getPosition().setX(tile[0] * cell[0] - this.gameobject.getSize().w - 2);
 
 			if(this.gameobject.getBorder("left") < tile[0] * cell[0] + cell[0] && this.direction == "left"
 			|| this.gameobject.getBorder("right") > tile[0] * cell[0] && this.direction == "right"){

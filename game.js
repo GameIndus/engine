@@ -191,7 +191,7 @@ function loop(){
 		if(Game.loader.isLoaded)
 			Game.spectrometer.render();
 
-		if(Game.debugMode){
+		if(Game.debugMode && window.debugRpgCollisions != null){
 			var lt = window.debugRpgCollisions;
 
 			var ctx = Game.getContext();
