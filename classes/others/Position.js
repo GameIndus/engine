@@ -8,6 +8,7 @@ Position.prototype = {
 	set: function(x, y){
 		this.x = x;
 		this.y = y;
+		return this;
 	},
 	get: function(){
 		return {x: this.x, y: this.y};
@@ -35,23 +36,29 @@ Position.prototype = {
 	add: function(position){
 		this.addX(position.getX());
 		this.addY(position.getY());
+		return this;
 	},
 	substract: function(position){
 		this.substractX(position.getX());
 		this.substractY(position.getY());
+		return this;
 	},
 
 	addX: function(x){
 		this.x += x;
+		return this;
 	},
 	addY: function(y){
 		this.y += y;
+		return this;
 	},
 	substractX: function(x){
 		this.x -= x;
+		return this;
 	},
 	substractY: function(y){
 		this.y -= y;
+		return this;
 	},
 
 
