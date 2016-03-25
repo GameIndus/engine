@@ -12,6 +12,7 @@ function Background(options){
 	this.imagePosition = new Position();
 
 	this.color = (options!=null&&options.color!=null) ? options.color : false;
+	this.repeat = options.repeat || false;
 
 	this.ressource = (options!=null&&options.name!=null) ? options.name : "default";
 	this.velocity = null;
@@ -77,11 +78,14 @@ Background.prototype = {
 			if(velocities.vX!=0)
 				this.imagePosition.x += velocities.vX * Game.delta * 2 * veloToMultiply.x;
 			if(velocities.vY!=0)
-				this.imagePosition.y += velocities.vY * Game.delta * 2 * 0	
+				this.imagePosition.y += velocities.vY * Game.delta * 2 * 0;
 		}
 	},
 
 	render: function(){
+		var ctx = Game.getContext();
+		if(ctx == null) return false;
+		
 		if(!this.color){
 			if(Game.ressources.getRessource(this.ressource)==null) return false;
 
@@ -93,36 +97,44 @@ Background.prototype = {
 			var imageWidth  = (this.imageSize.w!=0) ? this.imageSize.w : Game.canvas.getSize().x;
 			var imageHeight = (this.imageSize.h!=0) ? this.imageSize.h : Game.canvas.getSize().y;
 
-			Game.getContext().drawImage(ressource, this.imagePosition.x, this.imagePosition.y, 
-				imageWidth, imageHeight, this.position.x, this.position.y, width, height);
+			if(this.repeat){
+				var pattern = ctx.createPattern(ressource, "repeat");
+				
+				ctx.rect(this.position.getX(), this.position.getY(), width, height);
+				ctx.fillStyle = pattern;
+				ctx.fill();
+			}else{
+				ctx.drawImage(ressource, this.imagePosition.x, this.imagePosition.y, 
+					imageWidth, imageHeight, this.position.x, this.position.y, width, height);
 
-			if(this.velocity!=null){
-				if(this.velocity.getVelocities().vX<0){
-					Game.getContext().drawImage(ressource, globalImageSize.w-Math.abs(this.imagePosition.x), this.imagePosition.y, 
-						imageWidth, imageHeight, this.position.x, this.position.y, width, height);
-				}else{
-					Game.getContext().drawImage(ressource, -globalImageSize.w+Math.abs(this.imagePosition.x), this.imagePosition.y, 
-						imageWidth, imageHeight, this.position.x, this.position.y, width, height);
+				if(this.velocity!=null){
+					if(this.velocity.getVelocities().vX<0){
+						ctx.drawImage(ressource, globalImageSize.w-Math.abs(this.imagePosition.x), this.imagePosition.y, 
+							imageWidth, imageHeight, this.position.x, this.position.y, width, height);
+					}else{
+						ctx.drawImage(ressource, -globalImageSize.w+Math.abs(this.imagePosition.x), this.imagePosition.y, 
+							imageWidth, imageHeight, this.position.x, this.position.y, width, height);
+					}
+
+					if(this.velocity.getVelocities().vY<0){
+						ctx.drawImage(ressource, this.imagePosition.x, globalImageSize.h-Math.abs(this.imagePosition.y), 
+							imageWidth, imageHeight, this.position.x, this.position.y, width, height);
+					}else{
+						ctx.drawImage(ressource, this.imagePosition.x, -globalImageSize.h+Math.abs(this.imagePosition.y), 
+							imageWidth, imageHeight, this.position.x, this.position.y, width, height);
+					}
+
+					if(Math.abs(this.imagePosition.x)>globalImageSize.w) this.imagePosition.x = this.defaultImagePosition.x;
+					if(Math.abs(this.imagePosition.y)>globalImageSize.h) this.imagePosition.y = this.defaultImagePosition.y;
 				}
-
-				if(this.velocity.getVelocities().vY<0){
-					Game.getContext().drawImage(ressource, this.imagePosition.x, globalImageSize.h-Math.abs(this.imagePosition.y), 
-						imageWidth, imageHeight, this.position.x, this.position.y, width, height);
-				}else{
-					Game.getContext().drawImage(ressource, this.imagePosition.x, -globalImageSize.h+Math.abs(this.imagePosition.y), 
-						imageWidth, imageHeight, this.position.x, this.position.y, width, height);
-				}
-
-				if(Math.abs(this.imagePosition.x)>globalImageSize.w) this.imagePosition.x = this.defaultImagePosition.x;
-				if(Math.abs(this.imagePosition.y)>globalImageSize.h) this.imagePosition.y = this.defaultImagePosition.y;
 			}
 		}else{
 			var width = (this.size.w!=0) ? this.size.w : Game.canvas.getSize().x;
 			var height = (this.size.h!=0) ? this.size.h : Game.canvas.getSize().y;
 
-			Game.getContext().fillStyle = this.color;
-			Game.getContext().fillRect(this.position.x, this.position.y, width, height);
-			Game.getContext().fillStyle = "black";
+			ctx.fillStyle = this.color;
+			ctx.fillRect(this.position.x, this.position.y, width, height);
+			ctx.fillStyle = "black";
 		}
 	}
 
