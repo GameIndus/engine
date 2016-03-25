@@ -68,7 +68,7 @@ document.addEventListener(visibilityChange, function(e) {
     Input.keyDownsActives   = {};
     Input.mouseDownsActives = {};
 
-    if(Game.getCurrentScene() != null){
+    if(Game != null && Game.getCurrentScene() != null){
         if(Game.getCurrentScene().gameobjects != null){
             // For each gameobject with PlayerBehavior -> clear keysDown array
             for(var i=0;i<Game.getCurrentScene().gameobjects.length;i++){
