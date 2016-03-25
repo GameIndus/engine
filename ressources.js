@@ -51,7 +51,12 @@ Ressources.prototype = {
 
 		if(obj.type=="img"){
 			var img = new Image();
-			img.src = Config.assetsDir+'/'+obj.src;
+			
+			if(obj.src.indexOf("http://") == -1 && obj.src.indexOf("https://") == -1) 
+				img.src = Config.assetsDir+'/'+obj.src;
+			else
+				img.src = obj.src;
+
 			img.onload = function(){
 				obj.data = this;
 				that.ressources[name] = obj;
