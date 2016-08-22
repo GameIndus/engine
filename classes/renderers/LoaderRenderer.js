@@ -30,13 +30,6 @@ LoaderRenderer.prototype = {
         if(typeof this.size[1] === "string") this.size[1] = Game.getCanvas().size.y;
     },
 
-    getCenter: function(){
-        var x = this.pos.getX()+this.size[0]/2;
-        var y = this.pos.getY()+this.size[1]/2;
-
-        return {x: x, y: y};
-    },
-
     render: function(dt){
         var scene = Game.getCurrentScene();
         if(this.gameobject==null) return false;

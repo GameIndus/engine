@@ -68,15 +68,9 @@ document.addEventListener(visibilityChange, function(e) {
     Input.keyDownsActives   = {};
     Input.mouseDownsActives = {};
 
-    if(Game != null && Game.getCurrentScene() != null){
-        if(Game.getCurrentScene().gameobjects != null){
-            // For each gameobject with PlayerBehavior -> clear keysDown array
-            for(var i=0;i<Game.getCurrentScene().gameobjects.length;i++){
-                var go = Game.getCurrentScene().gameobjects[i];
-                if(go.behavior)
-                    go.behavior.keysDown = [];
-            }
-        }
+    for(var i = 0; i < timers.length; i++){
+        if(Game.paused) timers[i].pause();
+        else timers[i].resume();
     }
 
     if(!document.hidden && Game.loader != null && !Game.loader.isLoaded) Game.paused = false;
@@ -94,3 +88,15 @@ window.onerror = function(error) {
         Game.errorView.enabled = true;
     }
 };
+
+/*
+ *  OrientationChange event
+ */
+window.addEventListener("orientationchange", function(orientation){
+    if(Game == null) return false;
+    var ctx    = Game.getContext();
+    var canvas = Game.getCanvas();
+
+    if(ctx == null) return false;
+    canvas.setSize(canvas.getSize().getHeight(), canvas.getSize().getWidth()); 
+}, false);

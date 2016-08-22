@@ -3,21 +3,16 @@
  * @class
  */
 function Camera(){
-
-	this.scene = null;
+	this.scene      = null;
 	this.gameobject = null;
 
-	this.offset = {x: 0, y: 0};
-	this.position = {x: 0, y: 0};
-	this.speed = new Vector2();
-	this.zoom = 1;
+	this.position = new Position();
+	this.speed    = new Vector2();
+	this.zoom     = 1;
 
-	this.objectLastPosition = {x: 0, y: 0};
-	this.objectDistanceCamera = {w: 0, h: 0};
-	this.toAdd = {x: 0, y: 0};
-
-	this.canMoveOn = {x: true, y: false};
-	this.hasBounds = true;
+	this.canMoveOn       = {x: true, y: true};
+	this.moveEndPosition = null;
+	this.hasBounds       = true;
 
 	// Shake
 	this.shakeDuration  = -1;
@@ -35,11 +30,7 @@ Camera.prototype = {
 	},
 
 	setPosition: function(x, y){
-		this.position.x = x;
-		this.position.y = y;
-
-		if(this.canMoveOn.x) this.offset.x = -this.position.x;
-		if(this.canMoveOn.y) this.offset.y = -this.position.y;
+		this.position.set(x, y);
 	},
 
 	setBounds: function(bool){
@@ -59,23 +50,23 @@ Camera.prototype = {
 		this.zoom = zoom;
 	},
 
-	getOffset: function(){
-		return this.offset;
-	},
-
 	getCenter: function(){
 		var cs = Game.getSize();
-		return {x: -this.offset.x + cs.getWidth() / 2, y: -this.offset.y +  cs.getHeight() / 2};
+		return new Position(this.position.getX() + cs.getWidth() / 2, this.position.getY() + cs.getHeight() / 2);
 	},
 
 	getBorders: function(){
 		var cs = Game.getSize();
 
-		return {left: (-parseInt(this.offset.x)), 
-				top: (-parseInt(this.offset.y)),
-				right: (-parseInt(this.offset.x) + parseInt(cs.getWidth())),
-				bottom: (-parseInt(this.offset.y) + parseInt(cs.getHeight()))
+		return {left: (this.position.getX()), 
+				top: (this.position.getY()),
+				right: (this.position.getX() + parseInt(cs.getWidth())),
+				bottom: (this.position.getY() + parseInt(cs.getHeight()))
 		};
+	},
+
+	getPosition: function(){
+		return this.position;
 	},
 
 
@@ -83,7 +74,10 @@ Camera.prototype = {
 		this.shakeBeginTime = Date.now();
 		this.shakeForce     = force;
 
-		this.shakeDuration  = time;
+		this.shakeDuration  = time * 1000;
+	},
+	moveTo: function(position){
+		this.moveEndPosition = position;
 	},
 
 	/*
@@ -93,7 +87,7 @@ Camera.prototype = {
  		var ctx = Game.getContext();
 
  		ctx.save();
- 		ctx.scale(this.zoom, this.zoom);
+ 		ctx.translate(-this.position.getX(), -this.position.getY());
 
  		// Shake module
  		if(this.shakeDuration > 0){
@@ -102,11 +96,16 @@ Camera.prototype = {
  				this.shakeDuration  = -1;
  				this.shakeBeginTime = -1;
  			}else{
- 				var dx = Math.random() * this.shakeForce;
-				var dy = Math.random() * this.shakeForce;
-				ctx.translate(dx, dy);  
+ 				var sx = Math.round(Math.random()) * 2 - 1;
+ 				var sy = Math.round(Math.random()) * 2 - 1;
+
+ 				var dx = (Math.random() * this.shakeForce) * sx;
+				var dy = (Math.random() * this.shakeForce) * sy;
+				ctx.translate(-this.position.getX() + dx, -this.position.getY() + dy);  
  			}
  		}
+ 		
+ 		ctx.scale(this.zoom, this.zoom);
  	},
 
  	end: function(){
@@ -142,88 +141,23 @@ Camera.prototype = {
 			return false;
 		}
 
-		if(this.canMoveOn.x) this.offset.x = -this.position.x;
-		if(this.canMoveOn.y) this.offset.y = -this.position.y;
-
+		// Move camera to (x, y) with speed, etc...
+		if(this.moveEndPosition != null){
+			var posF = this.moveEndPosition;
+		}
 	},
-
 	updateFromGameobject: function(){
 		if(this.gameobject == null || this.scene == null || this.gameobject.getRenderer() == null) return false;
 
-		var limits = {xLeft: 0, xRight: 10000, yBottom: 10000, yTop: 10000};
-		if(this.scene.tilemap != null) limits = this.scene.tilemap.getLimits();
+		var camCenter    = this.getCenter();
+		var position     = this.gameobject.getCenter();
+		var canvasSize   = Game.getCanvas().getSize();
+		var middles      = {x: canvasSize.getWidth() / 2, y: canvasSize.getHeight() / 2};
 
-		var gameObjectPos = this.gameobject.getRenderer().getVeritableCenter();
-		var canvasSize    = {w: Game.getCanvas().getSize().x, h: Game.getCanvas().getSize().y};
-		var middles       = {x: canvasSize.w/2, y: canvasSize.h/2};
+		var lerpX = lerp(camCenter.getX(), position.getX(), this.speed.getX());
+		var lerpY = lerp(camCenter.getY(), position.getY(), this.speed.getY());
 
-		// Speed system
-		if(this.speed.x == 0) this.speed.x = 1;
-		if(this.speed.y == 0) this.speed.y = 1;
-		// TEMP
-		if(this.hasBounds) this.speed.x = 1;
-
-		if(this.speed.x > 1 || (this.speed.x >= 0 && this.speed.x != 1)){
-			this.objectDistanceCamera.w = gameObjectPos.x - (-this.offset.x + middles.x);
-			
-			if(this.objectDistanceCamera.w > 1 || this.objectDistanceCamera.w < -1){
-				if(this.objectDistanceCamera.w < 0)
-					this.toAdd.x++;
-				else
-					this.toAdd.x--;
-			}
-		}
-
-		if(this.speed.y > 1 || (this.speed.y >= 0 && this.speed.y != 1)){
-			this.objectDistanceCamera.h = gameObjectPos.y - (-this.offset.y + middles.y);
-			if(this.objectDistanceCamera.h>1||this.objectDistanceCamera.h<-1){
-				if(this.objectDistanceCamera.h<0)
-					this.toAdd.y++;
-				else
-					this.toAdd.y--;
-			}
-		}
-
-
-		if(this.hasBounds && this.scene.tilemap != null){
-			// Left & Right border
-			// if((gameObjectPos.x-middles.x>limits.xLeft)&&(gameObjectPos.x+middles.x<limits.xRight)&&this.canMoveOn.x)
-			// 	this.position.x = gameObjectPos.x-middles.x;
-			// else
-			// 	if(gameObjectPos.x<middles.x)
-			// 		this.position.x = 0;
-
-			// // Top & Bottom border
-			// if((gameObjectPos.y-middles.y>limits.yTop)&&(gameObjectPos.y+middles.y<=limits.yBottom)&&this.canMoveOn.y)
-			// 	this.position.y = gameObjectPos.y-middles.y;
-			// else
-			// 	if(gameObjectPos.y<middles.y)
-			// 		this.position.y = 0;
-					
-			var currentPosX = gameObjectPos.x - middles.x;
-			var currentPosY = gameObjectPos.y - middles.y;
-
-
-			if(this.position.x <= -limits.xLeft){
-				currentPosX = -limits.xLeft;
-			}
-
-			this.position.x = currentPosX;
-			this.position.y = currentPosY;
-		}else{
-			this.position.x = gameObjectPos.x - middles.x;
-			this.position.y = gameObjectPos.y - middles.y;
-		}
-
-		var borders = this.getBorders();
-
-		// Update Camera offset
-		var speedMovement = {x: this.toAdd.x * this.speed.x, y: this.toAdd.y * this.speed.y};
-
-		this.offset.x = -this.position.x * this.speed.x + speedMovement.x;
-		this.offset.y = -this.position.y * this.speed.y + speedMovement.y;
-
-		this.objectLastPosition = this.gameobject.getCenter();
+		this.position.set(lerpX - middles.x, lerpY - middles.y);
 	}
 
 };

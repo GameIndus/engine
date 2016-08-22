@@ -84,6 +84,9 @@ function lerp(value1, value2, n){
 
     return value1 + ((value2 - value1) * n);
 }
+function inRange(value, min, max){
+    return ((value >= min) && (value <= max));
+}
 
 Array.prototype.clone = function() {
     return this.slice(0);
@@ -108,3 +111,15 @@ var cloneObject = function() {
 }; 
 
 Object.defineProperty( Object.prototype, "clone", {value: cloneObject, enumerable: false});
+window.getDevicePixelRatio = function () {
+    var ratio = 1;
+    // To account for zoom, change to use deviceXDPI instead of systemXDPI
+    if (window.screen.systemXDPI !== undefined && window.screen.logicalXDPI       !== undefined && window.screen.systemXDPI > window.screen.logicalXDPI) {
+        // Only allow for values > 1
+        ratio = window.screen.systemXDPI / window.screen.logicalXDPI;
+    }
+    else if (window.devicePixelRatio !== undefined) {
+        ratio = window.devicePixelRatio;
+    }
+    return ratio;
+};

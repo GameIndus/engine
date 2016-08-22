@@ -1,14 +1,12 @@
-/**
- * Tilemap
- * @class
- */
 function TileMap(filename){
 	this.scene = null;
 	this.name  = "";
 
-	this.size   = {w: 0, h: 0};
-	this.tiles  = {};
-	this.limits = null;
+	this.cellSize = {w: 0, h: 0};
+	this.size     = {w: 0, h: 0};
+	this.tiles    = {};
+
+	this.position = new Position();
 
 	this.collisionsMap = {};
 }
@@ -26,37 +24,21 @@ TileMap.prototype = {
 			return null;
 	},
 	getLimits: function(){
-		if(this.limits!=null) return this.limits;
-		
-		var xLeft = 12000;
-		var xRight = 0;
-		var yTop = 12000;
-		var yBottom = 0;
-
-		for(var i=0;i<Object.keys(this.tiles).length;i++){
-			var key = Object.keys(this.tiles)[i];
-			for(var j=0;j<Object.keys(this.tiles[key].tiles).length;j++){
-				var tile = this.tiles[key].tiles[j];
-
-				var xPos = tile.objPos.x*tile.objSize[0];
-				var xPosR = tile.objPos.x*tile.objSize[0]+tile.objSize[0];
-				var yPos = tile.objPos.y*tile.objSize[1];
-				var yPosB = tile.objPos.y*tile.objSize[1]+tile.objSize[1];
-
-				if(xPos<=xLeft) xLeft = parseInt(xPos);
-				if(xPosR>=xRight) xRight = parseInt(xPosR);
-				if(yPos<=yTop) yTop = parseInt(yPos);
-				if(yPosB>=yBottom) yBottom = parseInt(yPosB);
-			}
-		}
-
-		var finalObj = {xLeft: xLeft, xRight: xRight, yBottom: yBottom, yTop: yTop};
-		this.limits = finalObj;
-
-		return finalObj;
+		return new Rectangle(this.getPosition().getX(), this.getPosition().getY(), this.getSize().getWidth() * this.cellSize.w, this.getSize().getHeight() * this.cellSize.h);
 	},
 	getName: function(){
 		return this.name
+	},
+	getPosition: function(){
+		return this.position;
+	},
+	getSize: function(){
+		return {
+			w: this.size.w,
+			h: this.size.h,
+			getWidth: function(){return this.w;},
+			getHeight: function(){return this.h;}
+		};
 	},
 	getTexture: function(){
 		return Game.ressources.getRessource(this.getTextureName());
@@ -109,7 +91,6 @@ TileMap.prototype = {
 			that.loadFromJson(data);
 		}, function(error){console.log(error.statusText);});
 	},
-
 	loadFromJson: function(data){
 		var keys = Object.keys(data);
 		var o    = 0;
@@ -122,7 +103,7 @@ TileMap.prototype = {
 
 			var tiles = [];
 			var tKeys = Object.keys(tile.tiles);
-			
+
 			for(var j=0;j<tKeys.length;j++){
 				var canvasPos = tKeys[j];
 				var imgPos = tile.tiles[canvasPos];
@@ -147,8 +128,11 @@ TileMap.prototype = {
 				tileObj.setLayer(layer);
 				tileObj.setSolid(solid);
 
-				this.size.w = tile.size[0];
-				this.size.h = tile.size[1];
+				if(parseInt(canvasPos[1]) == 0) this.size.w++;
+				if(parseInt(canvasPos[0]) == 0) this.size.h++;
+
+				this.cellSize.w = tile.size[0];
+				this.cellSize.h = tile.size[1];
 
 				tiles.push(tileObj);
 				o++;
@@ -195,15 +179,13 @@ TileMap.prototype = {
 
 				this.collisionsMap[layer][index] = (tile.isSolid()) ? 1 : 0;
 
-				if(j + 1 == Object.keys(this.tiles[key].tiles).length){
-					if(Config.debugMode){
-						var time = (Date.now() - timeBefore)/1000;
+				if(Config.debugMode && j + 1 == Object.keys(this.tiles[key].tiles).length){
+					var time = (Date.now() - timeBefore)/1000;
 
-						var timeToShow = (time)+" seconds.";
-						if(time<1) timeToShow = (time*1000)+" milliseconds.";
+					var timeToShow = (time)+" seconds.";
+					if(time<1) timeToShow = (time*1000)+" milliseconds.";
 
-						log("CollisionMap '"+this.name+"' loaded in "+timeToShow);
-					}
+					log("CollisionMap '"+this.name+"' loaded in "+timeToShow);
 				}
 			}
 		}
@@ -217,6 +199,9 @@ TileMap.prototype = {
 		var index = getIndexFromXY(x-1, y-1, sizeH+1);
 
 		this.collisionsMap[index] = bool;
+	},
+	setPosition: function(x, y){
+		this.position.set(x, y);
 	}
 
 };

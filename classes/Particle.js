@@ -1,8 +1,3 @@
-/**
- * Particle
- * @param {Object} options Options of the particle
- * @class
- */
 function Particle(options){
 	this.scene    = null;
 	

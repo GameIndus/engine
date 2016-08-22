@@ -21,6 +21,7 @@ var Game = function(){
 	this.paused       = false;
 	this.initialized  = false;
 	this.network      = false;
+	this.standalone   = false;
 
 	this.delta  = 0;
 	this.fps    = 0;
@@ -32,16 +33,21 @@ Game.prototype = {
 
 	load: function(id){
 		if(this.initialized) return false; 
-		this.ressources.loadRessources();
-		SoundsManager.loadSounds();
+		
+		if(!this.standalone){
+			this.ressources.loadRessources();
+			SoundsManager.loadSounds();
+		}
 
 		if(id!==undefined)
 			this.canvas.load(id);
 		else
 			this.canvas.load("canvas");
-		this.canvas.setSize(Config.defaultSize.w, Config.defaultSize.h);
+
+		this.canvas.setSize(Config.get("defaultSize").w, Config.get("defaultSize").h);
 
 		loop();
+		update();
 
 		log("Game engine ready.");
 	},
@@ -71,6 +77,10 @@ Game.prototype = {
 		this.maxFps = maxFps;
 	},
 
+	setStandalone: function(standalone){
+		this.standalone = standalone;
+	},
+
 	getCanvas: function(){
 		return this.canvas;
 	},
@@ -87,6 +97,9 @@ Game.prototype = {
 		return this.canvas.getContext();
 	},
 
+	getRessourcesManager: function(){
+		return this.ressources;
+	},
 	getRessources: function(){
 		return this.ressources;
 	},
@@ -136,47 +149,31 @@ Game.prototype = {
 
 };
 
-var lastTime = 0;
-var frames = 0;
-var averageFps = 0;
+var last = 0, logicFps = 60, frames = 0, averageFps = 0, updated = false;
+var timers   = [], workerError = false, workerTimeoutCrash = null, w = undefined;
 
 function loop(){
-
-	if(!Game.paused){
+	if(!Game.paused && updated){
 		var now = Date.now();
-		var dt  = (now - lastTime) / 1000.0;
+		var dt  = Math.min(1, (now - last) / 1000);
 
 		// Get FPS
 		frames++;
-		if(frames>=45){
+		if(frames >= 45){
 			Game.fps = Math.round(1/dt);
-			if(averageFps==0) averageFps = Game.fps
-			else averageFps = Math.round((averageFps+Game.fps)/2)
+			if(averageFps == 0) averageFps = Game.fps
+			else averageFps = Math.round((averageFps + Game.fps) / 2)
 			frames = 0;
 		}
-
-		// Spectrometer
-		if(Game.loader.isLoaded)
-			Game.spectrometer.update();
 
 		Game.delta = dt;
 		Game.canvas.clear();
 
 		if(Game.loader.isLoaded){
 			if(!Game.errorView.enabled){
-				if(Game.getCurrentScene()!=null){
-					Game.getNetworkManager().updateNetwork();
+				Game.events.dispatch("beforeGameRendering", {delta: dt, fps: Game.fps, averageFps: averageFps});
 
-					if(Game.getCurrentScene().camera!=null){
-						Game.getCurrentScene().camera.begin();
-						Game.getCurrentScene().camera.update();
-					}
-					
-					Game.getCurrentScene().render(dt);
-
-					if(Game.getCurrentScene().camera!=null)
-						Game.getCurrentScene().camera.end();
-				}
+				if(Game.getCurrentScene() != null) Game.getCurrentScene().render(dt);
 
 				Game.events.dispatch("gameRendered", {delta: dt, fps: Game.fps, averageFps: averageFps});
 			}else{
@@ -184,12 +181,8 @@ function loop(){
 			}
 			
 		}else{
-			Game.loader.update();
 			Game.loader.render();
 		}
-
-		if(Game.loader.isLoaded)
-			Game.spectrometer.render();
 
 		if(Game.debugMode && window.debugRpgCollisions != null){
 			var lt = window.debugRpgCollisions;
@@ -206,12 +199,55 @@ function loop(){
 			}
 		}
 
-		lastTime = now;
-	}
-	
+		if(Game.loader.isLoaded)
+			Game.spectrometer.render();
 
-	if(Game.maxFps==-1)
-		requestAnimationFrame(loop);
+		last    = now;
+		updated = false;
+	}
+
+	if(Game.maxFps == -1)
+		requestAnimationFrame(loop, Game.getCanvas().getCanvas());
 	else
 		setTimeout(loop, 1000/Game.maxFps);
+}
+function update(){
+	if (typeof(Worker) !== "undefined" && !workerError) {
+		if(w == undefined){
+			w = new Worker("/Lab/GameIndus/engine/2D/classes/others/Worker.js");
+			w.postMessage({event: "start", framespersecond: logicFps});
+		}
+
+		w.onerror = function(){
+			workerError = true;
+			update();
+		}
+		w.onmessage = function(event){
+			doUpdate();
+
+			if(workerTimeoutCrash != null) clearTimeout(workerTimeoutCrash);
+			workerTimeoutCrash = setTimeout(function(){
+				w.terminate();w = undefined;
+				update();
+			}, 100);
+		}
+		return false;
+	}
+
+	doUpdate();
+
+	setTimeout(update, 1000/logicFps);
+}
+function doUpdate(){
+	if(Game.loader.isLoaded){
+		if(Game.getCanvas() != null) Game.getCanvas().rescale();
+		if(Game.getCurrentScene() != null) Game.getCurrentScene().update();
+		
+		Game.spectrometer.update();
+		Game.events.dispatch("gameUpdated");
+	}else{
+		Game.loader.update();
+	}
+
+	updated = true;
 }

@@ -11,7 +11,8 @@ function ImageRenderer(options){
 	this.objPos = new Position();
 	this.size   = [];
 
-	this.flipped = (options!=null&&options.flipped!=null) ? options.flipped : false;
+	this.flipped     = (options!=null&&options.flipped!=null) ? options.flipped : false;
+	this.customSized = (options!=null&&options.customSized!=null) ? options.customSized : false;
 }
 
 ImageRenderer.prototype = {
@@ -24,22 +25,6 @@ ImageRenderer.prototype = {
 		this.gameobject = gameobject.ID;
 		this.objPos = gameobject.position;
 		this.size = gameobject.size;
-	},
-
-	/**
-	 * Get center of the current gameobject
-	 * @return {Object} X and Y positions in an object
-	 */
-	getCenter: function(){
-		var offset = {x: 0, y: 0};
-		var scene  = Game.getCurrentScene();
-		var gameobject = scene.getGameObject(this.gameobject);
-		
-		if(scene!=null&&scene.camera!=null) offset = scene.camera.getOffset();
-		var x = this.objPos.getX() + (this.size[0]*gameobject.scale/2)+offset.x;
-		var y = this.objPos.getY() + (this.size[1]*gameobject.scale/2)+offset.y;
-
-		return {x: x, y: y};
 	},
 
 	/**
@@ -85,25 +70,24 @@ ImageRenderer.prototype = {
 		var gameobject = scene.getGameObject(this.gameobject);
 		if(gameobject==null || !this.canBeRendered()) return false;
 
-		var x = this.pos.getX();
-		var y = this.pos.getY();
+		var x   = this.pos.getX();
+		var y   = this.pos.getY();
+		var src = Game.ressources.getRessource(this.name);
 
-		var offset = {x: 0, y: 0};
-		
-		if(scene!=null&&scene.camera!=null) offset = scene.camera.getOffset();
-		if(Game.ressources.getRessource(this.name)==null) return false;
-
+		if(src == null) return false;
 		Game.getContext().globalAlpha = gameobject.opacity;
+
+		var imgSize = (!this.customSized) ? {w: src.width - x, h: src.height - y} : {w: this.size[0], h: this.size[1]};
 
 		if(this.flipped){
 			Game.getContext().save();
-			Game.getContext().translate(this.objPos.getX()+(this.size[0]*gameobject.scale/2)+offset.x, this.objPos.getY()+(this.size[1]*gameobject.scale/2)+offset.y);
+			Game.getContext().translate(this.objPos.getX()+(this.size[0]*gameobject.scale/2), this.objPos.getY()+(this.size[1]*gameobject.scale/2));
 			Game.getContext().scale(-1, 1);
 
-			Game.getContext().drawImage(Game.ressources.getRessource(this.name), x, y, this.size[0], this.size[1], -this.size[0]*gameobject.scale/2, -this.size[1]*gameobject.scale/2, this.size[0]*gameobject.scale, this.size[1]*gameobject.scale);
+			Game.getContext().drawImage(src, x, y, imgSize.w, imgSize.h, -this.size[0]*gameobject.scale/2, -this.size[1]*gameobject.scale/2, this.size[0]*gameobject.scale, this.size[1]*gameobject.scale);
 			Game.getContext().restore();
 		}else{
-			Game.getContext().drawImage(Game.ressources.getRessource(this.name), x, y, this.size[0], this.size[1], this.objPos.getX()+offset.x, this.objPos.getY()+offset.y, this.size[0]*gameobject.scale, this.size[1]*gameobject.scale);
+			Game.getContext().drawImage(src, x, y, imgSize.w, imgSize.h, this.objPos.getX(), this.objPos.getY(), this.size[0]*gameobject.scale, this.size[1]*gameobject.scale);
 		}
 
 		Game.getContext().globalAlpha = 1;
