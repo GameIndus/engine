@@ -25,6 +25,15 @@ Scene.prototype = {
 		if(object instanceof GameObject) this.addGameObject(object);
 		else if(object instanceof Text) this.addText(object);
 		else if(object instanceof Background) this.addBackground(object);
+		else if(object instanceof Camera) this.setActiveCamera(object);
+		else if(object instanceof TileMap) this.setTileMap(object);
+	},
+	remove: function(object){
+		if(object instanceof GameObject) this.removeGameObject(object);
+		else if(object instanceof Text) this.removeText(object);
+		else if(object instanceof Background) this.removeBackground(object);
+		else if(object instanceof Camera) this.camera = null;
+		else if(object instanceof TileMap) this.tilemap = null;
 	},
 	
 	addGameObject: function(gameobject){
@@ -40,6 +49,7 @@ Scene.prototype = {
 	},
 	registerGameObject: function(name, gameobject){
 		this.addGameObject(gameobject);
+		gameobject.name = name;
 		this.gameobjectsMap[name] = gameobject.ID;
 	},
 	getGameObject: function(obj){
@@ -93,7 +103,6 @@ Scene.prototype = {
 		background.setScene(this);
 		this.backgrounds.push(background);
 	},
-
 	removeBackground: function(background){
 		if(this.backgrounds.indexOf(background) > -1)
 			this.backgrounds.splice(this.backgrounds.indexOf(background), 1);
@@ -109,6 +118,13 @@ Scene.prototype = {
 	},
 
 	setTileMap: function(filename){
+		if(filename instanceof TileMap || filename === null){
+			if(filename instanceof TileMap) filename.setScene(this);
+			
+			this.tilemap = filename;
+			return false;
+		}
+
 		var map = new TileMap();
 		map.setScene(this);
 		this.tilemap = map;
@@ -131,45 +147,18 @@ Scene.prototype = {
 			this.texts.splice(this.texts.indexOf(text), 1);
 	},
 	getObjectAt: function(x, y, layer, objectExcluded){
-		for(var i=0;i<this.gameobjects.length;i++){
-			if(this.gameobjects[i]==null) continue ;
+		var checkPosition = new Position(x, y);
+		if(x instanceof Position){ checkPosition = x;layer = y;objectExcluded = layer; }
+
+		for(var i = 0;i < this.gameobjects.length; i++){
+			if(this.gameobjects[i] == null) continue ;
 			var gameobject = this.gameobjects[i];
+			var rectangle  = gameobject.getBordersRectangle();
 
+			if(gameobject == objectExcluded) continue;
+			if(layer !== undefined && layer != gameobject.getLayer()) continue;
 
-			if(this.getTileMap()!==null){
-
-				var pos = gameobject.getTilePositions();
-				if(layer===undefined){
-					if(pos.x==x&&pos.y==y)
-						return gameobject;
-				}else{
-					if(pos.x==x&&pos.y==y&&this.gameobjects[i].layer==layer)
-						return gameobject;
-				}
-
-			}else{
-				
-				var pos    = gameobject.getCenter();
-				var size   = gameobject.size; 
-				var layerO = gameobject.layer;
-				
-				if((pos.x - (size[0] * gameobject.scale / 2)) < x
-				&& (pos.x + (size[0] * gameobject.scale / 2)) > x
-				&& (pos.y - (size[1] * gameobject.scale / 2)) < y
-				&& (pos.y + (size[1] * gameobject.scale / 2)) > y){
-					if(objectExcluded!==undefined){
-						if(objectExcluded==gameobject) continue ;
-					}
-
-					if(layer===undefined){
-						return gameobject;
-					}else{
-						if(layer==layerO)
-							return gameobject;
-					}
-				}
-
-			}
+			if(rectangle.inside(checkPosition)) return gameobject;
 		}
 
 		return null;
@@ -180,10 +169,27 @@ Scene.prototype = {
 		this.particles.push(particleObj);							
 	},
 
-
-	render: function(dt){
-		for(var i=0;i<this.backgrounds.length;i++){
+	update: function(dt){
+		for(var i=0;i<this.backgrounds.length;i++)
 			this.backgrounds[i].update();
+
+		for(var i = 0;i < this.gameobjects.length; i++){
+			var go = this.gameobjects[i];
+			if(go == null) continue ;
+			
+			if(go.physicEngine != null) go.physicEngine.update();
+			if(go.getRenderer() != null && typeof(go.getRenderer().update) === "function") 
+				go.getRenderer().update(Game.delta);
+
+			go.update();
+		}
+
+		if(this.camera != null) this.camera.update();
+	},
+	render: function(dt){
+		if(this.camera != null) this.camera.begin();
+
+		for(var i=0;i<this.backgrounds.length;i++){
 			this.backgrounds[i].render();
 		}
 
@@ -194,10 +200,10 @@ Scene.prototype = {
 		if(this.getTileMap() != null){
 			var tilemap = this.getTileMap();
 			var keys = Object.keys(tilemap.tiles);
-			for(var i=0;i<keys.length;i++){
+			for(var i = 0; i < keys.length; i++){
 				var tileGroup = tilemap.tiles[keys[i]];
 
-				for(var j=0;j<tileGroup.tiles.length;j++){
+				for(var j = 0; j < tileGroup.tiles.length; j++){
 					var tile = tileGroup.tiles[j];
 					tile.type = "tile";
 
@@ -230,9 +236,6 @@ Scene.prototype = {
 			for(var j=0;j<objs[keys[i]].length;j++){
 				var obj = objs[keys[i]][j];
 				if(obj.type == "gameobject"){
-					if(obj.physicEngine != null)
-						obj.physicEngine.update(dt);
-
 					obj.getRenderer().render(dt);
 				}else if(obj.type == "tile"){
 					obj.render();
@@ -245,11 +248,10 @@ Scene.prototype = {
 			this.particles[i].draw();
 
 		// Render texts
-		this.renderTexts();
-	},
-	renderTexts: function(){
 		for(var i=0;i<this.texts.length;i++)
 			this.texts[i].draw();
+
+		if(this.camera != null) this.camera.end();
 	},
 
 	// Custom events (only scene)

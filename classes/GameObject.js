@@ -3,10 +3,11 @@
  * @class
  */
 function GameObject(size){
-	this.ID = -1;
+	this.ID   = -1;
+	this.name = null;
 
 	this.position = new Position();
-	this.size = size;
+	this.size = size || [50, 50];
 
 	this.layer = 0;
 	this.scale = 1;
@@ -24,10 +25,10 @@ function GameObject(size){
 	this.velocity = new Vector2();
 
 	// Custom
-	this.life     = -1;
-	this.jailed   = true;
-	this.opacity  = 1;
-	this.behavior = null;
+	this.life      = -1;
+	this.jailed    = true;
+	this.opacity   = 1;
+	this.behaviors = [];
 
 	// Custom events (only gameobject)
 	this.events = {move: [], jump: [], hidden: []};
@@ -37,49 +38,57 @@ function GameObject(size){
 
 GameObject.prototype = {
 
-	/**
-	 * Getting ID of the gameobject
-	 * @return {Integer} ID of the gameobject
-	 */
+	getBorder: function(border){
+		switch(border){
+			case "top":
+				return this.getPosition().getY();
+			case "right":
+				return this.getPosition().getX() + this.getSize().getWidth();
+			case "bottom":
+				return this.getPosition().getY() + this.getSize().getHeight();
+			case "left":
+				return this.getPosition().getX();
+			default:
+				return -1;
+		}
+	},
+	getBordersRectangle: function(){
+		return new Rectangle(this.getPosition().getX(), this.getPosition().getY(), this.getSize().getWidth(), this.getSize().getHeight());
+	},
+	getCenter: function(){
+		return new Position(this.getPosition().getX() + this.getSize().w / 2, this.getPosition().getY() + this.getSize().h / 2);
+	},
 	getID: function(){
 		return this.ID;
 	},
-
-
 	getPosition: function(){
 		return this.position;
 	},
-	/**
-	 * Setting the position of a gameobject
-	 * @param {Integer} x The X position
-	 * @param {Integer} y The Y position
-	 */
-	setPosition: function(x, y){
-		this.position.set(x, y);
-
-		if(this.renderer != null && this.renderer.objPos != null) this.renderer.objPos = this.position;
+	getRenderer: function(){
+		if(this.renderer == null)
+			console.error("Renderer is not defined for gameobject #"+this.ID);
+		return this.renderer;
 	},
-
-	getCenter: function(){
-		return this.renderer.getCenter();
-	},
-
-	/**
-	 * Getting the size of the gameobject
-	 * @return {Object} An object with thr size (x & y)
-	 */
 	getSize: function(){
 		var sizeW = this.size[0] * this.scale;
 		var sizeH = this.size[1] * this.scale;
 
-		return {w: sizeW, h: sizeH};
-	},
+		return {
+			w: sizeW, 
+			h: sizeH,
 
-	setSize: function(w, h){
-		this.size = [w, h];
-		if(this.renderer!=null) this.renderer.size = [w, h];
-	},
+			getWidth: function(){
+				return this.w;
+			},
+			getHeight: function(){
+				return this.h;
+			}
 
+		};
+	},
+	getLayer: function(){
+		return this.layer;
+	},
 	getTilePositions: function(border){
 		var scene = Game.getCurrentScene();
 		if(scene.getTileMap()==null||scene.getTileMap().getFirstTile()==null) return null;
@@ -88,7 +97,7 @@ GameObject.prototype = {
 
 		var x = Math.floor((this.position.getX()+this.size[0]*this.scale/2)/ft.objSize[0]);
 		var y = Math.floor((this.position.getY()+this.size[1]*this.scale/2)/ft.objSize[1]);	
-
+		
 		if(border !== undefined && border == "top")
 			y = Math.floor(this.position.getY() / ft.objSize[1]);
 		else if(border !== undefined && border == "right")
@@ -97,103 +106,86 @@ GameObject.prototype = {
 			y = Math.floor((this.position.getY() + this.size[1]*this.scale) / ft.objSize[1]);
 		else if(border !== undefined && border == "left")
 			x = Math.floor(this.position.getX() / ft.objSize[0]);
+		else if(border !== undefined && (border == "topleft" || border == "lefttop")){
+			x = Math.floor(this.position.getX() / ft.objSize[0]);
+			y = Math.floor(this.position.getY() / ft.objSize[1]);
+		}else if(border !== undefined && (border == "topright" || border == "righttop")){
+			x = Math.floor((this.position.getX() + this.size[0]*this.scale) / ft.objSize[0]);
+			y = Math.floor(this.position.getY() / ft.objSize[1]);
+		}else if(border !== undefined && (border == "bottomright" || border == "rightbottom")){
+			x = Math.floor((this.position.getX() + this.size[0]*this.scale) / ft.objSize[0]);
+			y = Math.floor((this.position.getY() + this.size[1]*this.scale) / ft.objSize[1]);
+		}else if(border !== undefined && (border == "bottomleft" || border == "leftbottom")){
+			x = Math.floor(this.position.getX() / ft.objSize[0]);
+			y = Math.floor((this.position.getY() + this.size[1]*this.scale) / ft.objSize[1]);
+		}
 
 		return {x: x, y: y};
 	},
-
-	/**
-	 * Define a renderer for the gameobject
-	 * @param {Renderer} renderer The renderer instance
-	 */
-	setRenderer: function(renderer){
-		this.renderer = renderer;
-		this.renderer.setGameObject(this);
+	getName: function(){
+		return this.name;
 	},
-
-	/**
-	 * Getting the gameobject renderer
-	 * @return {Renderer} The renderer (null is not exists)
-	 */
-	getRenderer: function(){
-		if(this.renderer == null)
-			console.error("Renderer is not defined for gameobject #"+this.ID);
-		return this.renderer;
-	},
-
-	/**
-	 * Setting a physic engine
-	 * @param {PhysicEngine} physicEngine The physicEngine
-	 */
-	setPhysicEngine: function(physicEngine){
-		physicEngine.gameobject = this;
-		this.physicEngine = physicEngine;
-	},
-
-	/**
-	 * Setting the gameobject velocity
-	 * @param {Vector2} vector A vector2 object
-	 */
-	setVelocity: function(vector){
-		this.velocity = vector;
+	getVelocity: function(){
+		return this.velocity;
 	},
 
 
-	/**
-	 * Setting the layer of the gameobject
-	 * @param {Integer} layer The layer number (0 to 9)
-	 */
+	addBehavior: function(behavior){
+		this.behaviors.push(behavior);
+	},
+	setBehavior: function(behavior){
+		this.addBehavior(behavior);
+	},
+	getBehaviors: function(){
+		return this.behaviors;
+	},
+
+	setJailed: function(jailed){
+		this.jailed = jailed;
+	},
 	setLayer: function(layer){
-		if(layer > Config.layers - 1){
-			console.error("Layer "+layer+" is too high ! Max: "+(Config.layers-1));
+		var maxLayers = Config.get("maxLayers");
+		
+		if(layer > maxLayers - 1){
+			console.error("Layer " + layer + " is too high ! Max: " + (maxLayers - 1));
 			return false;
 		}
 		this.layer = layer;
 	},
-
-	/**
-	 * Setting the scale
-	 * @param {Float} scale The scale (0 to 10)
-	 */
-	setScale: function(scale){
-		this.scale = scale;
-	},
-
-	/**
-	 * Setting the rotation
-	 * @param {Float} rotation The rotation (in degree)
-	 */
-	rotate: function(angle){
-		this.angle = angle;
-	},
-
-	/**
-	 * Setting the life of the gameobject
-	 * @param {Integer} life Life in ms
-	 */
 	setLife: function(life){
 		this.life = life;
 	},
-
-	// Jailed
-	setJailed: function(jailed){
-		this.jailed = jailed;
-	},
-
-	/**
-	 * Setting the gameobject opacity
-	 * @param {Float} opacity Gameobject opacity (0 to 1)
-	 */
 	setOpacity: function(opacity){
 		this.opacity = opacity;
 	},
-
-	setBehavior: function(behavior){
-		this.behavior = behavior;
-		
-		if(this.behavior != null) this.behavior.run(this);
+	setPhysicEngine: function(physicEngine){
+		physicEngine.setGameObject(this);
+		this.physicEngine = physicEngine;
 	},
+	setPosition: function(x, y){
+		this.position.set(x, y);
 
+		if(this.renderer != null && this.renderer.objPos != null) this.renderer.objPos = this.position;
+	},
+	setRenderer: function(renderer){
+		this.renderer = renderer;
+		this.renderer.setGameObject(this);
+	},
+	setScale: function(scale){
+		this.scale = scale;
+	},
+	setSize: function(w, h){
+		this.size = [w, h];
+		if(this.renderer!=null) this.renderer.size = [w, h];
+	},
+	setVelocity: function(vector){
+		this.velocity = vector;
+	},
+	
 
+	rotate: function(angle){
+		this.angle = angle;
+	},
 
 	// Animations
 	setAnimated: function(bool){
@@ -229,33 +221,18 @@ GameObject.prototype = {
 		}
 	},
 
-
-	/**
-	 * Get a border position of gameobject
-	 * @param {String} The border to get (top, right, bottom or left)
-	 * @return {Float} Float with x or y position of the border
-	 */
-	getBorder: function(border){
-		switch(border){
-			case "top":
-				return this.getPosition().getY();
-			case "right":
-				return this.getPosition().getX() + this.getSize().w;
-			case "bottom":
-				return this.getPosition().getY() + this.getSize().h;
-			case "left":
-				return this.getPosition().getX();
-			default:
-				return -1;
-		}
-	},
-
 	update: function(scene){
-		if(this.behavior != null)
-			this.behavior.loop(this);
+		if(this.behaviors.length > 0){
+			for(var i = 0; i < this.behaviors.length; i++){
+				var b = this.behaviors[i];
+				
+				if(!b.runned){ b.run(this); b.runned = true; }
+				b.loop(this);
+			}
+		}
 
-		this.position.addX(this.velocity.getX() * Game.delta * 2);
-		this.position.addY(this.velocity.getY() * Game.delta * 2);
+		this.position.addX(this.velocity.getX());
+		this.position.addY(this.velocity.getY());
 
 		// Check if the gameobject is hidden (or not)
 		if(this.events["hidden"].length > 0){
@@ -289,45 +266,6 @@ GameObject.prototype = {
 		if(this.life == 0) scene.removeGameObject(this);
 	},
 
-	fixPosition: function(){
-		var scene  = Game.getCurrentScene();
-
-		if(scene.getTileMap()!==null){
-
-			var pos    = this.getTilePositions();
-			if(pos==null) return false;
-			var bottomTile = scene.getTileMap().getTileAt(pos.x, pos.y+1);
-			if(bottomTile==null) return false;
-
-			var y      = this.getTopBorder().y;
-			var fixedY = (bottomTile.objPos.y * bottomTile.objSize[1]) - (this.size[1] * this.scale);
-
-			this.position.setY(fixedY - 0.5);
-
-		}else{
-
-			var scene = Game.getCurrentScene();
-			var pos   = this.getCenter();
-			var sides = Game.collisionsManager.getSidesCollided(this);
-
-			for(var key in sides){
-				var side = sides[key];
-
-				if(side=="bottom"){
-					var bottomObj = scene.getObjectAt(pos.x, this.getBottomBorder().y+1, undefined, this);
-					if(bottomObj==null) continue ;
-					this.position.setY(bottomObj.getCenter().y - bottomObj.size[1] / 2 - this.size[1]);
-				}else if(side=="top"){
-					var topObj = scene.getObjectAt(pos.x, this.getTopBorder().y-1, undefined, this);
-					if(topObj==null) continue ;
-					this.position.setY(topObj.getCenter().y + topObj.size[1] / 2);
-				}
-			}
-
-		}
-	},
-
-
 	// Custom events (only gameobject)
 	dispatchEvent: function(name, data){
 		if(this.events[name]==null) return false;
@@ -341,11 +279,35 @@ GameObject.prototype = {
 
 	onHidden: function(callback){
 		this.events["hidden"].push(callback);
+	},
+
+	clone: function(){
+		var go = new GameObject([this.getSize().w / this.scale, this.getSize().h / this.scale]);
+
+		go.getPosition().set(this.getPosition().clone());
+		go.setLayer(this.layer + 0);
+		go.setOpacity(this.opacity + 0);
+		go.rotate(this.angle + 0);
+		go.setScale(this.scale);
+		go.setAnimated((this.isAnimated) ? true : false);
+		go.animations = this.animations.clone();
+		if(this.animation != null) go.setAnimation(this.animation.name + "");
+		go.setVelocity(this.getVelocity().clone());
+
+		for(var i = 0; i < this.getBehaviors().length; i++){
+			var b = this.getBehaviors()[i];
+			go.addBehavior(b);
+		}
+
+		if(this.renderer != null) go.setRenderer(this.renderer.clone());
+		if(this.physicEngine != null) go.setPhysicEngine(this.physicEngine.clone());
+
+		return go;
 	}
 	
 };
 
-// Temp Actor object for old projects which compile
+// Temp Actor object for old projects & compilation
 function Actor(size){GameObject.call(this, size);}
 Actor.prototype = Object.create(GameObject.prototype, {});
 Actor.prototype.constructor = Actor;

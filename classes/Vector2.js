@@ -23,6 +23,13 @@ Vector2.prototype = {
 		return this.y;
 	},
 
+	addX: function(x){
+		this.x += x;
+	},
+	addY: function(y){
+		this.y += y;
+	},
+
 	setAngle: function(angle){
 		var length = this.getLength();
 
@@ -48,6 +55,31 @@ Vector2.prototype = {
 	add: function(v2){
 		this.x += v2.getX();
 		this.y += v2.getY();
+		return this;
+	},
+	subtract: function(v2){
+		this.x -= v2.getX();
+		this.y -= v2.getY();
+		return this;
+	},
+	multiply: function(v2, y){
+		if(!isNaN(v2)){
+			if(y !== undefined && !isNaN(y)){
+				this.x *= v2;
+				this.y *= y;
+			}else{
+				this.x *= v2;
+				this.y *= v2;
+			}
+		}else if(v2 instanceof Vector2){
+			this.x *= v2.getX();
+			this.y *= v2.getY();
+		}
+		return this;
+	},
+
+	clone: function(){
+		return new Vector2(this.getX(), this.getY());
 	}
 
 };

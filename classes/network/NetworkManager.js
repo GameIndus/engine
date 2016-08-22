@@ -9,7 +9,7 @@ NetworkManager.prototype = {
 
 	load: function(){
 		var that = this;
-		this.network = new Network(Config.gameServer);
+		this.network = new Network(Config.get("socketServerPath"));
 
 		this.network.onConnect(function(conn){
 			// Load listeners

@@ -22,6 +22,8 @@ function Input(){
 	this.keyDownsActives   = {};
 	this.mouseDownsActives = {};
 
+	this.lastCursorPosition = new Position();
+
 	this.loadEvents();
 	this.loadIntervals();
 }
@@ -29,67 +31,78 @@ function Input(){
 Input.prototype = {
 
 	loadEvents: function(){
-		var that = this;
+		var self = this;
 		window.addEventListener("keydown", function(e){
-			if(Object.keys(that.keyDownsActives).indexOf(e.keyCode + "") == -1) 
-				that.keyDownsActives[e.keyCode + ""] = e;
+			if(Object.keys(self.keyDownsActives).indexOf(e.keyCode + "") == -1) 
+				self.keyDownsActives[e.keyCode + ""] = e;
 
-			that.dispatchEvent("keydown", e);
+			self.dispatchEvent("keydown", e);
 		});
 		window.addEventListener("keyup", function(e){
-			if(Object.keys(that.keyDownsActives).indexOf(e.keyCode + "") != -1) 
-				delete that.keyDownsActives[e.keyCode + ""];
+			if(Object.keys(self.keyDownsActives).indexOf(e.keyCode + "") != -1) 
+				delete self.keyDownsActives[e.keyCode + ""];
 
-			that.dispatchEvent("keyup", e);
+			self.dispatchEvent("keyup", e);
 		});
 		window.addEventListener("keypress", function(e){
-			that.dispatchEvent("keypress", e);
+			self.dispatchEvent("keypress", e);
 		});
 		window.addEventListener("click", function(e){
-			that.dispatchEvent("click", e);
+			e = self.formatMouseEvent(e);
+
+			self.dispatchEvent("click", e);
 		});
 		window.addEventListener("mouseup", function(e){
 			var b = e.which || e.button;
-			if(Object.keys(that.mouseDownsActives).indexOf(b + "") != -1) 
-				delete that.mouseDownsActives[b + ""];
 
-			that.dispatchEvent("mouseup", e);
+			e = self.formatMouseEvent(e);
+
+			if(Object.keys(self.mouseDownsActives).indexOf(b + "") != -1) 
+				delete self.mouseDownsActives[b + ""];
+
+			self.dispatchEvent("mouseup", e);
 		});
 		window.addEventListener("mousedown", function(e){
 			var b = e.which || e.button;
-			if(Object.keys(that.mouseDownsActives).indexOf(b + "") == -1) 
-				that.mouseDownsActives[b + ""] = e;
 
-			that.dispatchEvent("mousedown", e);
+			e = self.formatMouseEvent(e);
+
+			if(Object.keys(self.mouseDownsActives).indexOf(b + "") == -1) 
+				self.mouseDownsActives[b + ""] = e;
+
+			self.dispatchEvent("mousedown", e);
 		});
 		window.addEventListener("mousemove", function(e){
-			that.dispatchEvent("mousemove", e);
+			e = self.formatMouseEvent(e);
+
+			self.lastCursorPosition.set(e.clientX, e.clientY);
+			self.dispatchEvent("mousemove", e);
 		});
 		window.addEventListener("touchstart", function(e){
-			that.dispatchEvent("touchstart", e);
+			self.dispatchEvent("touchstart", e);
 		});
 		window.addEventListener("touchend", function(e){
-			that.dispatchEvent("touchend", e);
+			self.dispatchEvent("touchend", e);
 		});
 		window.addEventListener("touchcancel", function(e){
-			that.dispatchEvent("touchcancel", e);
+			self.dispatchEvent("touchcancel", e);
 		});
 		window.addEventListener("touchmove", function(e){
-			that.dispatchEvent("touchmove", e);
+			self.dispatchEvent("touchmove", e);
 		});
 		window.addEventListener("wheel", function(e){
-			that.dispatchEvent("wheel", e);
+			self.dispatchEvent("wheel", e);
 		}, false);
 	},
 	loadIntervals: function(){
-		var that = this;
+		var self = this;
 
 		var intervalG = function(){
-			for(var i = 0; i < Object.keys(that.keyDownsActives).length; i++){
-				that.dispatchEvent("keydown", that.keyDownsActives[Object.keys(that.keyDownsActives)[i]], true);
+			for(var i = 0; i < Object.keys(self.keyDownsActives).length; i++){
+				self.dispatchEvent("keydown", self.keyDownsActives[Object.keys(self.keyDownsActives)[i]], true);
 			}
-			for(var i = 0; i < Object.keys(that.mouseDownsActives).length; i++){
-				that.dispatchEvent("mousedown", that.mouseDownsActives[Object.keys(that.mouseDownsActives)[i]], true);
+			for(var i = 0; i < Object.keys(self.mouseDownsActives).length; i++){
+				self.dispatchEvent("mousedown", self.mouseDownsActives[Object.keys(self.mouseDownsActives)[i]], true);
 			}
 
 			requestAnimationFrame(intervalG);
@@ -272,6 +285,62 @@ Input.prototype = {
 		return false;
 	},
 
+	getLastCursorPosition: function(){
+		return this.lastCursorPosition;
+	},
+
+	lockMouse: function(){
+		if(Game == null || Game.getCanvas == null) return false;
+		var canvas = Game.getCanvas();
+		if(canvas.getCanvas() == null) return false;
+		canvas = canvas.getCanvas();
+
+		canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
+
+    	if(canvas.requestPointerLock != null) 
+    		canvas.requestPointerLock();
+	},
+	mouseIsLocked: function(){
+		if(Game == null || Game.getCanvas == null) return false;
+		var canvas = Game.getCanvas();
+		if(canvas.getCanvas() == null) return false;
+		canvas = canvas.getCanvas();
+
+		return (document.webkitPointerLockElement === canvas || document.pointerLockElement === canvas || document.mozPointerLockElement === canvas);
+	},
+	unlockMouse: function(){
+		document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock;
+
+    	if(document.exitPointerLock != null) 
+    		document.exitPointerLock();
+	},
+
+	goFullscreen: function(){
+		if(Game == null || Game.getCanvas == null) return false;
+		var canvas = Game.getCanvas();
+		if(canvas.getCanvas() == null) return false;
+		canvas = canvas.getCanvas();
+
+		canvas.requestFullscreen = canvas.requestFullscreen || canvas.mozRequestFullscreen || canvas.webkitRequestFullscreen;
+		
+		if(canvas.requestFullscreen != null)
+			canvas.requestFullscreen();
+	},
+	isFullscreen: function(){
+		if(Game == null || Game.getCanvas == null) return false;
+		var canvas = Game.getCanvas();
+		if(canvas.getCanvas() == null) return false;
+		canvas = canvas.getCanvas();
+
+		return (document.fullscreenElement === canvas || document.mozFullscreenElement === canvas || document.webkitFullscreenElement === canvas);
+	},
+	exitFullscreen: function(){
+		document.cancelFullScreen = document.cancelFullScreen || document.mozCancelFullScreen || document.webkitCancelFullScreen;
+
+    	if(document.cancelFullScreen != null) 
+    		document.cancelFullScreen();
+	},
+
 
 	reset: function(){
 		this.keyDownFuncs = {};
@@ -295,6 +364,32 @@ Input.prototype = {
 
 		this.keyDownsActives   = {};
 		this.mouseDownsActives = {};
+	},
+	createNewMouseEvent: function(e, x, y){
+		return new MouseEvent(e.type, {clientX: x, clientY: y, button: e.button, which: e.which, altKey: e.altKey, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, metaKey: e.metaKey, view: e.view, relatedTarget: e.relatedTarget});
+	},
+	formatMouseEvent: function(event){
+		var clientX = event.clientX, clientY = event.clientY;
+		var mouseLocked = Input.mouseIsLocked();
+		
+		if(Input.isFullscreen()){
+			if(Game == null || Game.getCanvas == null) return false;
+			var canvas = Game.getCanvas();
+			if(canvas.getCanvas() == null) return false;
+			canvas = canvas.getCanvas();
+
+			clientX -= canvas.offsetLeft;clientY -= canvas.offsetTop;
+
+			if(!mouseLocked) event = this.createNewMouseEvent(event, clientX, clientY);
+		}
+		if(mouseLocked){
+			clientX = this.lastCursorPosition.getX() + event.movementX;
+			clientY = this.lastCursorPosition.getY() + event.movementY;
+
+			event = this.createNewMouseEvent(event, clientX, clientY);
+		}
+
+		return event;
 	}
 
 };

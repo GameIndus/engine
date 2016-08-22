@@ -26,18 +26,15 @@ Tile.prototype = {
 	},
 
 	render: function(){
+		var tilemap = this.scene.tilemap;
+		if(tilemap == null) return false;
+
 		var x = this.pos.x * this.size[0] + this.pos.x * this.betweenX;
 		var y = this.pos.y * this.size[1] + this.pos.y * this.betweenY;
 
 		if(!this.canBeRendered(x, y)) return false;
 
-		var offset = {x: 0, y: 0};
-		if(this.scene!=null&&this.scene.camera!=null) offset = this.scene.camera.getOffset();
-
-		offset.x = Math.round(offset.x);
-		offset.y = Math.round(offset.y);
-
-		Game.getContext().drawImage(Game.ressources.getRessource(this.name), x, y, this.size[0], this.size[1], (this.objPos.x * this.objSize[0])+offset.x, (this.objPos.y * this.objSize[1])+offset.y, this.objSize[0], this.objSize[1]);
+		Game.getContext().drawImage(Game.ressources.getRessource(this.name), x, y, this.size[0], this.size[1], tilemap.getPosition().getX() + (this.objPos.x * this.objSize[0]), tilemap.getPosition().getY() + (this.objPos.y * this.objSize[1]), this.objSize[0], this.objSize[1]);
 	},
 
 	// Edit vars
@@ -57,42 +54,33 @@ Tile.prototype = {
 
 
 	getBorder: function(border){
-		var offset = {x: 0, y: 0};
-		if(this.scene != null && this.scene.camera != null) offset = this.scene.camera.getOffset();
-
 		switch(border){
 			case "top":
-				return (this.objPos.y * this.objSize[1]) + offset.y;
+				return (this.objPos.y * this.objSize[1]);
 			case "right":
-				return (this.objPos.x * this.objSize[0]) + offset.x + this.objSize[0];
+				return (this.objPos.x * this.objSize[0]) + this.objSize[0];
 			case "bottom":
-				return (this.objPos.y * this.objSize[1]) + offset.y + this.objSize[1];
+				return (this.objPos.y * this.objSize[1]) + this.objSize[1];
 			case "left":
-				return (this.objPos.x * this.objSize[0]) + offset.x;
+				return (this.objPos.x * this.objSize[0]);
 			default:
 				return -1;
 		}
 	},
 
 	canBeRendered: function(){
-		if(this.scene==null) return false;
+		if(this.scene == null) return false;
 		var limits = Game.getCanvas().getSize();
 
 		// Check for camera
 		var camera = this.scene.camera;
-		if(camera!=null) limits = camera.getBorders();
+		if(camera != null) limits = camera.getBorders();
 
-		var rightBorder  = (camera != null) ? this.getBorder("right") - camera.getOffset().x : this.getBorder("right");
-		var leftBorder   = (camera != null) ? this.getBorder("left") - camera.getOffset().x : this.getBorder("left");
-		var bottomBorder = (camera != null) ? this.getBorder("bottom") - camera.getOffset().y : this.getBorder("bottom");
-		var topBorder    = (camera != null) ? this.getBorder("top") - camera.getOffset().y : this.getBorder("top");
+		if(this.getBorder("right")  <= limits.left) return false;
+		if(this.getBorder("left")   >= limits.right) return false;
+		if(this.getBorder("bottom") <= limits.top) return false;
+		if(this.getBorder("top")    >= limits.bottom) return false;
 
-		if(rightBorder <= limits.left) return false;
-		if(leftBorder >= limits.right) return false;
-		if(bottomBorder <= limits.top) return false;
-		if(topBorder >= limits.bottom) return false;
-
-		
 		return true;
 	}
 
