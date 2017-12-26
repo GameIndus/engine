@@ -1,0 +1,3 @@
+class Light extends GameObject {
+	
+}

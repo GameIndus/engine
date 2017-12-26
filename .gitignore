@@ -1,0 +1,9 @@
+node_modules/
+.idea/
+*.xml
+*.map
+*.iml
+*.json
+*.js
+library.d.ts
+index.ts
