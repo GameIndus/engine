@@ -1,24 +1,24 @@
 class Point {
 
-    private _x: number;
-
-    private _y: number;
-
     constructor(x?: number, y?: number) {
         this.x = x || 0;
         this.y = y || 0;
     }
 
+    private _x: number;
+
     public get x(): number {
         return this._x;
     }
 
-    public get y(): number {
-        return this._y;
-    }
-
     public set x(x: number) {
         this._x = x;
+    }
+
+    private _y: number;
+
+    public get y(): number {
+        return this._y;
     }
 
     public set y(y: number) {

@@ -1,78 +1,80 @@
 class Polygon {
-	
-	private _area  : number;
-	private _points: Point[];
+
+    public constructor(points?: Point[]) {
+        if (points) this.setTo(points);
+    }
+
+    private _area: number;
+
+    public get area(): number {
+        return this._area;
+    }
+
+    private _points: Point[];
+
+    public get points(): Point[] {
+        return this._points;
+    }
 
 
-	public constructor(points?: Point[]){
-		if(points) this.setTo(points);
-	}
+    public contains(x: number, y: number): boolean {
+        let inside = false;
 
-	public get area(): number {
-		return this._area;
-	}
-	public get points(): Point[] {
-		return this._points;
-	}
+        for (var i = -1, j = this._points.length - 1; ++i < this._points.length; j = i) {
+            let ix = this._points[i].x;
+            let iy = this._points[i].y;
 
+            let jx = this._points[j].x;
+            let jy = this._points[j].y;
 
-	public contains(x: number, y: number): boolean {
-		let inside = false;
+            if (((iy <= y && y < jy) || (jy <= y && y < iy)) && (x < (jx - ix) * (y - iy) / (jy - iy) + ix))
+                inside = !inside;
+        }
 
-		for (var i = -1, j = this._points.length - 1; ++i < this._points.length; j = i) {
-			let ix = this._points[i].x;
-			let iy = this._points[i].y;
+        return inside;
+    }
 
-			let jx = this._points[j].x;
-			let jy = this._points[j].y;
+    private setTo(points: Point[]): Polygon {
 
-			if (((iy <= y && y < jy) || (jy <= y && y < iy)) && (x < (jx - ix) * (y - iy) / (jy - iy) + ix))
-				inside = !inside;
-		}
+        this._area = 0;
+        this._points = [];
 
-		return inside;
-	}
-	private setTo(points: Point[]): Polygon {
+        // Calculate the lowest Y boundary
+        let lowY = Number.MAX_VALUE;
 
-		this._area   = 0;
-		this._points = [];
+        for (let i = 0; i < points.length; i++) {
+            let p = points[i];
 
-		// Calculate the lowest Y boundary
-		let lowY = Number.MAX_VALUE;
+            this._points.push(p);
+            if (p.y < lowY) lowY = p.y;
+        }
 
-		for( let i = 0; i < points.length; i++ ) {
-			let p = points[i];
+        // Calculate area of the polygon
+        this.calculateArea(lowY);
 
-			this._points.push(p);
-			if(p.y < lowY) lowY = p.y;
-		}
+        return this;
+    }
 
-		// Calculate area of the polygon
-		this.calculateArea(lowY);
+    private calculateArea(lowY: number): number {
+        let p1: Point;
+        let p2: Point;
+        let avgHeight: number;
+        let width: number;
 
-		return this;
-	}
+        for (let i = 0, len = this.points.length; i < len; i++) {
 
-	private calculateArea(lowY: number): number{
-		let p1        : Point;
-		let p2        : Point;
-		let avgHeight : number;
-		let width     : number;
+            p1 = this.points[i];
 
-		for( let i = 0, len = this.points.length; i < len; i++ ) {
+            if (i == len - 1) p2 = this.points[0];
+            else p2 = this.points[i + 1];
 
-			p1 = this.points[i];
+            avgHeight = ((p1.y - lowY) + (p2.y - lowY)) / 2;
+            width = p1.x - p2.x;
 
-			if( i == len - 1 ) p2 = this.points[0];
-			else               p2 = this.points[i + 1];
+            this._area += avgHeight * width;
+        }
 
-			avgHeight = ( (p1.y - lowY) + (p2.y - lowY) ) / 2;
-			width     = p1.x - p2.x;
-
-			this._area += avgHeight * width;
-		}
-
-		return this.area;
-	}
+        return this.area;
+    }
 
 }

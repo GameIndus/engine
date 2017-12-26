@@ -1,7 +1,7 @@
-class Diamond extends Star{
+class Diamond extends Star {
 
-	public constructor(radiusFraction?: number){
-		super(2, radiusFraction);
-	}
+    public constructor(radiusFraction?: number) {
+        super(2, radiusFraction);
+    }
 
 }

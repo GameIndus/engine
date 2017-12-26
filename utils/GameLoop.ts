@@ -1,92 +1,93 @@
-class GameLoop{
+class GameLoop {
 
-	private game           : Game;
-	private _isRunning     : boolean;
-	private forceTimeout   : boolean;
-	private _isSetTimeout  : boolean;
+    private game: Game;
+    private forceTimeout: boolean;
+    private animationFrame: Function;
+    private onLoop: FrameRequestCallback;
+    private loopId: number;
 
-	private animationFrame : Function;
-	private onLoop         : FrameRequestCallback;
-	private loopId         : number;
+    public constructor(game: Game, forceTimeout ?: boolean) {
+        this.game = game;
+        this.forceTimeout = forceTimeout || false;
 
+        this._initialize();
+    }
 
-	public constructor(game: Game, forceTimeout ?: boolean) {
-		this.game         = game;
-		this.forceTimeout = forceTimeout || false;
+    private _isRunning: boolean;
 
-		this._initialize();
-	}
+    public get isRunning(): boolean {
+        return this._isRunning;
+    }
 
+    private _isSetTimeout: boolean;
 
-	public get isRunning(): boolean{
-		return this._isRunning;
-	}
-	public get isSetTimeout(): boolean{
-		return this._isSetTimeout;
-	}
+    public get isSetTimeout(): boolean {
+        return this._isSetTimeout;
+    }
 
+    public start(): void {
+        let self: GameLoop = this;
 
-	private _initialize(): void{
-		Util.getVendors().forEach(function(vendor){
-			
-			if(!window.requestAnimationFrame){
-				window.requestAnimationFrame = window[ vendor + 'RequestAnimationFrame' ];
-				window.cancelAnimationFrame  = window[ vendor + 'CancelAnimationFrame'  ];
-			}
+        this._isRunning = true;
 
-		});
-	}
-	public start(): void{
-		let self: GameLoop = this;
+        if (window.requestAnimationFrame && !this.forceTimeout) {
 
-		this._isRunning = true;
+            this._isSetTimeout = false;
 
-		if(window.requestAnimationFrame && !this.forceTimeout){
+            this.onLoop = function (time) {
+                return self.updateFromRAF(time);
+            };
 
-			this._isSetTimeout = false;
+            this.loopId = window.requestAnimationFrame(this.onLoop);
 
-			this.onLoop = function(time) {
-				return self.updateFromRAF(time);
-			};
+        } else {
 
-			this.loopId = window.requestAnimationFrame(this.onLoop); 
+            this._isSetTimeout = true;
 
-		} else {
+            this.onLoop = function () {
+                return self.updateFromTimeout();
+            }
 
-			this._isSetTimeout = true;
+            this.loopId = window.setTimeout(this.onLoop, 0);
 
-			this.onLoop = function() {
-				return self.updateFromTimeout();
-			}
+        }
+    }
 
-			this.loopId = window.setTimeout(this.onLoop, 0);
+    public stop(): void {
+        if (this.isSetTimeout) {
+            clearTimeout(this.loopId);
+        } else {
+            window.cancelAnimationFrame(this.loopId);
+        }
 
-		}
-	}
+        this._isRunning = false;
+    }
 
-	private updateFromTimeout(): void{
-		if(this.isRunning) {
-			this.game.update(Date.now());
+    private _initialize(): void {
+        Util.getVendors().forEach(function (vendor) {
 
-			this.loopId = window.setTimeout(this.onLoop, this.game.time.callTime);
-		}
-	}
-	private updateFromRAF(time: number): void{
-		if(this.isRunning) {
-			this.game.update(Math.floor(time));
+            if (!window.requestAnimationFrame) {
+                window.requestAnimationFrame = window[vendor + 'RequestAnimationFrame'];
+                window.cancelAnimationFrame = window[vendor + 'CancelAnimationFrame'];
+            }
 
-			this.loopId = window.requestAnimationFrame(this.onLoop);
-		}
-	}
+        });
+    }
 
-	public stop(): void{
-		if(this.isSetTimeout) {
-			clearTimeout(this.loopId);
-		} else {
-			window.cancelAnimationFrame(this.loopId);
-		}
+    private updateFromTimeout(): void {
+        if (this.isRunning) {
+            this.game.update(Date.now());
 
-		this._isRunning = false;
-	}
+            this.loopId = window.setTimeout(this.onLoop, this.game.time.callTime);
+        }
+    }
+
+    private updateFromRAF(time: number): void {
+        if (this.isRunning) {
+            this.game.update(Math.floor(time));
+
+            this.loopId = window.requestAnimationFrame(this.onLoop);
+        }
+    }
 
 }

@@ -1,127 +1,127 @@
 class Time {
 
-	private game     : Game;
+    private static _timers: Timer[] = [];
+    private game: Game;
+    private _started: number;
+    private timeExpected: number;
+    private _now: number;
+    private _lastTime: number;
 
-	private _callTime    : number = 0;
-	private _fps         : number = 60;
-	private _started     : number;
-	private _time        : number;
-	private timeExpected : number;
-		
-	// For game update loop
-	private _elapsed  : number;
-	private _now      : number;
-	private _lastTime : number;
+    public constructor(game: Game) {
+        this.game = game;
+    }
 
+    private _callTime: number = 0;
 
-	private static _timers: Timer[] = [];
+    public get callTime(): number {
+        return this._callTime;
+    }
 
+    private _fps: number = 60;
 
-	public constructor(game: Game) {
-		this.game = game;
-	}
+    public get fps(): number {
+        return this._fps;
+    }
 
+    private _time: number;
 
+    public get time(): number {
+        return this._time;
+    }
 
-	public get callTime(): number {
-		return this._callTime;
-	}
-	public get elapsed(): number {
-		return this._elapsed;
-	}
-	public get fps(): number {
-		return this._fps;
-	}
-	public get fpsFactor(): number {
-		return 1.0 / this._fps;
-	}
-	public get time(): number {
-		return this._time;
-	}
+    // For game update loop
+    private _elapsed: number;
 
+    public get elapsed(): number {
+        return this._elapsed;
+    }
 
+    public get fpsFactor(): number {
+        return 1.0 / this._fps;
+    }
 
-	public boot(): void {
-		this._started     = Date.now();
-		this._time        = Date.now();
-		this.timeExpected = this.time;
-	}
+    public static createTimer(delay: number, callback: Function): Timer {
+        let timer: Timer = new Timer(delay, callback);
+        this._timers.push(timer);
+        return timer;
+    }
 
-	public static createTimer(delay: number, callback: Function): Timer {
-		let timer: Timer = new Timer(delay, callback);
-		this._timers.push(timer);
-		return timer;
-	}
-	public static createRepeatedTimer(delay: number, repeats: number, callback: Function): Timer {
-		return Time.createTimer(delay, callback).repeat(repeats);
-	}
+    public static createRepeatedTimer(delay: number, repeats: number, callback: Function): Timer {
+        return Time.createTimer(delay, callback).repeat(repeats);
+    }
 
-	public gamePaused(): void {
-		// Pause timers
-		let i: number = Time._timers.length;
-		while(i--){
-			Time._timers[i].pause();
-		}
-	}
-	public gameResumed(): void {
-		this._time = Date.now();
+    public static now(): number {
+        if (window.performance !== undefined && window.performance.now !== undefined) {
+            return window.performance.now.bind(window.performance)();
+        } else if (Date.now !== undefined) {
+            return Date.now();
+        } else {
+            return new Date().getTime();
+        }
+    }
 
-		// Resume timers
-		let i: number = Time._timers.length;
-		while(i--){
-			Time._timers[i].resume();
-		}
-	}
+    public boot(): void {
+        this._started = Date.now();
+        this._time = Date.now();
+        this.timeExpected = this.time;
+    }
 
-	public refresh(): void {
-		this._time = Date.now();
-	}
+    public gamePaused(): void {
+        // Pause timers
+        let i: number = Time._timers.length;
+        while (i--) {
+            Time._timers[i].pause();
+        }
+    }
 
-	public update(time: number): void {
-		this._time = Date.now();
+    public gameResumed(): void {
+        this._time = Date.now();
 
-		// Update time for game update loop
-		this._lastTime = this._now;
-		this._now      = time;
-		this._elapsed  = this._now - this._lastTime;
+        // Resume timers
+        let i: number = Time._timers.length;
+        while (i--) {
+            Time._timers[i].resume();
+        }
+    }
 
-		if(this.game.loop.isSetTimeout) {
-			this._callTime    = Math.floor(Math.max(0, (1000.0 / this._fps) - (this.timeExpected - time)));
+    public refresh(): void {
+        this._time = Date.now();
+    }
 
-			this.timeExpected = time + this._callTime;
-		}
+    public update(time: number): void {
+        this._time = Date.now();
 
-		this.updateTimers();
-	}
-	public updateTimers(): void {
-		let timers : Timer[] = Time._timers;
-		let i      : number  = 0;
+        // Update time for game update loop
+        this._lastTime = this._now;
+        this._now = time;
+        this._elapsed = this._now - this._lastTime;
 
-		let len    : number  = timers.length;
+        if (this.game.loop.isSetTimeout) {
+            this._callTime = Math.floor(Math.max(0, (1000.0 / this._fps) - (this.timeExpected - time)));
 
-		while (i < len){
+            this.timeExpected = time + this._callTime;
+        }
 
-			if (timers[i].update()) {
-				i++;
-			} else {
-				// Timer needs to be removed
-				Time._timers.splice(i, 1);
-				len--;
-			}
+        this.updateTimers();
+    }
 
-		}
-	}
+    public updateTimers(): void {
+        let timers: Timer[] = Time._timers;
+        let i: number = 0;
 
+        let len: number = timers.length;
 
+        while (i < len) {
 
-	public static now() : number{
-		if ( window.performance !== undefined && window.performance.now !== undefined ) {
-			return window.performance.now.bind(window.performance)();
-		} else if ( Date.now !== undefined ) {
-			return Date.now();
-		} else {
-			return new Date().getTime();
-		}
-	}
+            if (timers[i].update()) {
+                i++;
+            } else {
+                // Timer needs to be removed
+                Time._timers.splice(i, 1);
+                len--;
+            }
+
+        }
+    }
 
 }

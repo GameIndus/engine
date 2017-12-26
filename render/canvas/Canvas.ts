@@ -1,22 +1,25 @@
 class Canvas {
 
-    private game: Game;
-
     protected initialized: boolean;
-
-    protected _wrapper: HTMLElement;
-
-    protected _canvas: HTMLCanvasElement;
-
-    protected _context: CanvasRenderingContext2D;
+    private game: Game;
 
     public constructor(game: Game) {
         this.game = game;
     }
 
+    protected _wrapper: HTMLElement;
+
+    public get wrapper(): HTMLElement {
+        return this._wrapper;
+    }
+
+    protected _canvas: HTMLCanvasElement;
+
     public get canvas(): HTMLCanvasElement {
         return this._canvas;
     }
+
+    protected _context: CanvasRenderingContext2D;
 
     public get context(): CanvasRenderingContext2D {
         return this._context;
@@ -24,10 +27,6 @@ class Canvas {
 
     public get element(): HTMLCanvasElement {
         return this._canvas;
-    }
-
-    public get wrapper(): HTMLElement {
-        return this._wrapper;
     }
 
     public get size(): RectangleSize {

@@ -1,59 +1,61 @@
-class Util{
-	
-	public static getVendors(): string[] {
-		return ['ms', 'moz', 'webkit', 'o'];
-	}
+class Util {
 
-	public static sortArrayByProperty(array: any[], property: string): any[]{
-		let sortOrder: number = 1;
+    public static getVendors(): string[] {
+        return ['ms', 'moz', 'webkit', 'o'];
+    }
 
-		if(property[0] === "-") {
-			sortOrder = -1;
-			property = property.substr(1);
-		}
+    public static sortArrayByProperty(array: any[], property: string): any[] {
+        let sortOrder: number = 1;
 
-		array.sort(function (a, b) {
-			let result: number = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-			return result * sortOrder;
-		});
+        if (property[0] === "-") {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
 
-		return array;
-	}
-	public static copyObject<T> (object:T): T {
-		var objectCopy = <T>{};
+        array.sort(function (a, b) {
+            let result: number = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            return result * sortOrder;
+        });
 
-		for (var key in object)
-			if (object.hasOwnProperty(key))
-				objectCopy[key] = object[key];
+        return array;
+    }
 
-		return objectCopy;
-	}
-	public static objectEquals(obj1: Object, obj2: Object) : boolean {
+    public static copyObject<T>(object: T): T {
+        var objectCopy = <T>{};
 
-		for(let key in obj1) {
-			if(!obj1.hasOwnProperty(key)) continue;
+        for (var key in object)
+            if (object.hasOwnProperty(key))
+                objectCopy[key] = object[key];
 
-			if(obj1[key] != obj2[key]) return false;
-		}
+        return objectCopy;
+    }
 
-		return true;
-	}
+    public static objectEquals(obj1: Object, obj2: Object): boolean {
 
-	public static removeFrom(array: Array<any>, item: any): void{
-		array.splice(array.indexOf(item), 1);
-	}
+        for (let key in obj1) {
+            if (!obj1.hasOwnProperty(key)) continue;
 
-	public static urlFromPath(path: string, base: string): string{
-		let isUrl: boolean = Util.isUrl(path);
+            if (obj1[key] != obj2[key]) return false;
+        }
 
-		if(isUrl) return path;
-		else return base + path;
-	}
+        return true;
+    }
 
-	public static isUrl(str): boolean {
-		var pattern = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+    public static removeFrom(array: Array<any>, item: any): void {
+        array.splice(array.indexOf(item), 1);
+    }
 
-		return pattern.test(str);
-	}
+    public static urlFromPath(path: string, base: string): string {
+        let isUrl: boolean = Util.isUrl(path);
+
+        if (isUrl) return path;
+        else return base + path;
+    }
+
+    public static isUrl(str): boolean {
+        var pattern = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
+        return pattern.test(str);
+    }
 
 }

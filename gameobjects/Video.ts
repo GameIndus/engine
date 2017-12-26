@@ -1,3 +1,3 @@
-class Video extends GameObject{
+class Video extends GameObject {
 
 }

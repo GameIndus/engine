@@ -1,23 +1,22 @@
 abstract class Plugin {
 
-    private _game: Game;
-
-    private _id: number;
-
     private _name: string;
-
     private _registered: boolean;
 
     public constructor(public name: string) {
         this._name = name;
     }
 
-    protected get game(): Game {
-        return this._game;
-    }
+    private _id: number;
 
     public get id(): number {
         return this._id;
+    }
+
+    private _game: Game;
+
+    protected get game(): Game {
+        return this._game;
     }
 
     public abstract onEnable(): void;

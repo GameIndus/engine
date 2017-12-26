@@ -1,19 +1,20 @@
 interface Shape {
-	points: Point[];
+    points: Point[];
 }
 
 interface ComplexShape {
-	points: Point[];
-	calculatePoints(position: Position, size: RectangleSize) : Point[];
+    points: Point[];
+
+    calculatePoints(position: Position, size: RectangleSize): Point[];
 }
 
 enum ShapeType {
-	// Basic shapes
-	RECTANGLE,
-	CIRCLE,
-	TRIANGLE,
+    // Basic shapes
+    RECTANGLE,
+    CIRCLE,
+    TRIANGLE,
 
-	// Custom & Complex shape
-	COMPLEX,
-	POLYGON
+    // Custom & Complex shape
+    COMPLEX,
+    POLYGON
 }

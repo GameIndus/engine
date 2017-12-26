@@ -1,7 +1,7 @@
-class Triangle implements Shape{
+class Triangle implements Shape {
 
-	public get points(): Point[]{
-		return [];
-	}
-	
+    public get points(): Point[] {
+        return [];
+    }
+
 }

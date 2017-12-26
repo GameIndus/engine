@@ -1,14 +1,7 @@
 class GeometricObject extends GameObject {
 
-    private _color: Color = Color.BLACK;
-
-    private _shape: ShapeType = ShapeType.RECTANGLE;
-
     private _shapeData: any;
-
     private _fill: boolean = true;
-
-    protected _animator: GeometricAnimator;
 
     constructor(game: Game, name?: string, shape?: ShapeType, position?: Position, size?: number | any, color?: Color, fill?: boolean, shapeData?: ComplexShape | Point[]) {
         super(game, name);
@@ -28,27 +21,24 @@ class GeometricObject extends GameObject {
         if (shapeData) this._shapeData = shapeData;
     }
 
+    private _color: Color = Color.BLACK;
+
     public get color(): Color {
         return this._color || Color.BLACK;
     }
 
-    public get filled(): boolean {
-        return this._fill;
+    public set color(color: Color) {
+        this._color = color;
     }
 
-    public get shapeType(): ShapeType {
-        return this._shape;
-    }
+    private _shape: ShapeType = ShapeType.RECTANGLE;
 
     public get shape(): ComplexShape {
         if (!(this._shapeData instanceof Object))
             return this._shapeData;
     }
 
-    public get points(): Point[] {
-        if (this._shapeData instanceof Object)
-            return this._shapeData;
-    }
+    protected _animator: GeometricAnimator;
 
     public get animator(): GeometricAnimator {
         if (this._animator) return this._animator;
@@ -56,16 +46,25 @@ class GeometricObject extends GameObject {
         return this._animator;
     }
 
-    public set color(color: Color) {
-        this._color = color;
+    public get filled(): boolean {
+        return this._fill;
     }
 
     public set filled(fill: boolean) {
         this._fill = fill;
     }
 
+    public get shapeType(): ShapeType {
+        return this._shape;
+    }
+
     public set shapeType(shape: ShapeType) {
         this._shape = shape;
+    }
+
+    public get points(): Point[] {
+        if (this._shapeData instanceof Object)
+            return this._shapeData;
     }
 
     public render(graphics: Graphics, time: number): void {

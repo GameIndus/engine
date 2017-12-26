@@ -1,52 +1,54 @@
 class Animator {
 
-	private   _game   : Game;
-	protected _object : GameObject;
+    private _positionTween: Tween;
+    private _sizeTween: Tween;
 
-	private _positionTween : Tween;
-	private _sizeTween     : Tween;
+    public constructor(game: Game, object: GameObject) {
+        this._game = game;
+        this._object = object;
+    }
 
-	public constructor(game: Game, object: GameObject) {
-		this._game   = game;
-		this._object = object;
-	}
+    private _game: Game;
+
+    protected get game(): Game {
+        return this._game;
+    }
+
+    protected _object: GameObject;
+
+    protected get object(): GameObject {
+        return this._object;
+    }
 
 
-	protected get game(): Game {
-		return this._game;
-	}
-	protected get object(): GameObject {
-		return this._object;
-	}
+    public position(positionTo: Position, duration: number, easing?: Easing, delay?: number, repeats?: number, yoyo?: boolean): Tween {
+        if (this._positionTween) this._positionTween.destroy();
 
+        if (!easing) easing = Easing.LINEAR;
 
-	public position(positionTo: Position, duration: number, easing?: Easing, delay?: number, repeats?: number, yoyo?: boolean): Tween {
-		if( this._positionTween ) this._positionTween.destroy();
+        this._positionTween = this.game.tween(this.object.position).easing(easing).to(positionTo, duration);
 
-		if( !easing ) easing = Easing.LINEAR;
+        if (delay) this._positionTween.delay(delay);
+        if (repeats) this._positionTween.repeat(repeats);
+        if (yoyo) this._positionTween.yoyo();
 
-		this._positionTween = this.game.tween(this.object.position).easing(easing).to(positionTo, duration);
+        this._positionTween.start();
+        return this._positionTween;
+    }
 
-		if( delay )   this._positionTween.delay(delay);
-		if( repeats ) this._positionTween.repeat(repeats);
-		if( yoyo )    this._positionTween.yoyo();
+    public size(sizeTo: RectangleSize, duration: number, easing?: Easing, delay?: number, repeats?: number, yoyo?: boolean): Tween {
+        if (this._sizeTween) this._sizeTween.destroy();
 
-		this._positionTween.start();
-		return this._positionTween;
-	}
-	public size(sizeTo: RectangleSize, duration: number, easing?: Easing, delay?: number, repeats?: number, yoyo?: boolean): Tween {
-		if( this._sizeTween ) this._sizeTween.destroy();
+        if (!easing) easing = Easing.LINEAR;
 
-		if( !easing ) easing = Easing.LINEAR;
+        this._sizeTween = this.game.tween(this.object.size).easing(easing).min(0).to(sizeTo, duration);
 
-		this._sizeTween = this.game.tween(this.object.size).easing(easing).min(0).to(sizeTo, duration);
+        if (delay) this._sizeTween.delay(delay);
+        if (repeats) this._sizeTween.repeat(repeats);
+        if (yoyo) this._sizeTween.yoyo();
 
-		if( delay )   this._sizeTween.delay(delay);
-		if( repeats ) this._sizeTween.repeat(repeats);
-		if( yoyo )    this._sizeTween.yoyo();
-
-		this._sizeTween.start();
-		return this._sizeTween;
-	}
+        this._sizeTween.start();
+        return this._sizeTween;
+    }
 
 }

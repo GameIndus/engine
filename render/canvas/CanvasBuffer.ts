@@ -1,10 +1,6 @@
 class CanvasBuffer extends Canvas {
 
-    private _source: any;
-
     private _clipping: Rectangle;
-
-    private _repeatSource: boolean;
 
     public constructor(source: HTMLImageElement | Gradient) {
         super(null);
@@ -13,18 +9,22 @@ class CanvasBuffer extends Canvas {
         this._canvas = CanvasPool.create(this, this._source.width, this._source.height);
     }
 
+    private _source: any;
+
     public get source(): HTMLImageElement {
         if (this._source instanceof Gradient) return null;
         return this._source;
     }
 
-    public get gradient(): Gradient {
-        if (this._source instanceof HTMLImageElement) return null;
-        return this._source;
-    }
+    private _repeatSource: boolean;
 
     public set repeatSource(repeat: boolean) {
         this._repeatSource = repeat;
+    }
+
+    public get gradient(): Gradient {
+        if (this._source instanceof HTMLImageElement) return null;
+        return this._source;
     }
 
     public clip(clippingRectangle: Rectangle): void {
