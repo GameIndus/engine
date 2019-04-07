@@ -1,9 +1,5 @@
-node_modules/
-.idea/
-*.xml
-*.map
+node_modules
+coverage
+dist
+.idea
 *.iml
-*.json
-*.js
-library.d.ts
-index.ts
