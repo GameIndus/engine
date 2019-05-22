@@ -1,7 +1,7 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
 import Position from "../geometry/Position";
-import Util from "../utils/Util";
+import Util from "../util/Util";
 
 export default class Mouse {
 

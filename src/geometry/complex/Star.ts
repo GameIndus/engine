@@ -1,4 +1,4 @@
-import MathUtil from "../../utils/Math";
+import MathUtil from "../../util/Math";
 import Point from "../Point";
 import Position from "../Position";
 import Rectangle, {RectanglePosition, RectangleSize} from "../Rectangle";

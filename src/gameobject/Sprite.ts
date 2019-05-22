@@ -1,8 +1,8 @@
 import Game from "../core/Game";
 import Position from "../geometry/Position";
 import Rectangle from "../geometry/Rectangle";
-import Texture from "../render/textures/Texture";
-import SpriteAnimation from "./animators/SpriteAnimation";
+import Texture from "../render/texture/Texture";
+import SpriteAnimation from "./animator/SpriteAnimation";
 import GameObject from "./GameObject";
 
 export class Sprite extends GameObject {

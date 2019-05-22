@@ -4,9 +4,10 @@
   "description": "Modern and customizable web-based 2D engine",
   "scripts": {
     "watch": "webpack --watch --mode development",
-    "build": "npm test && webpack --mode production",
+    "build": "webpack --mode production",
     "test": "jest",
-    "testWithCoverage": "jest --coverage"
+    "testWithCoverage": "jest --coverage",
+    "tslint": "tslint -t json -o tslint-report.json --project . --force"
   },
   "repository": {
     "type": "git",
@@ -22,16 +23,17 @@
   },
   "homepage": "https://github.com/GameIndus/engine-2d#readme",
   "devDependencies": {
-    "@types/jest": "^24.0.11",
+    "@types/jest": "^24.0.13",
     "@types/node": "^11.13.0",
-    "clean-webpack-plugin": "^2.0.1",
-    "jest": "^24.7.1",
+    "clean-webpack-plugin": "^2.0.2",
+    "jest": "^24.8.0",
+    "jest-sonar-reporter": "^2.0.0",
     "ts-jest": "^24.0.2",
-    "ts-loader": "^5.3.3",
-    "tslint": "^5.15.0",
+    "ts-loader": "^5.4.5",
+    "tslint": "^5.16.0",
     "tslint-webpack-plugin": "^2.0.4",
-    "typescript": "^3.4.2",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "typescript": "^3.4.5",
+    "webpack": "^4.32.0",
+    "webpack-cli": "^3.3.2"
   }
 }

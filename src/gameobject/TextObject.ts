@@ -1,5 +1,5 @@
 import Game from "../core/Game";
-import Color from "../utils/Color";
+import Color from "../util/Color";
 import GameObject from "./GameObject";
 import Graphics from "./Graphics";
 

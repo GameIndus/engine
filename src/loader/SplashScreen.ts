@@ -1,6 +1,6 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
-import Color from "../utils/Color";
+import Color from "../util/Color";
 import Loader from "./Loader";
 import LoaderImages from "./LoaderImages";
 

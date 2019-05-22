@@ -1,5 +1,5 @@
 import Game from "../../core/Game";
-import Gradient from "../../utils/Gradient";
+import Gradient from "../../util/Gradient";
 import Texture from "./Texture";
 
 export default class GradientTexture extends Texture {

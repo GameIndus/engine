@@ -1,4 +1,4 @@
-import MathUtil from "../utils/Math";
+import MathUtil from "../util/Math";
 
 export default class Vector2 {
 

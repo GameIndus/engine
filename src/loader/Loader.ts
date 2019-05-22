@@ -1,7 +1,7 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
-import {LoaderConfig} from "../utils/GameConfig";
-import Util from "../utils/Util";
+import {LoaderConfig} from "../util/GameConfig";
+import Util from "../util/Util";
 import {CacheFile} from "./DataCache";
 import SplashScreen from "./SplashScreen";
 

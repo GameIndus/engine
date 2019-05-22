@@ -1,4 +1,4 @@
-import MyPlugin from "../plugins/MyPlugin";
+import MyPlugin from "../plugin/MyPlugin";
 import Game from "./Game";
 import GamePlugin from "./GamePlugin";
 

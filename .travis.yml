@@ -1,0 +1,21 @@
+language: node_js
+dist: trusty
+
+node_js:
+  - "10"
+
+addons:
+  sonarcloud:
+    organization: "gameindus"
+
+install:
+- npm install
+
+script:
+- npm run testWithCoverage
+- npm run tslint
+- sonar-scanner
+
+cache:
+  directories:
+  - '$HOME/.sonar/cache'

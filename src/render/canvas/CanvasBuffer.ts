@@ -1,5 +1,5 @@
 import Rectangle from "../../geometry/Rectangle";
-import Gradient from "../../utils/Gradient";
+import Gradient from "../../util/Gradient";
 import Canvas from "./Canvas";
 import CanvasPool from "./CanvasPool";
 

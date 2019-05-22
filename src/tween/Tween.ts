@@ -1,7 +1,7 @@
 import Signal from "../core/Signal";
 import Time from "../time/Time";
-import Color from "../utils/Color";
-import Util from "../utils/Util";
+import Color from "../util/Color";
+import Util from "../util/Util";
 import {Easing} from "./Easing";
 
 export default class Tween {

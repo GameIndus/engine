@@ -1,6 +1,6 @@
 import Game from "../../core/Game";
 import Rectangle, {RectangleSize} from "../../geometry/Rectangle";
-import Gradient from "../../utils/Gradient";
+import Gradient from "../../util/Gradient";
 import CanvasBuffer from "../canvas/CanvasBuffer";
 
 export default class Texture {

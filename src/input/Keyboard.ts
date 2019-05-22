@@ -1,6 +1,6 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
-import Util from "../utils/Util";
+import Util from "../util/Util";
 import {Key} from "./Key";
 
 export default class Keyboard {

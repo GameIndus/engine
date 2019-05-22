@@ -4,8 +4,8 @@ import Vector2 from "../core/Vector2";
 import Position from "../geometry/Position";
 import Rectangle, {RectanglePosition} from "../geometry/Rectangle";
 import {Easing} from "../tween/Easing";
-import Color from "../utils/Color";
-import MathUtil from "../utils/Math";
+import Color from "../util/Color";
+import MathUtil from "../util/Math";
 import GameObject from "./GameObject";
 import Particle, {ParticleType} from "./Particle";
 

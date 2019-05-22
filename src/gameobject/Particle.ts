@@ -2,10 +2,10 @@ import Game from "../core/Game";
 import Circle from "../geometry/Circle";
 import Star from "../geometry/complex/Star";
 import Rectangle from "../geometry/Rectangle";
-import Texture from "../render/textures/Texture";
-import GradientTexture from "../render/textures/TextureGradient";
-import Gradient from "../utils/Gradient";
-import GeometricAnimator from "./animators/GeometricAnimator";
+import Texture from "../render/texture/Texture";
+import GradientTexture from "../render/texture/TextureGradient";
+import Gradient from "../util/Gradient";
+import GeometricAnimator from "./animator/GeometricAnimator";
 import GeometricObject from "./GeometricObject";
 import {ParticleEmitter} from "./ParticleEmitter";
 

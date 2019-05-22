@@ -3,8 +3,8 @@ import Vector2 from "../core/Vector2";
 import Point from "../geometry/Point";
 import Position from "../geometry/Position";
 import {RectangleSize} from "../geometry/Rectangle";
-import Animator from "./animators/Animator";
-import Behavior from "./behaviors/Behavior";
+import Animator from "./animator/Animator";
+import Behavior from "./behavior/Behavior";
 import Graphics from "./Graphics";
 import Group from "./Group";
 

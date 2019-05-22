@@ -6,8 +6,8 @@ import Position from "../geometry/Position";
 import Rectangle from "../geometry/Rectangle";
 import {ComplexShape, ShapeType} from "../geometry/Shape";
 import Triangle from "../geometry/Triangle";
-import Color from "../utils/Color";
-import GeometricAnimator from "./animators/GeometricAnimator";
+import Color from "../util/Color";
+import GeometricAnimator from "./animator/GeometricAnimator";
 import GameObject from "./GameObject";
 import Graphics from "./Graphics";
 

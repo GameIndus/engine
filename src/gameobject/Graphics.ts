@@ -5,8 +5,8 @@ import Polygon from "../geometry/Polygon";
 import Rectangle from "../geometry/Rectangle";
 import {ComplexShape} from "../geometry/Shape";
 import Triangle from "../geometry/Triangle";
-import Texture from "../render/textures/Texture";
-import Color from "../utils/Color";
+import Texture from "../render/texture/Texture";
+import Color from "../util/Color";
 
 export default class Graphics {
 

@@ -1,6 +1,6 @@
 export {default as Game} from "./core/Game";
 
-export {default as Color} from "./utils/Color";
+export {default as Color} from "./util/Color";
 
 export {ShapeType} from "./geometry/Shape";
 

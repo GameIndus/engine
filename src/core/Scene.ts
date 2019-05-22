@@ -1,14 +1,14 @@
-import GameObject from "../gameobjects/GameObject";
-import GeometricObject from "../gameobjects/GeometricObject";
-import {ParticleEmitter, ParticleEmitterConfig} from "../gameobjects/ParticleEmitter";
-import {Sprite, SpriteConfig} from "../gameobjects/Sprite";
-import TextObject from "../gameobjects/TextObject";
+import GameObject from "../gameobject/GameObject";
+import GeometricObject from "../gameobject/GeometricObject";
+import {ParticleEmitter, ParticleEmitterConfig} from "../gameobject/ParticleEmitter";
+import {Sprite, SpriteConfig} from "../gameobject/Sprite";
+import TextObject from "../gameobject/TextObject";
 import Point from "../geometry/Point";
 import Position from "../geometry/Position";
 import {RectangleSize} from "../geometry/Rectangle";
 import {ComplexShape, ShapeType} from "../geometry/Shape";
-import Color from "../utils/Color";
-import Util from "../utils/Util";
+import Color from "../util/Color";
+import Util from "../util/Util";
 import Game from "./Game";
 
 export default class Scene {

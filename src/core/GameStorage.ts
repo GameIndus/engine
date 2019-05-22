@@ -1,4 +1,4 @@
-import {DeviceCapability} from "../utils/Device";
+import {DeviceCapability} from "../util/Device";
 import Game from "./Game";
 
 export default class GameStorage {

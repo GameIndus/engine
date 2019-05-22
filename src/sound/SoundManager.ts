@@ -1,5 +1,5 @@
 import Game from "../core/Game";
-import {DeviceOS} from "../utils/Device";
+import {DeviceOS} from "../util/Device";
 import Sound from "./Sound";
 
 export default class SoundManager {
