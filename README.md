@@ -10,6 +10,12 @@ Created for the new-generation GameIndus platform :rocket:
 </h4>
 
 <p align="center">
+    <a href="https://travis-ci.com/gameindus/engine-2d">
+        <img src="https://img.shields.io/travis/com/gameindus/engine-2d.svg" alt="Travis">
+    </a>
+    <a href="https://sonarcloud.io/dashboard?id=fr.gameindus.engine-2d">
+        <img src="https://sonarcloud.io/api/project_badges/measure?project=fr.gameindus.engine-2d&metric=alert_status" alt="SonarQube Quality gate">
+    </a>
     <a href="https://twitter.com/GameIndus">
         <img src="https://img.shields.io/twitter/follow/GameIndus.svg?style=social&label=Follow%20us%20on%20Twitter" alt="Follow us">
     </a>
@@ -51,13 +57,18 @@ All these tools are working together thanks to NodeJs. You can find all used pac
 
 ### How to build? ###
 
-First you need NodeJs and Npm installed. Then, in the folder where you have cloned
+1. First you need NodeJs and Npm installed. Then, in the folder where you have cloned
 the repository, install the build dependencies using npm:
 ```sh
 npm install
 ```
 
-Then, to test and build the source, run:
+2. You can test the source code by running:
+```sh
+npm run test
+```
+
+Then, to build the source, you just have to run:
 ```sh
 npm run build
 ```
