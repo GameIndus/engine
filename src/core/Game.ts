@@ -101,7 +101,7 @@ export default class Game {
         this._isBooted = false;
         this._paused = false;
         this._scenes = [];
-        this._currentScene = Scene.prototype;
+        this._currentScene = new Scene(this, "default");
         this._cache = DataCache.prototype;
         this._canvas = Canvas.prototype;
         this._device = new Device();
@@ -140,7 +140,7 @@ export default class Game {
     }
 
     public get currentScene(): Scene {
-        return this._currentScene || Scene.prototype;
+        return this._currentScene;
     }
 
     public set currentScene(scene: Scene) {

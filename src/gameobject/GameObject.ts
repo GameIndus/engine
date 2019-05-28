@@ -36,7 +36,7 @@ export default abstract class GameObject {
 
     private _parent: Group | null;
 
-    constructor(game: Game, name?: string) {
+    protected constructor(game: Game, name?: string) {
         this.game = game;
         this._animator = Animator.prototype;
         this._id = -1;

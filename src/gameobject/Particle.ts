@@ -30,7 +30,7 @@ export default class Particle extends GeometricObject {
 
     public constructor(game: Game, emitter: ParticleEmitter) {
         super(game);
-        this._animator = GeometricAnimator.prototype;
+        this._animator = new GeometricAnimator(game, this);
         this._type = ParticleType.CIRCULAR;
         this._texture = Texture.prototype;
         this._lifeTime = 0;

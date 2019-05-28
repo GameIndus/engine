@@ -1,6 +1,5 @@
-import MyPlugin from "../plugin/MyPlugin";
 import Game from "./Game";
-import GamePlugin from "./GamePlugin";
+import GamePlugin from "../plugin/GamePlugin";
 
 export default class PluginManager {
 
@@ -13,8 +12,6 @@ export default class PluginManager {
     public constructor(game: Game) {
         this._game = game;
         this._plugins = [];
-
-        this.register(new MyPlugin());
     }
 
     public register(plugin: GamePlugin): boolean {
