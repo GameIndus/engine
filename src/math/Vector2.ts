@@ -11,10 +11,17 @@
 export default class Vector2 {
 
     /**
-     * The zero vector.
+     * A (0, 0) vector
      */
-    public static get ZERO(): Vector2 {
+    public static get Zero(): Vector2 {
         return new Vector2().zero();
+    }
+
+    /**
+     * A (1, 1) vector
+     */
+    public static get One(): Vector2 {
+        return new Vector2(1, 1);
     }
 
     /**
@@ -198,7 +205,15 @@ export default class Vector2 {
             throw new RangeError("Cannot divide the vector by zero.");
         }
 
-        return this.multiplyScalar(1 / scalar);
+        return this.scale(1 / scalar);
+    }
+
+    /**
+     * Perform a dot product with another vector.
+     * @param vector Vector to dot.
+     */
+    public dot(vector: Vector2): number {
+        return this.x * vector.x + this.y * vector.y;
     }
 
     /**
@@ -270,18 +285,18 @@ export default class Vector2 {
     }
 
     /**
-     * Multiply this vector by a scalar.
-     * @param scalar Number to multiply with.
+     * Negate this vector
      */
-    public multiplyScalar(scalar: number): Vector2 {
-        if (isFinite(scalar)) {
-            this.x *= scalar;
-            this.y *= scalar;
-        } else {
-            this.x = 0;
-            this.y = 0;
-        }
-        return this;
+    public negate(): Vector2 {
+        return this.scale(-1);
+    }
+
+    /**
+     * Returns the normal vector to this one.
+     * @see https://en.wikipedia.org/wiki/Normal_(geometry)
+     */
+    public normal(): Vector2 {
+        return this.perpendicular().normalize();
     }
 
     /**
@@ -290,6 +305,13 @@ export default class Vector2 {
      */
     public normalize(): Vector2 {
         return this.divideScalar(this.magnitude);
+    }
+
+    /**
+     * Return a NEW vector which is perpendicular to this one.
+     */
+    public perpendicular(): Vector2 {
+        return new Vector2(this.y, -this.x);
     }
 
     /**
@@ -324,6 +346,16 @@ export default class Vector2 {
     public round(): Vector2 {
         this.x = Math.round(this.x);
         this.y = Math.round(this.y);
+        return this;
+    }
+
+    /**
+     * Scale this vector by a factor.
+     * @param factor The factor to scale the vector with.
+     */
+    public scale(factor: number): Vector2 {
+        this.x *= factor;
+        this.y *= factor;
         return this;
     }
 

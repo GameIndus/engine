@@ -1,3 +1,14 @@
+/**
+ * Unit test suite for Vector2 class.
+ *
+ * This file is part of the GameIndus engine.
+ * This file is used by Jest to test the engine.
+ *
+ * @copyright Copyright (c) 2019, Maxime Malgorn
+ * @author Maxime Malgorn <maxime.malgorn@laposte.net>
+ * @since 2.0.0
+ */
+
 import Vector2 from "../../src/math/Vector2";
 
 const X = -40;
@@ -16,15 +27,30 @@ beforeEach(() => {
     vector = new Vector2(X, Y);
 });
 
-test("should create a valid zero vector", () => {
-    vector = Vector2.ZERO;
+test("should create valid specifics vectors", () => {
+    vector = Vector2.Zero;
     expect(vector.x).toBe(0);
     expect(vector.y).toBe(0);
+
+    vector = Vector2.One;
+    expect(vector.x).toBe(1);
+    expect(vector.y).toBe(1);
+});
+
+test("should create a vector from an angle", () => {
+    const vectorFromAngle = Vector2.fromAngle(55);
+    expect(vectorFromAngle.x).toBe(Math.cos(55));
+    expect(vectorFromAngle.y).toBe(Math.sin(55));
 });
 
 test("should store basic values", () => {
     expect(vector.x).toBe(X);
     expect(vector.y).toBe(Y);
+
+    vector.x = X * 2;
+    vector.y = Y * 2;
+    expect(vector.x).toBe(X * 2);
+    expect(vector.y).toBe(Y * 2);
 });
 
 test("should get absolute vector", () => {
@@ -97,8 +123,13 @@ test("should divive by a vector or a scalar", () => {
     expect(vector.y).toBe(base.y / 4);
 
     // We should not divide it by zero
-    expect(() => vector.divide(Vector2.ZERO)).toThrow(RangeError);
+    expect(() => vector.divide(Vector2.Zero)).toThrow(RangeError);
     expect(() => vector.divideScalar(0)).toThrow(RangeError);
+});
+
+test("should dot with another vector", () => {
+    const base = vector.clone();
+    expect(vector.dot(vector2)).toBe(base.x * vector2.x + base.y * vector2.y);
 });
 
 test("should test vectors equality", () => {
@@ -113,12 +144,12 @@ test("should floor the values", () => {
 });
 
 test("should test vectors collinearity", () => {
-    expect(vector.isCollinearWith(vector.clone().multiplyScalar(2))).toBeTruthy();
+    expect(vector.isCollinearWith(vector.clone().scale(2))).toBeTruthy();
     expect(vector.isCollinearWith(vector.clone().add(new Vector2(5, 7)))).toBeFalsy();
 });
 
 test("should test validity of a zero vector", () => {
-    expect(Vector2.ZERO.isZero()).toBeTruthy();
+    expect(Vector2.Zero.isZero()).toBeTruthy();
 });
 
 test("should calculate the Manhattan length", () => {
@@ -147,30 +178,36 @@ test("should mix with another vector", () => {
     expect(() => vector.mix(vector2, 1.1)).toThrow(RangeError);
 });
 
-test("should multiply by a vector or a scalar", () => {
-    let base = vector.clone();
-
-    // Multiply with basic values
+test("should multiply by another vector", () => {
+    const base = vector.clone();
     vector.multiply(vector2);
     expect(vector.x).toBe(base.x * vector2.x);
     expect(vector.y).toBe(base.y * vector2.y);
+});
 
-    // Also multiply the vector by a finite scalar ...
-    base = vector.clone();
-    vector.multiplyScalar(5);
-    expect(vector.x).toBe(base.x * 5);
-    expect(vector.y).toBe(base.y * 5);
+test("should negate a vector", () => {
+    const base = vector.clone();
+    vector.negate();
+    expect(vector.x).toBe(-base.x);
+    expect(vector.y).toBe(-base.y);
+});
 
-    // ... or an infinite one
-    vector.multiplyScalar(Infinity);
-    expect(vector.x).toBe(0);
-    expect(vector.y).toBe(0);
+test("should calculate a normal vector", () => {
+    const normalVector = vector.normal();
+    expect(normalVector.x).toBe(0.6);
+    expect(normalVector.y).toBe(0.8);
 });
 
 test("should calculate a normalized vector", () => {
     vector.normalize();
     expect(vector.x).toBe(-0.8);
     expect(vector.y).toBe(0.6);
+});
+
+test("should create a perpendicular vector", () => {
+   const perpendicular = vector.perpendicular();
+   expect(perpendicular.x).toBe(vector.y);
+   expect(perpendicular.y).toBe(-vector.x);
 });
 
 test("should rotate a vector", () => {
@@ -189,6 +226,13 @@ test("should round the values", () => {
     const decimalVector = vector3.clone().round();
     expect(decimalVector.x).toBe(Math.round(vector3.x));
     expect(decimalVector.y).toBe(Math.round(vector3.y));
+});
+
+test("should scale a vector", () => {
+    const base = vector.clone();
+    vector.scale(5);
+    expect(vector.x).toBe(base.x * 5);
+    expect(vector.y).toBe(base.y * 5);
 });
 
 test("should substract another vector or a scalar", () => {
