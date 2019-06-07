@@ -1,7 +1,7 @@
 {
-  "name": "engine-2d",
-  "version": "2.1.0",
-  "description": "Modern and customizable web-based 2D engine",
+  "name": "engine",
+  "version": "2.0.0",
+  "description": "Modern and customizable web-based engine",
   "scripts": {
     "watch": "webpack --watch --mode development",
     "build": "webpack --mode production",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GameIndus/engine-2d.git"
+    "url": "git+https://github.com/GameIndus/engine.git"
   },
   "keywords": [
     "game-engine"
@@ -19,9 +19,9 @@
   "author": "Utarwyn <maxime.malgorn@laposte.net>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/GameIndus/engine-2d/issues"
+    "url": "https://github.com/GameIndus/engine/issues"
   },
-  "homepage": "https://github.com/GameIndus/engine-2d#readme",
+  "homepage": "https://github.com/GameIndus/engine#readme",
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "@types/node": "^11.13.13",

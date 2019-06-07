@@ -82,17 +82,21 @@ test("should calculate the distance from another vector", () => {
     expect(vector.distance(vector2)).toBeCloseTo(47.80);
 });
 
-test("should divive by a vector", () => {
-    const vx = vector.x;
-    const vy = vector.y;
+test("should divive by a vector or a scalar", () => {
+    let base = vector.clone();
 
+    // Divide with a basic vector
     vector.divide(vector2);
+    expect(vector.x).toBe(base.x / vector2.x);
+    expect(vector.y).toBe(base.y / vector2.y);
 
-    expect(vector.x).toBe(vx / vector2.x);
-    expect(vector.y).toBe(vy / vector2.y);
-});
+    // Also divide the vector by a scalar
+    base = vector.clone();
+    vector.divideScalar(4);
+    expect(vector.x).toBe(base.x / 4);
+    expect(vector.y).toBe(base.y / 4);
 
-test("cannot divide it by zero", () => {
+    // We should not divide it by zero
     expect(() => vector.divide(Vector2.ZERO)).toThrow(RangeError);
     expect(() => vector.divideScalar(0)).toThrow(RangeError);
 });
@@ -141,6 +145,26 @@ test("should mix with another vector", () => {
     // Check out of range values
     expect(() => vector.mix(vector2, -0.1)).toThrow(RangeError);
     expect(() => vector.mix(vector2, 1.1)).toThrow(RangeError);
+});
+
+test("should multiply by a vector or a scalar", () => {
+    let base = vector.clone();
+
+    // Multiply with basic values
+    vector.multiply(vector2);
+    expect(vector.x).toBe(base.x * vector2.x);
+    expect(vector.y).toBe(base.y * vector2.y);
+
+    // Also multiply the vector by a finite scalar ...
+    base = vector.clone();
+    vector.multiplyScalar(5);
+    expect(vector.x).toBe(base.x * 5);
+    expect(vector.y).toBe(base.y * 5);
+
+    // ... or an infinite one
+    vector.multiplyScalar(Infinity);
+    expect(vector.x).toBe(0);
+    expect(vector.y).toBe(0);
 });
 
 test("should calculate a normalized vector", () => {
