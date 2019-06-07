@@ -1,25 +1,25 @@
-import Game from "../core/Game";
 import Circle from "../geometry/Circle";
 import Point from "../geometry/Point";
 import Polygon from "../geometry/Polygon";
 import Rectangle from "../geometry/Rectangle";
 import {ComplexShape} from "../geometry/Shape";
 import Triangle from "../geometry/Triangle";
+import Canvas from "../render/canvas/Canvas";
 import Texture from "../render/texture/Texture";
 import Color from "../util/Color";
 
 export default class Graphics {
 
-    private game: Game;
+    private canvas: Canvas;
 
     private _colorsCache: any[] = [];
 
-    public constructor(game: Game) {
-        this.game = game;
+    public constructor(canvas: Canvas) {
+        this.canvas = canvas;
     }
 
     public get context(): CanvasRenderingContext2D {
-        return this.game.canvas.context;
+        return this.canvas.context;
     }
 
     public drawParticle(texture: Texture, x: number, y: number): void {

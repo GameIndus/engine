@@ -1,7 +1,6 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
 import Position from "../geometry/Position";
-import Util from "../util/Util";
 
 export default class Mouse {
 
@@ -10,6 +9,11 @@ export default class Mouse {
         const y: number = event.y || event.clientY || event.pageY;
 
         return new Position(x, y);
+    }
+
+    private static handleContextMenu(event: Event): boolean {
+        event.preventDefault();
+        return false;
     }
 
     private readonly _onClick: Signal;
@@ -22,15 +26,15 @@ export default class Mouse {
 
     private readonly _onWheel: Signal;
 
-    private game: Game;
-
     private readonly _clicksHistory: Position[];
 
     private readonly _downButtons: MouseClickType[];
 
-    private _lastClickPosition: Position;
+    private game: Game;
 
-    private _lastPosition: Position;
+    private _lastClickPosition?: Position;
+
+    private _lastPosition?: Position;
 
     public constructor(game: Game) {
         this.game = game;
@@ -41,8 +45,6 @@ export default class Mouse {
         this._onWheel = new Signal(true);
         this._clicksHistory = [];
         this._downButtons = [];
-        this._lastClickPosition = new Position(-1, -1);
-        this._lastPosition = new Position(-1, -1);
 
         this.bind();
     }
@@ -51,11 +53,11 @@ export default class Mouse {
         return this._clicksHistory;
     }
 
-    public get lastClickPosition(): Position {
+    public get lastClickPosition(): Position | undefined {
         return this._lastClickPosition;
     }
 
-    public get lastPosition(): Position {
+    public get lastPosition(): Position | undefined {
         return this._lastPosition;
     }
 
@@ -71,14 +73,14 @@ export default class Mouse {
         canvas.removeEventListener("mousemove", this.handleMove.bind(this));
         canvas.removeEventListener("mouseup", this.handleUp.bind(this));
         canvas.removeEventListener("wheel", this.handleWheel.bind(this));
-        canvas.removeEventListener("contextmenu", this.handleContextMenu.bind(this));
+        canvas.removeEventListener("contextmenu", Mouse.handleContextMenu.bind(this));
 
         canvas.addEventListener("click", this.handleClick.bind(this), true);
         canvas.addEventListener("mousedown", this.handleDown.bind(this), true);
         canvas.addEventListener("mousemove", this.handleMove.bind(this), true);
         canvas.addEventListener("mouseup", this.handleUp.bind(this), true);
         canvas.addEventListener("wheel", this.handleWheel.bind(this), true);
-        canvas.addEventListener("contextmenu", this.handleContextMenu.bind(this), true);
+        canvas.addEventListener("contextmenu", Mouse.handleContextMenu.bind(this), true);
     }
 
     private handleClick(event: MouseEvent): boolean {
@@ -89,11 +91,6 @@ export default class Mouse {
 
         this._onClick.dispatch(pos.clone(), MouseClickType.LEFT_CLICK);
 
-        return false;
-    }
-
-    private handleContextMenu(event: Event): boolean {
-        event.preventDefault();
         return false;
     }
 
@@ -118,7 +115,7 @@ export default class Mouse {
     private handleMove(event: MouseEvent): void {
         const pos: Position = Mouse.positionFromEvent(event);
         this._lastPosition = pos.clone();
-        this._onMove.dispatch(this.lastPosition);
+        this._onMove.dispatch(this._lastPosition);
     }
 
     private handleUp(event: MouseEvent): void {
@@ -133,7 +130,7 @@ export default class Mouse {
         }
 
         if (this._downButtons.indexOf(type) > -1) {
-            Util.removeFrom(this._downButtons, type);
+            this._downButtons.splice(this._downButtons.indexOf(type), 1);
         }
 
         this._onUp.dispatch(pos.clone(), type);
@@ -155,9 +152,7 @@ export default class Mouse {
 }
 
 enum MouseClickType {
-    LEFT_CLICK,
-    MIDDLE_CLICK,
-    RIGHT_CLICK,
+    LEFT_CLICK, MIDDLE_CLICK, RIGHT_CLICK,
 }
 
 enum MouseWheelDirection {

@@ -1,6 +1,5 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
-import Util from "../util/Util";
 import {Key} from "./Key";
 
 export default class Keyboard {
@@ -96,12 +95,12 @@ export default class Keyboard {
         const key: Key = Key.fromCode(event.keyCode);
 
         if (key == null) {
-            return false;
+            return true;
         }
         event.preventDefault();
 
         if (this.keyIsDown(key)) {
-            Util.removeFrom(this._keysDown, key);
+            this._keysDown.splice(this._keysDown.indexOf(key), 1);
         }
 
         this._onKeyUp.dispatch(key);

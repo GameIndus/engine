@@ -32,33 +32,13 @@ export default class Util {
         return objectCopy;
     }
 
-    public static objectEquals(obj1: any, obj2: any): boolean {
-        for (const key in obj1) {
-            if (obj1.hasOwnProperty(key)) {
-                if (obj1[key] !== obj2[key]) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    public static removeFrom(array: any[], item: any): void {
-        array.splice(array.indexOf(item), 1);
-    }
-
     public static urlFromPath(path: string, base: string): string {
         return Util.isUrl(path) ? path : base + path;
     }
 
     public static isUrl(str: string): boolean {
+        // tslint:disable-next-line:max-line-length
         const pattern = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%\/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/;
         return pattern.test(str);
     }
-
-    private constructor() {
-        // Not implemented
-    }
-
 }

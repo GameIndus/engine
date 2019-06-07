@@ -1,8 +1,8 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
-import Vector2 from "../core/Vector2";
 import Position from "../geometry/Position";
 import Rectangle, {RectanglePosition} from "../geometry/Rectangle";
+import Vector2 from "../math/Vector2";
 import {Easing} from "../tween/Easing";
 import Color from "../util/Color";
 import MathUtil from "../util/Math";

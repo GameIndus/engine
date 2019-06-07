@@ -50,9 +50,6 @@ export default class Star implements ComplexShape {
 
         const points: Point[] = [];
 
-        const rect: Rectangle = new Rectangle(position.x, position.y, size.width, size.height);
-        const center: Point = rect.getPoint(RectanglePosition.CENTER);
-
         const len: number = Math.min(size.width, size.height);
         let rot: number = Math.PI / 2 * 3;
         const step: number = Math.PI / this.spikes;

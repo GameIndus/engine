@@ -1,16 +1,9 @@
-import Game from "../core/Game";
 import Time from "../time/Time";
 import Tween from "./Tween";
 
 export default class TweenManager {
 
-    private _game: Game;
-
     private _tweens: Tween[] = [];
-
-    public constructor(game: Game) {
-        this._game = game;
-    }
 
     public get tweens(): Tween[] {
         return this._tweens;

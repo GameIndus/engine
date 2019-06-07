@@ -1,7 +1,6 @@
 import Color from "./Color";
 
 export interface GameConfig {
-
     width?: number;
     height?: number;
     parent?: HTMLElement;
@@ -15,7 +14,6 @@ export interface GameConfig {
     forceSetTimeout?: boolean;
 
     autoFocus?: boolean;
-
 }
 
 export interface LoaderConfig {

@@ -38,6 +38,6 @@ module.exports = (env, argv) => {
         ],
         resolve: {
             extensions: [".tsx", ".ts", ".js"],
-        },
+        }
     };
 };

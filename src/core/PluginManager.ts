@@ -1,5 +1,5 @@
-import Game from "./Game";
 import GamePlugin from "../plugin/GamePlugin";
+import Game from "./Game";
 
 export default class PluginManager {
 

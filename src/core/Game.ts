@@ -101,7 +101,7 @@ export default class Game {
         this._isBooted = false;
         this._paused = false;
         this._scenes = [];
-        this._currentScene = new Scene(this, "default");
+        this._currentScene = new Scene(this, "root");
         this._cache = DataCache.prototype;
         this._canvas = Canvas.prototype;
         this._device = new Device();
@@ -386,15 +386,15 @@ export default class Game {
 
         this._canvas.setup(this.width, this.height, this._config.canvasId, this._config.parent, this._config.autoFocus);
 
-        this._cache = new DataCache(this);
-        this._graphics = new Graphics(this);
+        this._cache = new DataCache();
+        this._graphics = new Graphics(this.canvas);
         this._input = new Input(this);
         this._loader = new Loader(this, this._config.loader);
         this._plugins = new PluginManager(this);
         this._sound = new SoundManager(this);
         this._storage = new GameStorage(this);
         this._time = new Time(this);
-        this._tweens = new TweenManager(this);
+        this._tweens = new TweenManager();
 
         // Preload
         this._onPreload.dispatch(this);

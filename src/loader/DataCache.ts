@@ -1,13 +1,8 @@
-import Game from "../core/Game";
-
 export default class DataCache {
-
-    private game: Game;
 
     private _cache: DataCacheStorage;
 
-    public constructor(game: Game) {
-        this.game = game;
+    public constructor() {
         this._cache = {images: [], sounds: []};
     }
 
