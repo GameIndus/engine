@@ -7,7 +7,7 @@ import Point from "../geometry/Point";
 import Position from "../geometry/Position";
 import {RectangleSize} from "../geometry/Rectangle";
 import {ComplexShape, ShapeType} from "../geometry/Shape";
-import Color from "../util/Color";
+import Color from "../math/Color";
 import Util from "../util/Util";
 import Game from "./Game";
 

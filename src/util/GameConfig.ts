@@ -1,4 +1,4 @@
-import Color from "./Color";
+import Color from "../math/Color";
 
 export interface GameConfig {
     width?: number;

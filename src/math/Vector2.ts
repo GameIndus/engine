@@ -35,12 +35,12 @@ export default class Vector2 {
     /**
      * X property of the 2d vector
      */
-    private _x: number;
+    public x: number;
 
     /**
      * Y property of the 2d vector
      */
-    private _y: number;
+    public y: number;
 
     /**
      * Construct a new 2d vector with initial values
@@ -48,36 +48,8 @@ export default class Vector2 {
      * @param y initial Y value
      */
     constructor(x: number = 0, y: number = 0) {
-        this._x = x;
-        this._y = y;
-    }
-
-    /**
-     * Get the X property of the vector
-     */
-    public get x(): number {
-        return this._x;
-    }
-
-    /**
-     * Set the X property of the vector
-     */
-    public set x(x: number) {
-        this._x = x;
-    }
-
-    /**
-     * Get the Y property of the vector
-     */
-    public get y(): number {
-        return this._y;
-    }
-
-    /**
-     * Set the Y property of the vector
-     */
-    public set y(y: number) {
-        this._y = y;
+        this.x = x;
+        this.y = y;
     }
 
     /**

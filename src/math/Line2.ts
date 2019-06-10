@@ -15,12 +15,12 @@ export default class Line2 {
     /**
      * Represents the starting point of the line
      */
-    private _begin: Vector2;
+    public begin: Vector2;
 
     /**
      * Represents the ending point of the line
      */
-    private _end: Vector2;
+    public end: Vector2;
 
     /**
      * Construct a 2d line
@@ -28,38 +28,8 @@ export default class Line2 {
      * @param end Ending point of the line
      */
     constructor(begin?: Vector2, end?: Vector2) {
-        this._begin = begin || Vector2.Zero;
-        this._end = end || Vector2.Zero;
-    }
-
-    /**
-     * Get the starting point of the line
-     */
-    public get begin(): Vector2 {
-        return this._begin;
-    }
-
-    /**
-     * Set the starting point of the line
-     * @param vector Vector to set
-     */
-    public set begin(vector: Vector2) {
-        this._begin = vector;
-    }
-
-    /**
-     * Get the ending point of the line
-     */
-    public get end(): Vector2 {
-        return this._end;
-    }
-
-    /**
-     * Set the ending point of the line
-     * @param vector Vector to set
-     */
-    public set end(vector: Vector2) {
-        this._end = vector;
+        this.begin = begin || Vector2.Zero;
+        this.end = end || Vector2.Zero;
     }
 
     /**

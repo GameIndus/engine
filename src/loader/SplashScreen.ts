@@ -1,6 +1,6 @@
 import Game from "../core/Game";
 import Signal from "../core/Signal";
-import Color from "../util/Color";
+import Color from "../math/Color";
 import Loader from "./Loader";
 import LoaderImages from "./LoaderImages";
 
@@ -48,10 +48,10 @@ export default class SplashScreen {
         this._lastProgressState = false;
         this._progressReady = false;
 
-        this._backgroundColor = Color.fromHex("#F1F5F6") || Color.WHITE;
-        this._progressBarColor = Color.fromHex("#2980b9") || Color.BLUE;
-        this._progressBackgroundColor = Color.fromHex("#DDDDDD") || Color.GRAY;
-        this._madeByColor = Color.fromHex("#1d1b1b") || Color.BLACK;
+        this._backgroundColor = Color.fromHex("#F1F5F6") || Color.White;
+        this._progressBarColor = Color.fromHex("#2980b9") || Color.Blue;
+        this._progressBackgroundColor = Color.fromHex("#DDDDDD") || Color.Gray;
+        this._madeByColor = Color.fromHex("#1d1b1b") || Color.Black;
         this._inRendering = false;
 
         // Use the loader configuration to setup the splash screen
@@ -106,7 +106,7 @@ export default class SplashScreen {
         loading.style.width = "100%";
         loading.style.height = "100%";
         loading.style.zIndex = "10000";
-        loading.style.backgroundColor = this._backgroundColor.toString("rgba");
+        loading.style.backgroundColor = this._backgroundColor.rgba;
         loading.style.display = "block";
         loading.style.position = "absolute";
         loading.style.left = "0";
@@ -138,7 +138,7 @@ export default class SplashScreen {
         madeBy.style.fontFamily = "'Open Sans',Helvetica,Arial,sans-serif";
         madeBy.style.fontSize = "19px";
         madeBy.style.fontWeight = "300";
-        madeBy.style.color = this._madeByColor.toString("rgba");
+        madeBy.style.color = this._madeByColor.rgba;
         madeBy.className = "made-by";
 
         progressC.style.display = "block";
@@ -147,7 +147,7 @@ export default class SplashScreen {
         progressC.style.height = "5px";
         progressC.style.opacity = "0";
         progressC.style.transition = "ease-out .3s";
-        progressC.style.background = this._progressBackgroundColor.toString("rgba");
+        progressC.style.background = this._progressBackgroundColor.rgba;
         progressC.style.left = "calc(50% - 210.5px)";
         progressC.style.top = "calc(50% + 40px)";
 
@@ -157,7 +157,7 @@ export default class SplashScreen {
         progress.style.height = "5px";
         progress.style.opacity = "1";
         progress.style.transition = "ease-out .7s";
-        progress.style.background = this._progressBarColor.toString("rgba");
+        progress.style.background = this._progressBarColor.rgba;
         progress.style.left = "0";
         progress.style.top = "0";
 

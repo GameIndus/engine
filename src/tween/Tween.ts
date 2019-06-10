@@ -1,6 +1,6 @@
 import Signal from "../core/Signal";
+import Color from "../math/Color";
 import Time from "../time/Time";
-import Color from "../util/Color";
 import Util from "../util/Util";
 import {Easing} from "./Easing";
 
@@ -119,11 +119,7 @@ export default class Tween {
                 i++;
             }
         } else {
-            if (this._object instanceof Color) {
-                this._startValues = Util.copyObject(this._object.toRGBA());
-            } else {
-                this._startValues = Util.copyObject(this._object);
-            }
+            this._startValues = Util.copyObject(this._object);
 
             if (typeof (this._object).clone !== "undefined" && !(this._object instanceof Color)) {
                 this._startValues = this._object.clone();
@@ -149,7 +145,7 @@ export default class Tween {
             }
         } else {
             if (this._endValues instanceof Color) {
-                this._endValues = Util.copyObject(this._endValues.toRGBA());
+                this._endValues = Util.copyObject(this._endValues);
             }
         }
 
@@ -233,22 +229,10 @@ export default class Tween {
                     objvalue = Math.round(objvalue);
                 }
 
-                if (this._object instanceof Color) {
-                    if (objvalue < 0) {
-                        objvalue = 0;
-                    }
-                    if (objvalue > 255) {
-                        objvalue = 255;
-                    }
-                    objvalue = Math.round(objvalue);
-
-                    this._object.updateRGBA(property, objvalue);
+                if (this._object[property] === undefined) {
+                    this._object = objvalue;
                 } else {
-                    if (this._object[property] === undefined) {
-                        this._object = objvalue;
-                    } else {
-                        this._object[property] = objvalue;
-                    }
+                    this._object[property] = objvalue;
                 }
             }
 

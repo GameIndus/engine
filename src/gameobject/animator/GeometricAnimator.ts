@@ -1,7 +1,7 @@
 import Game from "../../core/Game";
+import Color from "../../math/Color";
 import {Easing} from "../../tween/Easing";
 import Tween from "../../tween/Tween";
-import Color from "../../util/Color";
 import GeometricObject from "../GeometricObject";
 import Animator from "./Animator";
 

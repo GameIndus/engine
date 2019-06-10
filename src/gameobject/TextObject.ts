@@ -1,5 +1,5 @@
 import Game from "../core/Game";
-import Color from "../util/Color";
+import Color from "../math/Color";
 import GameObject from "./GameObject";
 import Graphics from "./Graphics";
 
@@ -22,7 +22,7 @@ export default class TextObject extends GameObject {
         this.text = text;
         this._fontFamily = "Arial";
         this._fontSize = 16;
-        this._color = Color.BLACK;
+        this._color = Color.Black;
         this._opacity = 1;
     }
 

@@ -4,9 +4,9 @@ import Polygon from "../geometry/Polygon";
 import Rectangle from "../geometry/Rectangle";
 import {ComplexShape} from "../geometry/Shape";
 import Triangle from "../geometry/Triangle";
+import Color from "../math/Color";
 import Canvas from "../render/canvas/Canvas";
 import Texture from "../render/texture/Texture";
-import Color from "../util/Color";
 
 export default class Graphics {
 
@@ -48,7 +48,7 @@ export default class Graphics {
     }
 
     public drawShape(shape: Rectangle | Triangle | Circle | Polygon | ComplexShape, fill: boolean = true,
-                     color: Color = Color.BLACK): void {
+                     color: Color = Color.Black): void {
         if (this.context == null) {
             return;
         }
@@ -59,8 +59,8 @@ export default class Graphics {
             this.context.strokeStyle = this.colorToString(color);
         }
 
-        if (color.toRGBA().a < 255) {
-            this.context.globalAlpha = color.toRGBA().a / 255;
+        if (color.a < 255) {
+            this.context.globalAlpha = color.a / 255;
         }
 
         // this.context.save();
@@ -86,14 +86,14 @@ export default class Graphics {
             }
         }
 
-        if (color.toRGBA().a < 255) {
+        if (color.a < 255) {
             this.context.globalAlpha = 1;
         }
 
         // this.context.restore();
     }
 
-    public writeTextAt(text: string, x: number, y: number, color: Color = Color.BLACK, font: string = "sans-serif",
+    public writeTextAt(text: string, x: number, y: number, color: Color = Color.Black, font: string = "sans-serif",
                        size: number = 16, lineSpacing?: number): void {
         if (this.context != null) {
             this.context.fillStyle = this.colorToString(color);
@@ -150,13 +150,13 @@ export default class Graphics {
     }
 
     private colorToString(color: Color): string {
-        const cacheColor = this._colorsCache[color.color];
+        const cacheColor = this._colorsCache[color.value];
         if (cacheColor) {
             return cacheColor;
         }
 
-        const str = color.toString("rgba");
-        this._colorsCache[color.color] = str;
+        const str = color.rgba;
+        this._colorsCache[color.value] = str;
         return str;
     }
 

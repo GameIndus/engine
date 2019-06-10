@@ -2,9 +2,9 @@ import Game from "../core/Game";
 import Signal from "../core/Signal";
 import Position from "../geometry/Position";
 import Rectangle, {RectanglePosition} from "../geometry/Rectangle";
+import Color from "../math/Color";
 import Vector2 from "../math/Vector2";
 import {Easing} from "../tween/Easing";
-import Color from "../util/Color";
 import MathUtil from "../util/Math";
 import GameObject from "./GameObject";
 import Particle, {ParticleType} from "./Particle";
@@ -21,7 +21,7 @@ export class ParticleEmitter extends GameObject {
     private _particleMass: number = 0;
     private _particleAutoAngle: boolean = false;
     private _particleType: ParticleType = ParticleType.CIRCULAR;
-    private _particleColor: Color = Color.BLACK;
+    private _particleColor: Color = Color.Black;
     private _particlePosRnd: Position = new Position(0, 0);
     private _lifeSpan: [number, number] = [2000, 2000];
     private _angle: [number, number] = [0, 360];
@@ -47,7 +47,7 @@ export class ParticleEmitter extends GameObject {
         this._onUpdate = new Signal(true);
         this._spawnZone = new Rectangle();
         this._animateScale = [1, 1, Easing.LINEAR];
-        this._animateColor = [Color.BLACK, Color.BLACK, Easing.LINEAR];
+        this._animateColor = [Color.Black, Color.Black, Easing.LINEAR];
         this._emitCounter = 0;
 
         if (config) {
@@ -262,19 +262,20 @@ export class ParticleEmitter extends GameObject {
 
         // Animations
         if (this._animateColor[0] !== this._animateColor[1]) {
-            let rgba0 = this._animateColor[0].toRGBA();
-            let rgba1 = this._animateColor[1].toRGBA();
+            const color1 = this._animateColor[0];
+            const color2 = this._animateColor[1];
 
             // If colors are random
-            if (this._animateColor[0].isRandom) {
-                rgba0 = Color.RANDOM.toRGBA();
+            // TODO need a rewrite: prefer using Color.Random at each iteration if random mode activated.
+            /*if (this._animateColor[0].isRandom) {
+                rgba0 = Color.Random.toRGBA();
             }
             if (this._animateColor[1].isRandom) {
-                rgba1 = Color.RANDOM.toRGBA();
-            }
+                rgba1 = Color.Random.toRGBA();
+            }*/
 
-            p.color = new Color(rgba0.r, rgba0.g, rgba0.b, rgba0.a);
-            p.animator.color(new Color(rgba1.r, rgba1.g, rgba1.b, rgba1.a), p.lifeTime, this._animateColor[2]);
+            p.color = new Color(color1.r, color1.g, color1.b, color1.a);
+            p.animator.color(new Color(color2.r, color2.g, color2.b, color2.a), p.lifeTime, this._animateColor[2]);
         }
         if (this._animateScale[0] !== this._animateScale[1]) {
             const minSize = Math.min(p.size.width, p.size.height);

@@ -46,11 +46,6 @@ test("should create a vector from an angle", () => {
 test("should store basic values", () => {
     expect(vector.x).toBe(X);
     expect(vector.y).toBe(Y);
-
-    vector.x = X * 2;
-    vector.y = Y * 2;
-    expect(vector.x).toBe(X * 2);
-    expect(vector.y).toBe(Y * 2);
 });
 
 test("should get absolute vector", () => {
@@ -167,9 +162,13 @@ test("should calculate the magnitude", () => {
 });
 
 test("should mix with another vector", () => {
-    vector.mix(vector2, 0.6);
+    // Check mix with the default amount value
+    const mixed = vector.clone().mix(vector2);
+    expect(mixed.x).toBe(-17);
+    expect(mixed.y).toBe(23.5);
 
-    // Check good values
+    // Check mix with a custom amount value
+    vector.mix(vector2, 0.6);
     expect(vector.x).toBe(-12.4);
     expect(vector.y).toBe(22.2);
 
@@ -235,7 +234,7 @@ test("should scale a vector", () => {
     expect(vector.y).toBe(base.y * 5);
 });
 
-test("should substract another vector or a scalar", () => {
+test("should subtract another vector or a scalar", () => {
     let base = vector.clone();
 
     vector.sub(vector2);

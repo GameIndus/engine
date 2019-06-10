@@ -12,10 +12,14 @@ install:
 - npm install
 
 script:
+- npm run build
 - npm run testWithCoverage
 - npm run tslint
 - sonar-scanner
 
 cache:
   directories:
-  - '$HOME/.sonar/cache'
+  - node_modules
+  - node_cache
+  - $HOME/.npm
+  - $HOME/.sonar/cache

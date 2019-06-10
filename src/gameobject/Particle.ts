@@ -2,6 +2,7 @@ import Game from "../core/Game";
 import Circle from "../geometry/Circle";
 import Star from "../geometry/complex/Star";
 import Rectangle from "../geometry/Rectangle";
+import Vector2 from "../math/Vector2";
 import Texture from "../render/texture/Texture";
 import GradientTexture from "../render/texture/TextureGradient";
 import Gradient from "../util/Gradient";
@@ -100,7 +101,7 @@ export default class Particle extends GeometricObject {
         // Update mass
         if (this.mass > 0) {
             this._massFactor *= this.mass;
-            this.velocity.addY(this._massFactor);
+            this.velocity.add(new Vector2(0, this._massFactor));
         }
     }
 

@@ -1,6 +1,6 @@
 import {RectangleSize} from "../geometry/Rectangle";
+import Color from "../math/Color";
 import Canvas from "../render/canvas/Canvas";
-import Color from "./Color";
 
 export default class Gradient {
 
@@ -95,7 +95,7 @@ export default class Gradient {
         const stopStep = 1 / (nbColors - 1);
 
         for (let step = 0, i = 0; step <= 1; step += stopStep, i++) {
-            this._gradient.addColorStop(step, this.colors[i].toString("rgba"));
+            this._gradient.addColorStop(step, this.colors[i].rgba);
         }
     }
 

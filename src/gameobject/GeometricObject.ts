@@ -6,7 +6,7 @@ import Position from "../geometry/Position";
 import Rectangle from "../geometry/Rectangle";
 import {ComplexShape, ShapeType} from "../geometry/Shape";
 import Triangle from "../geometry/Triangle";
-import Color from "../util/Color";
+import Color from "../math/Color";
 import GeometricAnimator from "./animator/GeometricAnimator";
 import GameObject from "./GameObject";
 import Graphics from "./Graphics";
@@ -40,13 +40,13 @@ export default class GeometricObject extends GameObject {
 
         this._animator = GeometricAnimator.prototype;
         this._fill = fill || true;
-        this._color = color || Color.BLACK;
+        this._color = color || Color.Black;
         this._shapeType = shapeType || ShapeType.RECTANGLE;
         this._shapePattern = shapePattern || null;
     }
 
     public get color(): Color {
-        return this._color || Color.BLACK;
+        return this._color || Color.Black;
     }
 
     public set color(color: Color) {

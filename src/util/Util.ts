@@ -24,7 +24,7 @@ export default class Util {
         const objectCopy = {} as T;
 
         for (const key in object) {
-            if (object.hasOwnProperty(key)) {
+            if ((object as any).hasOwnProperty(key)) {
                 objectCopy[key] = object[key];
             }
         }
