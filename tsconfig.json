@@ -5,12 +5,12 @@
     "sourceMap": true,
     "removeComments": true,
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": "./src"
   },
-  "files": [
-    "src/index.ts"
-  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "tests"
   ]
 }
