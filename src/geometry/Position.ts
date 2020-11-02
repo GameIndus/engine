@@ -4,7 +4,7 @@ export default class Position {
 
     private _y: number;
 
-    private _hooks: Array<(position: Position) => void>;
+    private _hooks: Array<(position: Position) => any>;
 
     private _lerpPos?: Position;
 

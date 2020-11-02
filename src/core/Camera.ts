@@ -9,11 +9,13 @@ export default class Camera {
     private scene: Scene;
     private gameobject?: GameObject;
 
+    /// private position: Position;
+
     constructor(game: Game, scene: Scene, gameobject?: GameObject) {
         this.game = game;
 
         this.scene = scene;
-        if (this.gameobject !== undefined) { this.gameobject = gameobject; }
+        this.gameobject = gameobject;
     }
 
 }
