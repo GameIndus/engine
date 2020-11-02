@@ -13,7 +13,9 @@ export default class Camera {
         this.game = game;
 
         this.scene = scene;
-        this.gameobject = gameobject || GameObject.prototype;
+        if (this.gameobject !== undefined) {
+            this.gameobject = gameobject;
+        }
     }
 
 }
