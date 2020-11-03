@@ -34,6 +34,8 @@ export default abstract class GameObject {
 
     private _velocity: Vector2 = new Vector2();
 
+    private _renderer: boolean;
+
     private readonly _behaviors: Behavior[] = [];
 
     private _parent: Group | null;
@@ -50,6 +52,7 @@ export default abstract class GameObject {
         this._anchor = new Point();
         this._size = {width: 0, height: 0};
         this._velocity = new Vector2();
+        this._renderer = false;
         this._behaviors = [];
         this._parent = null;
     }

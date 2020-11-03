@@ -9,6 +9,7 @@ import {RectangleSize} from "../geometry/Rectangle";
 import {ComplexShape, ShapeType} from "../geometry/Shape";
 import Color from "../math/Color";
 import Util from "../util/Util";
+import Camera from "./Camera";
 import Game from "./Game";
 
 // THINK MANAGE A ATL + TAB CANNT MOVE
@@ -23,6 +24,8 @@ export default class Scene {
 
     private readonly _gameobjects: GameObject[];
 
+    private _cameras: Camera[];
+
     private _sortedGameobjects: GameObject[] = [];
 
     private _gameobjectsRendered: number = 0;
@@ -34,6 +37,7 @@ export default class Scene {
         this._id = -1;
         this._name = name;
         this._gameobjects = [];
+        this._cameras = [];
     }
 
     public get id(): number {
@@ -58,6 +62,14 @@ export default class Scene {
 
         this._gameobjects.push(gameobject);
         return gameobject;
+    }
+
+    public createCamera(scene: Scene, gameobject: GameObject): Camera {
+        const camera = new Camera(this.game, scene, gameobject);
+
+        this._cameras.push(camera);
+
+        return camera;
     }
 
     public createShape(name: string, shapeType?: ShapeType, position?: Position,
@@ -132,6 +144,10 @@ export default class Scene {
     public update(): void {
         for (const gameobject of this._gameobjects) {
             gameobject._update();
+        }
+
+        for (const camera of this._cameras) {
+            camera._update();
         }
     }
 
