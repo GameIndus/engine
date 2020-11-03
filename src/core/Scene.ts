@@ -35,6 +35,8 @@ export default class Scene {
 
     private _currentObjectId: number = 0;
 
+    private _activeCameraId: number = 0;
+
     public constructor(game: Game, name: string) {
         this.game = game;
         this._id = -1;
@@ -58,14 +60,29 @@ export default class Scene {
 
     public add(gameobject: GameObject): GameObject {
         gameobject.id = this._currentObjectId;
-        if (!gameobject.name) {
-            gameobject.name = "g_" + this._currentObjectId;
-        }
+        if (!gameobject.name) { gameobject.name = "g_" + this._currentObjectId; }
 
         this._currentObjectId++;
 
         this._gameobjects.push(gameobject);
         return gameobject;
+    }
+
+    public addCamera(camera: Camera): Camera {
+        camera.id = this._activeCameraId;
+        if (!camera.name) { camera.name = "c_" + this._activeCameraId; }
+
+        this._activeCameraId++;
+
+        this._cameras.push(camera);
+        return camera;
+    }
+
+    public createCamera(name: string, position?: Position, viewport?: RectangleSize): Camera {
+        const camera = new Camera(this.game, name, viewport);
+
+        this.addCamera(camera);
+        return camera;
     }
 
     public createShape(name: string, shapeType?: ShapeType, position?: Position,

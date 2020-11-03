@@ -30,12 +30,12 @@ export default class Camera {
 
     private _renderer: boolean;
 
-    constructor(game: Game, name?: string) {
+    constructor(game: Game, name?: string, viewport?: RectangleSize) {
         this.game = game;
         this._id = -1;
         this._name = name || "";
         this._position = new Position();
-        this._viewport = {width: 0, height: 0};
+        this._viewport = viewport || {width: 0, height: 0};
         this._zoom = 1;
         this._velocity = new Vector2();
         this._renderer = false;
