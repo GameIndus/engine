@@ -106,7 +106,7 @@ export default class Camera {
     public _update(): void {
         if (!this.velocity.isZero()) {
             this.position.addX(this.velocity.x);
-            this.position.addY(this.velocity.y)
+            this.position.addY(this.velocity.y);
         }
     }
 

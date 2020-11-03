@@ -158,6 +158,10 @@ export default class Scene {
         for (const gameobject of this._gameobjects) {
             gameobject._update();
         }
+
+        for (const camera of this._cameras) {
+            camera._update();
+        }
     }
 
     public render(time: number): void {
