@@ -28,9 +28,11 @@ export default class Camera {
 
     private _velocity: Vector2 = new Vector2();
 
+    private _target: GameObject;
+
     private _renderer: boolean;
 
-    constructor(game: Game, name?: string, viewport?: RectangleSize) {
+    constructor(game: Game, name?: string, viewport?: RectangleSize, target?: GameObject) {
         this.game = game;
         this._id = -1;
         this._name = name || "";
@@ -38,6 +40,7 @@ export default class Camera {
         this._viewport = viewport || {width: 0, height: 0};
         this._zoom = 1;
         this._velocity = new Vector2();
+        this._target = target || GameObject.prototype;
         this._renderer = false;
     }
 
@@ -89,21 +92,36 @@ export default class Camera {
         this._velocity = velocity;
     }
 
+    public get target(): GameObject {
+        return this._target;
+    }
+
+    public set target(target: GameObject) {
+        this._target = target;
+    }
+
     public setViewport(width: number, height?: number): Camera {
         this.viewport.width = width;
         this.viewport.height = height || width;
-
         return this;
     }
 
     public setPosition(x?: number, y?: number): Camera {
         this.position.x = x || 0;
         this.position.y = y || this.position.x;
+        return this;
+    }
 
+    public setTarget(target: GameObject): Camera {
+        this._target = target;
         return this;
     }
 
     public _update(): void {
+        if (!this.target) {
+            // if (this.target.position.x - this.position.x) {}
+        }
+
         if (!this.velocity.isZero()) {
             this.position.addX(this.velocity.x);
             this.position.addY(this.velocity.y);
