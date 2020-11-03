@@ -35,7 +35,7 @@ export default class Scene {
 
     private _currentObjectId: number = 0;
 
-    private _activeCameraId: number = 0;
+    private _counterCameraId: number = 0;
 
     public constructor(game: Game, name: string) {
         this.game = game;
@@ -69,10 +69,10 @@ export default class Scene {
     }
 
     public addCamera(camera: Camera): Camera {
-        camera.id = this._activeCameraId;
-        if (!camera.name) { camera.name = "c_" + this._activeCameraId; }
+        camera.id = this._counterCameraId;
+        if (!camera.name) { camera.name = "c_" + this._counterCameraId; }
 
-        this._activeCameraId++;
+        this._counterCameraId++;
 
         this._cameras.push(camera);
         return camera;
