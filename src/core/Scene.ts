@@ -1,3 +1,4 @@
+import {callbackify} from "util";
 import GameObject from "../gameobject/GameObject";
 import GeometricObject from "../gameobject/GeometricObject";
 import {ParticleEmitter, ParticleEmitterConfig} from "../gameobject/ParticleEmitter";
@@ -24,6 +25,8 @@ export default class Scene {
 
     private readonly _gameobjects: GameObject[];
 
+    private _camera?: Camera;
+
     private _cameras: Camera[];
 
     private _sortedGameobjects: GameObject[] = [];
@@ -37,6 +40,7 @@ export default class Scene {
         this._id = -1;
         this._name = name;
         this._gameobjects = [];
+        this._camera = undefined;
         this._cameras = [];
     }
 
@@ -62,14 +66,6 @@ export default class Scene {
 
         this._gameobjects.push(gameobject);
         return gameobject;
-    }
-
-    public createCamera(scene: Scene, gameobject: GameObject): Camera {
-        const camera = new Camera(this.game, scene, gameobject);
-
-        this._cameras.push(camera);
-
-        return camera;
     }
 
     public createShape(name: string, shapeType?: ShapeType, position?: Position,
@@ -144,10 +140,6 @@ export default class Scene {
     public update(): void {
         for (const gameobject of this._gameobjects) {
             gameobject._update();
-        }
-
-        for (const camera of this._cameras) {
-            camera._update();
         }
     }
 

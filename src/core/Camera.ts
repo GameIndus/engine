@@ -3,7 +3,6 @@ import Position from "../geometry/Position";
 import {RectangleSize} from "../geometry/Rectangle";
 import Vector2 from "../math/Vector2";
 import Game from "./Game";
-import Scene from "./Scene";
 
 interface MoveAxis {
     x: boolean,
@@ -12,132 +11,103 @@ interface MoveAxis {
 
 export default class Camera {
 
-    private readonly game: Game;
+    protected game: Game;
 
-    private scene: Scene;
-    private gameobject: GameObject;
+    // TODO animations
+    // protected _animator: Animator;
 
-    private offset: Position;
-    private position: Position;
-    private speed: Vector2;
-    private zoom: number;
+    private _id: number;
 
-    private objectLastPosition: Position;
-    private objectDistance: RectangleSize;
-    private toAdd: Position;
+    private _name: string;
 
-    private canMoveOn: MoveAxis;
+    private _position: Position;
 
-    constructor(game: Game, scene: Scene, gameobject: GameObject) {
+    private _viewport: RectangleSize;
+
+    private _zoom: number;
+
+    private _velocity: Vector2 = new Vector2();
+
+    private _renderer: boolean;
+
+    constructor(game: Game, name?: string) {
         this.game = game;
-
-        this.scene = scene;
-        this.gameobject = gameobject;
-
-        this.offset = new Position();
-        this.position = new Position();
-        this.speed = new Vector2();
-        this.zoom = 1;
-
-        this.objectLastPosition = new Position();
-        this.objectDistance = {width: 0, height: 0};
-        this.toAdd = new Position();
-
-        this.canMoveOn = {x: true, y: true};
+        this._id = -1;
+        this._name = name || "";
+        this._position = new Position();
+        this._viewport = {width: 0, height: 0};
+        this._zoom = 1;
+        this._velocity = new Vector2();
+        this._renderer = false;
     }
 
-    public setScene(scene: Scene): void {
-        this.scene = scene;
+    public get id(): number {
+        return this._id;
     }
 
-    public setPosition(x: number, y: number): void {
-        this.position.x = x;
-        this.position.y = y;
-
-
-
-        if (this.canMoveOn.x) {
-            this.offset.addX(-this.position.x);
-        }
-        if (this.canMoveOn.y) {
-            this.offset.addY(-this.position.y);
-        }
+    public set id(id: number) {
+        this._id = id;
     }
 
-    public setCanMoveOn(axe: string, bool: boolean): void {
-        axe = axe.toUpperCase();
-        if (axe === "X" || axe === "HORIZONTAL") {
-            this.canMoveOn.x = bool;
-        }
-        if (axe === "Y" || axe === "VERTICAL") {
-            this.canMoveOn.y = bool;
-        }
+    public get name(): string {
+        return this._name;
     }
 
-    public setSpeed(speed: Vector2): void {
-        this.speed = speed;
+    public set name(name: string) {
+        this._name = name;
     }
 
-    public setZoom(zoom: number): void {
-        this.zoom = zoom;
+    public get position(): Position {
+        return this._position || new Position();
     }
 
-    public getCenter(): object {
-        const cs = this.game.canvas.size;
-        return {x: -this.offset.x + cs.width / 2, y: -this.offset.y + cs.height / 2};
+    public set position(position: Position) {
+        this._position = position;
     }
 
-    public attachTo(gameobject: GameObject): void {
-        this.gameobject = gameobject;
+    public get viewport(): RectangleSize {
+        return this._viewport;
     }
 
-    public updateOnGameobject() {
-        if (this.gameobject === null || this.scene === null) { return false; }
+    public set viewport(viewport: RectangleSize) {
+        this._viewport = viewport;
+    }
 
-        if (this.speed.x === 0) { this.speed.x++; }
-        if (this.speed.y === 0) { this.speed.y++; }
+    public get zoom(): number {
+        return this._zoom;
+    }
 
-        const canvasSize = {width: this.game.canvas.size.width, height: this.game.canvas.size.height};
-        let middle = {x: canvasSize.width / 2, y: canvasSize.height / 2};
+    public set zoom(zoom: number) {
+        this._zoom = zoom;
+    }
 
-        if (this.speed.x >= 1) {
-            this.objectDistance.width = this.gameobject.position.x - (-this.offset.x + middle.x);
+    public get velocity(): Vector2 {
+        return this._velocity || new Vector2();
+    }
 
-            if (this.objectDistance.width > 1 || this.objectDistance.width < -1) {
-                if (this.objectDistance.width < 0) {
-                    this.toAdd.x++;
-                } else {
-                    this.toAdd.x--;
-                }
-            }
-        }
+    public set velocity(velocity: Vector2) {
+        this._velocity = velocity;
+    }
 
-        if(this.speed.y >= 1) {
-            this.objectDistance.height = this.gameobject.position.y - (-this.offset.y + middle.y);
+    public setViewport(width: number, height?: number): Camera {
+        this.viewport.width = width;
+        this.viewport.height = height || width;
 
-            if (this.objectDistance.height > 1 || this.objectDistance.height < -1) {
-                if (this.objectDistance.width < 0) {
-                    this.toAdd.y++;
-                } else {
-                    this.toAdd.y--;
-                }
-            }
-        }
+        return this;
+    }
 
-        /// Update Camera offset
-        let speedMovement = {x: this.toAdd.x * this.speed.x, y: this.toAdd.y * this.speed.y};
+    public setPosition(x?: number, y?: number): Camera {
+        this.position.x = x || 0;
+        this.position.y = y || this.position.x;
 
-        this.offset.x = -this.position.x * this.speed.x + speedMovement.x;
-        this.offset.y = -this.position.y * this.speed.y + speedMovement.y;
-
-        this.objectLastPosition = this.gameobject.position;
+        return this;
     }
 
     public _update(): void {
-        if (this.gameobject != null) { this.updateOnGameobject(); }
-
-        if (this.canMoveOn.x) this.offset.x = -this.position.x;
-        if (this.canMoveOn.y) this.offset.y = -this.position.y;
+        if (!this.velocity.isZero()) {
+            this.position.addX(this.velocity.x);
+            this.position.addY(this.velocity.y)
+        }
     }
 
 }
