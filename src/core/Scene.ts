@@ -11,6 +11,8 @@ import Color from "../math/Color";
 import Util from "../util/Util";
 import Game from "./Game";
 
+// THINK MANAGE A ATL + TAB CANNT MOVE
+
 export default class Scene {
 
     private readonly game: Game;
