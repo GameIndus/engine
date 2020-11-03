@@ -79,9 +79,9 @@ export default class Scene {
     }
 
     public createCamera(name: string, position?: Position, viewport?: RectangleSize): Camera {
-        const camera = new Camera(this.game, name, viewport);
-
+        const camera = new Camera(this.game, name, position, viewport);
         this.addCamera(camera);
+
         return camera;
     }
 
