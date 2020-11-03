@@ -152,7 +152,6 @@ export default class Camera {
                 if (this.target.position.y - this.position.y + this._deadZone.y > this.viewport.height) {
                     //console.log("Y > "+ (this.target.position.y - (this.viewport.height - this._deadZone.y)));
                     this.position.setY(this.target.position.y - (this.viewport.height - this._deadZone.y));
-                    this.moveContext()
                     this.game.canvas.context.restore();
 
                 }else if (this.target.position.x - this._deadZone.y < this.position.x) {
