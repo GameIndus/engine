@@ -141,10 +141,10 @@ export default class Camera {
         if (this.target) {
             if (this.canMoveOn.x) {
                 if (this.target.position.x - this.position.x + this._deadZone.x > this.viewport.width) {
-                    //console.log("X > "+ (this.target.position.x - (this.viewport.width - this._deadZone.x)));
+                    console.log("X > "+ (this.target.position.x - (this.viewport.width - this._deadZone.x)));
                     this.position.setX(this.target.position.x - (this.viewport.width - this._deadZone.x));
                 } else if (this.target.position.x - this._deadZone.x < this.position.x) {
-                    //console.log("X > "+ (this.target.position.x - this._deadZone.x));
+                    console.log("X > "+ (this.target.position.x - this._deadZone.x));
                     this.position.setX(this.target.position.x - this._deadZone.x);
                 }
             }
