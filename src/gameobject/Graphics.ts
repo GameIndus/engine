@@ -59,9 +59,7 @@ export default class Graphics {
             this.context.strokeStyle = this.colorToString(color);
         }
 
-        if (color.a < 255) {
-            this.context.globalAlpha = color.a / 255;
-        }
+        this.context.globalAlpha = color.a;
 
         // this.context.save();
 
