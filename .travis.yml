@@ -14,7 +14,6 @@ install:
 script:
 - npm run build
 - npm run testWithCoverage
-- npm run tslint
 - sonar-scanner
 
 cache:
