@@ -66,6 +66,10 @@ export default class Scene {
         this._camera = camera;
     }
 
+    public get cameras(): Camera[] {
+        return this._cameras;
+    }
+
     public add(gameobject: GameObject): GameObject {
         gameobject.id = this._currentObjectId;
         if (!gameobject.name) { gameobject.name = "g_" + this._currentObjectId; }
@@ -82,16 +86,15 @@ export default class Scene {
 
         this._counterCameraId++;
 
-        // TODO Change???
+        // TODO Change ???
         if (camera.id === 0) { this.camera = camera; }
         this._cameras.push(camera);
         return camera;
     }
 
-    public createCamera(name: string, position?: Position, viewport?: RectangleSize): Camera {
-        const camera = new Camera(this.game, name, position, viewport);
+    public createCamera(name: string, position?: Position, viewport?: RectangleSize, target?: GameObject): Camera {
+        const camera = new Camera(this.game, name, position, viewport, target);
         this.addCamera(camera);
-
         return camera;
     }
 
@@ -168,10 +171,6 @@ export default class Scene {
         for (const gameobject of this._gameobjects) {
             gameobject._update();
         }
-
-        for (const camera of this._cameras) {
-            camera._update();
-        }
     }
 
     public render(time: number): void {
@@ -185,5 +184,4 @@ export default class Scene {
             gameobject.render(this.game.graphics, time);
         }
     }
-
 }

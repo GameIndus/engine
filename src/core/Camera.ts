@@ -1,7 +1,7 @@
 import {ShapeType} from "..";
 import GameObject from "../gameobject/GameObject";
 import Position from "../geometry/Position";
-import Rectangle, {RectangleSize} from "../geometry/Rectangle";
+import {RectangleSize} from "../geometry/Rectangle";
 import Color from "../math/Color";
 import Vector2 from "../math/Vector2";
 import Game from "./Game";
@@ -34,8 +34,6 @@ export default class Camera {
 
     private _canMoveOn: MoveAxis;
 
-    private _debug: Rectangle;
-
     constructor(game: Game, name?: string, position?: Position, viewport?: RectangleSize, target?: GameObject) {
         this.game = game;
         this._id = -1;
@@ -45,8 +43,6 @@ export default class Camera {
         this._zoom = 1;
         this._target = target || GameObject.prototype;
         this._canMoveOn = {x: true, y: true};
-
-        this._debug = new Rectangle();
     }
 
     public get id(): number {
@@ -148,7 +144,7 @@ export default class Camera {
         this.game.canvas.context.restore();
     }
 
-    public _update(): void {
+    public update(): void {
         // TODO
     }
 }

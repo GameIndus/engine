@@ -441,7 +441,15 @@ export default class Game {
         this.canvas.clear();
 
         if (this.isLoaded && !this.loader.splash.inRendering) {
+
+            if (this.currentScene.camera !== null) {
+                this.currentScene.camera.begin();
+                this.currentScene.camera.update();
+            }
+
             this.currentScene.render(elapsedTime);
+
+            if (this.currentScene.camera !== null) { this.currentScene.camera.end(); }
         }
     }
 

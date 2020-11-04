@@ -76,6 +76,11 @@ export default class GameLoop {
         if (this.running && this.onLoop) {
             this.game.update(Date.now());
             this.loopId = window.setTimeout(this.onLoop, this.game.time.callTime);
+
+            // this.game.currentScene.camera.begin();
+            // this.game.currentScene.camera._update();
+
+            // if (this.game.currentScene.camera.)
         }
     }
 
