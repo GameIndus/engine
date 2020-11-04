@@ -29,7 +29,7 @@ export default class Camera {
 
     private _deadZone: Position = new Position()
 
-    private _canMoveOn: MoveAxis
+    private readonly _canMoveOn: MoveAxis
 
     constructor(game: Game, name?: string, position?: Position, viewport?: RectangleSize, target?: GameObject) {
         this.game = game
