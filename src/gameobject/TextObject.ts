@@ -1,78 +1,77 @@
-import Game from "../core/Game";
-import Color from "../math/Color";
-import GameObject from "./GameObject";
-import Graphics from "./Graphics";
+import Game from '../core/Game'
+import Color from '../math/Color'
+import GameObject from './GameObject'
+import Graphics from './Graphics'
 
 export default class TextObject extends GameObject {
+    private readonly text: string
 
-    private readonly text: string;
+    private _fontFamily: string
 
-    private _fontFamily: string;
+    private _fontSize: number
 
-    private _fontSize: number;
+    private _color: Color
 
-    private _color: Color;
+    private _opacity: number
 
-    private _opacity: number;
-
-    private _lineHeight?: number;
+    private _lineHeight?: number
 
     public constructor(game: Game, name: string, text: string) {
-        super(game, name);
-        this.text = text;
-        this._fontFamily = "Arial";
-        this._fontSize = 16;
-        this._color = Color.Black;
-        this._opacity = 1;
+        super(game, name)
+        this.text = text
+        this._fontFamily = 'Arial'
+        this._fontSize = 16
+        this._color = Color.Black
+        this._opacity = 1
     }
 
     public get fontFamily(): string {
-        return this._fontFamily;
+        return this._fontFamily
     }
 
     public set fontFamily(fontFamily: string) {
-        this._fontFamily = fontFamily;
+        this._fontFamily = fontFamily
     }
 
     public get fontSize(): number {
-        return this._fontSize;
+        return this._fontSize
     }
 
     public set fontSize(fontSize: number) {
-        this._fontSize = fontSize;
-        this._lineHeight = fontSize;
+        this._fontSize = fontSize
+        this._lineHeight = fontSize
     }
 
     public get color(): Color {
-        return this._color;
+        return this._color
     }
 
     public set color(color: Color) {
-        this._color = color;
+        this._color = color
     }
 
     public get opacity(): number {
-        return this._opacity;
+        return this._opacity
     }
 
     public set opacity(opacity: number) {
-        this._opacity = opacity;
+        this._opacity = opacity
     }
 
     public get lineHeight(): number | undefined {
-        return this._lineHeight;
+        return this._lineHeight
     }
 
     public set lineHeight(lineHeight: number | undefined) {
-        this._lineHeight = lineHeight;
+        this._lineHeight = lineHeight
     }
 
     public get isMultiline(): boolean {
-        return this.text.indexOf("\n") > -1;
+        return this.text.indexOf('\n') > -1
     }
 
     public getOpacity(): number {
-        return this.opacity;
+        return this.opacity
     }
 
     public update(): void {
@@ -81,9 +80,13 @@ export default class TextObject extends GameObject {
 
     public render(graphics: Graphics, time: number): void {
         graphics.writeTextAt(
-            this.text, this.position.x, this.position.y,
-            this.color, this.fontFamily, this.fontSize, this.lineHeight,
-        );
+            this.text,
+            this.position.x,
+            this.position.y,
+            this.color,
+            this.fontFamily,
+            this.fontSize,
+            this.lineHeight,
+        )
     }
-
 }

@@ -1,27 +1,25 @@
-import Game from "../core/Game";
+import Game from '../core/Game'
 
 export default class Sound {
+    private _game: Game
 
-    private _game: Game;
+    private _autoplay = false
+    private _loop = false
+    private _key: string
+    private _name: string
 
-    private _autoplay: boolean = false;
-    private _loop: boolean = false;
-    private _key: string;
-    private _name: string;
+    private _startTime = 0
+    private _currentTime = 0
+    private _duration = 0
 
-    private _startTime: number = 0;
-    private _currentTime: number = 0;
-    private _duration: number = 0;
-
-    private _paused: boolean = false;
-    private _override: boolean = false; // Will always start playing from the beginning
+    private _paused = false
+    private _override = false // Will always start playing from the beginning
 
     // TODO
 
     constructor(game: Game) {
-        this._game = game;
-        this._key = "TODO";
-        this._name = "TODO";
+        this._game = game
+        this._key = 'TODO'
+        this._name = 'TODO'
     }
-
 }

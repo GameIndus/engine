@@ -1,4 +1,4 @@
-import Vector2 from "./Vector2";
+import Vector2 from './Vector2'
 
 /**
  * Class representing a 2D line.
@@ -11,16 +11,15 @@ import Vector2 from "./Vector2";
  * @since 2.0.0
  */
 export default class Line2 {
-
     /**
      * Represents the starting point of the line
      */
-    public begin: Vector2;
+    public begin: Vector2
 
     /**
      * Represents the ending point of the line
      */
-    public end: Vector2;
+    public end: Vector2
 
     /**
      * Construct a 2d line
@@ -28,15 +27,15 @@ export default class Line2 {
      * @param end Ending point of the line
      */
     constructor(begin?: Vector2, end?: Vector2) {
-        this.begin = begin || Vector2.Zero;
-        this.end = end || Vector2.Zero;
+        this.begin = begin || Vector2.Zero
+        this.end = end || Vector2.Zero
     }
 
     /**
      * Return the length of the line segment in pixels
      */
     public get length(): number {
-        return this.begin.distance(this.end);
+        return this.begin.distance(this.end)
     }
 
     /**
@@ -45,14 +44,17 @@ export default class Line2 {
      * @see https://en.wikipedia.org/wiki/Slope
      */
     public get slope(): number {
-        return (this.end.y - this.begin.y) / (this.end.x - this.begin.x);
+        return (this.end.y - this.begin.y) / (this.end.x - this.begin.x)
     }
 
     /**
      * Return the slope of the line in the form of a vector
      */
     public get slopeVector(): Vector2 {
-        return this.end.clone().sub(this.begin).scale(1 / this.length);
+        return this.end
+            .clone()
+            .sub(this.begin)
+            .scale(1 / this.length)
     }
 
     /**
@@ -60,7 +62,7 @@ export default class Line2 {
      * @see https://www.mathopenref.com/coordintercept.html
      */
     public get intercept(): number {
-        return this.begin.y - this.slope * this.begin.x;
+        return this.begin.y - this.slope * this.begin.x
     }
 
     /**
@@ -69,10 +71,10 @@ export default class Line2 {
      * @param point Point to check the distance with.
      */
     public distanceToPoint(point: Vector2): number {
-        const dx = this.end.x - this.begin.x;
-        const dy = this.end.y - this.begin.y;
-        const factor = this.end.x * this.begin.y - this.end.y * this.begin.x;
-        return Math.abs(dy * point.x - dx * point.y + factor) / this.length;
+        const dx = this.end.x - this.begin.x
+        const dy = this.end.y - this.begin.y
+        const factor = this.end.x * this.begin.y - this.end.y * this.begin.x
+        return Math.abs(dy * point.x - dx * point.y + factor) / this.length
     }
 
     /**
@@ -81,7 +83,7 @@ export default class Line2 {
      * @return A new point found on the line with a calculated Y.
      */
     public findPointAtX(x: number): Vector2 {
-        return new Vector2(x, this.slope * x + this.intercept);
+        return new Vector2(x, this.slope * x + this.intercept)
     }
 
     /**
@@ -90,7 +92,6 @@ export default class Line2 {
      * @return A new point found on the line with a calculated X.
      */
     public findPointAtY(y: number): Vector2 {
-        return new Vector2((y - this.intercept) / this.slope, y);
+        return new Vector2((y - this.intercept) / this.slope, y)
     }
-
 }

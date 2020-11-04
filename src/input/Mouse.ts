@@ -1,160 +1,162 @@
-import Game from "../core/Game";
-import Signal from "../core/Signal";
-import Position from "../geometry/Position";
+import Game from '../core/Game'
+import Signal from '../core/Signal'
+import Position from '../geometry/Position'
 
 export default class Mouse {
-
     private static positionFromEvent(event: MouseEvent): Position {
-        const x: number = event.x || event.clientX || event.pageX;
-        const y: number = event.y || event.clientY || event.pageY;
+        const x: number = event.x || event.clientX || event.pageX
+        const y: number = event.y || event.clientY || event.pageY
 
-        return new Position(x, y);
+        return new Position(x, y)
     }
 
     private static handleContextMenu(event: Event): boolean {
-        event.preventDefault();
-        return false;
+        event.preventDefault()
+        return false
     }
 
-    private readonly _onClick: Signal;
+    private readonly _onClick: Signal
 
-    private readonly _onDown: Signal;
+    private readonly _onDown: Signal
 
-    private readonly _onMove: Signal;
+    private readonly _onMove: Signal
 
-    private readonly _onUp: Signal;
+    private readonly _onUp: Signal
 
-    private readonly _onWheel: Signal;
+    private readonly _onWheel: Signal
 
-    private readonly _clicksHistory: Position[];
+    private readonly _clicksHistory: Position[]
 
-    private readonly _downButtons: MouseClickType[];
+    private readonly _downButtons: MouseClickType[]
 
-    private game: Game;
+    private game: Game
 
-    private _lastClickPosition?: Position;
+    private _lastClickPosition?: Position
 
-    private _lastPosition?: Position;
+    private _lastPosition?: Position
 
     public constructor(game: Game) {
-        this.game = game;
-        this._onClick = new Signal(true);
-        this._onDown = new Signal(true);
-        this._onMove = new Signal(true);
-        this._onUp = new Signal(true);
-        this._onWheel = new Signal(true);
-        this._clicksHistory = [];
-        this._downButtons = [];
+        this.game = game
+        this._onClick = new Signal(true)
+        this._onDown = new Signal(true)
+        this._onMove = new Signal(true)
+        this._onUp = new Signal(true)
+        this._onWheel = new Signal(true)
+        this._clicksHistory = []
+        this._downButtons = []
 
-        this.bind();
+        this.bind()
     }
 
     public get clicksHistory(): Position[] {
-        return this._clicksHistory;
+        return this._clicksHistory
     }
 
     public get lastClickPosition(): Position | undefined {
-        return this._lastClickPosition;
+        return this._lastClickPosition
     }
 
     public get lastPosition(): Position | undefined {
-        return this._lastPosition;
+        return this._lastPosition
     }
 
     public get downButtons(): MouseClickType[] {
-        return this._downButtons;
+        return this._downButtons
     }
 
     private bind(): void {
-        const canvas: HTMLCanvasElement = this.game.canvas.element;
+        const canvas: HTMLCanvasElement = this.game.canvas.element
 
-        canvas.removeEventListener("click", this.handleClick.bind(this));
-        canvas.removeEventListener("mousedown", this.handleDown.bind(this));
-        canvas.removeEventListener("mousemove", this.handleMove.bind(this));
-        canvas.removeEventListener("mouseup", this.handleUp.bind(this));
-        canvas.removeEventListener("wheel", this.handleWheel.bind(this));
-        canvas.removeEventListener("contextmenu", Mouse.handleContextMenu.bind(this));
+        canvas.removeEventListener('click', this.handleClick.bind(this))
+        canvas.removeEventListener('mousedown', this.handleDown.bind(this))
+        canvas.removeEventListener('mousemove', this.handleMove.bind(this))
+        canvas.removeEventListener('mouseup', this.handleUp.bind(this))
+        canvas.removeEventListener('wheel', this.handleWheel.bind(this))
+        canvas.removeEventListener('contextmenu', Mouse.handleContextMenu.bind(this))
 
-        canvas.addEventListener("click", this.handleClick.bind(this), true);
-        canvas.addEventListener("mousedown", this.handleDown.bind(this), true);
-        canvas.addEventListener("mousemove", this.handleMove.bind(this), true);
-        canvas.addEventListener("mouseup", this.handleUp.bind(this), true);
-        canvas.addEventListener("wheel", this.handleWheel.bind(this), true);
-        canvas.addEventListener("contextmenu", Mouse.handleContextMenu.bind(this), true);
+        canvas.addEventListener('click', this.handleClick.bind(this), true)
+        canvas.addEventListener('mousedown', this.handleDown.bind(this), true)
+        canvas.addEventListener('mousemove', this.handleMove.bind(this), true)
+        canvas.addEventListener('mouseup', this.handleUp.bind(this), true)
+        canvas.addEventListener('wheel', this.handleWheel.bind(this), true)
+        canvas.addEventListener('contextmenu', Mouse.handleContextMenu.bind(this), true)
     }
 
     private handleClick(event: MouseEvent): boolean {
-        const pos: Position = Mouse.positionFromEvent(event);
+        const pos: Position = Mouse.positionFromEvent(event)
 
-        this._lastClickPosition = pos.clone();
-        this._clicksHistory.push(pos.clone());
+        this._lastClickPosition = pos.clone()
+        this._clicksHistory.push(pos.clone())
 
-        this._onClick.dispatch(pos.clone(), MouseClickType.LEFT_CLICK);
+        this._onClick.dispatch(pos.clone(), MouseClickType.LEFT_CLICK)
 
-        return false;
+        return false
     }
 
     private handleDown(event: MouseEvent): void {
-        const pos: Position = Mouse.positionFromEvent(event);
-        let type: MouseClickType = MouseClickType.LEFT_CLICK;
+        const pos: Position = Mouse.positionFromEvent(event)
+        let type: MouseClickType = MouseClickType.LEFT_CLICK
 
         if (event.which === 2) {
-            type = MouseClickType.MIDDLE_CLICK;
+            type = MouseClickType.MIDDLE_CLICK
         }
         if (event.which === 3) {
-            type = MouseClickType.RIGHT_CLICK;
+            type = MouseClickType.RIGHT_CLICK
         }
 
         if (this._downButtons.indexOf(type) === -1) {
-            this._downButtons.push(type);
+            this._downButtons.push(type)
         }
 
-        this._onDown.dispatch(pos.clone(), type);
+        this._onDown.dispatch(pos.clone(), type)
     }
 
     private handleMove(event: MouseEvent): void {
-        const pos: Position = Mouse.positionFromEvent(event);
-        this._lastPosition = pos.clone();
-        this._onMove.dispatch(this._lastPosition);
+        const pos: Position = Mouse.positionFromEvent(event)
+        this._lastPosition = pos.clone()
+        this._onMove.dispatch(this._lastPosition)
     }
 
     private handleUp(event: MouseEvent): void {
-        const pos: Position = Mouse.positionFromEvent(event);
-        let type: MouseClickType = MouseClickType.LEFT_CLICK;
+        const pos: Position = Mouse.positionFromEvent(event)
+        let type: MouseClickType = MouseClickType.LEFT_CLICK
 
         if (event.which === 2) {
-            type = MouseClickType.MIDDLE_CLICK;
+            type = MouseClickType.MIDDLE_CLICK
         }
         if (event.which === 3) {
-            type = MouseClickType.RIGHT_CLICK;
+            type = MouseClickType.RIGHT_CLICK
         }
 
         if (this._downButtons.indexOf(type) > -1) {
-            this._downButtons.splice(this._downButtons.indexOf(type), 1);
+            this._downButtons.splice(this._downButtons.indexOf(type), 1)
         }
 
-        this._onUp.dispatch(pos.clone(), type);
+        this._onUp.dispatch(pos.clone(), type)
     }
 
     private handleWheel(event: WheelEvent): boolean {
-        let direction: MouseWheelDirection = MouseWheelDirection.DOWN;
+        let direction: MouseWheelDirection = MouseWheelDirection.DOWN
 
-        event.preventDefault();
+        event.preventDefault()
 
         if (event.deltaY < 0) {
-            direction = MouseWheelDirection.UP;
+            direction = MouseWheelDirection.UP
         }
 
-        this._onWheel.dispatch(direction);
+        this._onWheel.dispatch(direction)
 
-        return false;
+        return false
     }
 }
 
 enum MouseClickType {
-    LEFT_CLICK, MIDDLE_CLICK, RIGHT_CLICK,
+    LEFT_CLICK,
+    MIDDLE_CLICK,
+    RIGHT_CLICK,
 }
 
 enum MouseWheelDirection {
-    UP, DOWN,
+    UP,
+    DOWN,
 }

@@ -9,19 +9,18 @@
  * @since 2.0.0
  */
 export default class Vector2 {
-
     /**
      * A (0, 0) vector
      */
     public static get Zero(): Vector2 {
-        return new Vector2().zero();
+        return new Vector2().zero()
     }
 
     /**
      * A (1, 1) vector
      */
     public static get One(): Vector2 {
-        return new Vector2(1, 1);
+        return new Vector2(1, 1)
     }
 
     /**
@@ -29,34 +28,34 @@ export default class Vector2 {
      * @param angle Angle to apply to create the vector.
      */
     public static fromAngle(angle: number): Vector2 {
-        return new Vector2(Math.cos(angle), Math.sin(angle));
+        return new Vector2(Math.cos(angle), Math.sin(angle))
     }
 
     /**
      * X property of the 2d vector
      */
-    public x: number;
+    public x: number
 
     /**
      * Y property of the 2d vector
      */
-    public y: number;
+    public y: number
 
     /**
      * Construct a new 2d vector with initial values
      * @param x initial X value
      * @param y initial Y value
      */
-    constructor(x: number = 0, y: number = 0) {
-        this.x = x;
-        this.y = y;
+    constructor(x = 0, y = 0) {
+        this.x = x
+        this.y = y
     }
 
     /**
      * Calculate the magnitude of the vector.
      */
     public get magnitude(): number {
-        return Math.sqrt(this.x * this.x + this.y * this.y);
+        return Math.sqrt(this.x * this.x + this.y * this.y)
     }
 
     /**
@@ -64,7 +63,7 @@ export default class Vector2 {
      * @see https://en.wikipedia.org/wiki/Taxicab_geometry
      */
     public get lengthManhattan(): number {
-        return Math.abs(this.x) + Math.abs(this.y);
+        return Math.abs(this.x) + Math.abs(this.y)
     }
 
     /**
@@ -72,16 +71,16 @@ export default class Vector2 {
      * The result will be between -PI and PI (included).
      */
     public get angle(): number {
-        return Math.atan2(this.y, this.x);
+        return Math.atan2(this.y, this.x)
     }
 
     /**
      * Absolute X and Y properties of the vector.
      */
     public abs(): Vector2 {
-        this.x = Math.abs(this.x);
-        this.y = Math.abs(this.y);
-        return this;
+        this.x = Math.abs(this.x)
+        this.y = Math.abs(this.y)
+        return this
     }
 
     /**
@@ -89,9 +88,9 @@ export default class Vector2 {
      * @param vector Vector to add. It will NOT be modified.
      */
     public add(vector: Vector2): Vector2 {
-        this.x += vector.x;
-        this.y += vector.y;
-        return this;
+        this.x += vector.x
+        this.y += vector.y
+        return this
     }
 
     /**
@@ -99,18 +98,18 @@ export default class Vector2 {
      * @param scalar Number to add at X and Y properties. It can be positive or negative.
      */
     public addScalar(scalar: number): Vector2 {
-        this.x += scalar;
-        this.y += scalar;
-        return this;
+        this.x += scalar
+        this.y += scalar
+        return this
     }
 
     /**
      * Ceil X and Y properties of this vector.
      */
     public ceil(): Vector2 {
-        this.x = Math.ceil(this.x);
-        this.y = Math.ceil(this.y);
-        return this;
+        this.x = Math.ceil(this.x)
+        this.y = Math.ceil(this.y)
+        return this
     }
 
     /**
@@ -119,16 +118,16 @@ export default class Vector2 {
      * @param max Vector used for maximum properties.
      */
     public clamp(min: Vector2, max: Vector2): Vector2 {
-        this.x = Math.max(min.x, Math.min(max.x, this.x));
-        this.y = Math.max(min.y, Math.min(max.y, this.y));
-        return this;
+        this.x = Math.max(min.x, Math.min(max.x, this.x))
+        this.y = Math.max(min.y, Math.min(max.y, this.y))
+        return this
     }
 
     /**
      * Clone this vector an these properties.
      */
     public clone(): Vector2 {
-        return new Vector2(this.x, this.y);
+        return new Vector2(this.x, this.y)
     }
 
     /**
@@ -136,9 +135,9 @@ export default class Vector2 {
      * @param vector Vector to copy
      */
     public copy(vector: Vector2): Vector2 {
-        this.x = vector.x;
-        this.y = vector.y;
-        return this;
+        this.x = vector.x
+        this.y = vector.y
+        return this
     }
 
     /**
@@ -146,10 +145,10 @@ export default class Vector2 {
      * @param vector Vector to take for the calculation.
      */
     public distance(vector: Vector2): number {
-        const dx: number = this.x - vector.x;
-        const dy: number = this.y - vector.y;
+        const dx: number = this.x - vector.x
+        const dy: number = this.y - vector.y
 
-        return Math.sqrt(dx * dx + dy * dy);
+        return Math.sqrt(dx * dx + dy * dy)
     }
 
     /**
@@ -159,12 +158,12 @@ export default class Vector2 {
      */
     public divide(vector: Vector2): Vector2 {
         if (vector.x === 0 || vector.y === 0) {
-            throw new RangeError("Cannot divide the vector by a zero one.");
+            throw new RangeError('Cannot divide the vector by a zero one.')
         }
 
-        this.x /= vector.x;
-        this.y /= vector.y;
-        return this;
+        this.x /= vector.x
+        this.y /= vector.y
+        return this
     }
 
     /**
@@ -174,10 +173,10 @@ export default class Vector2 {
      */
     public divideScalar(scalar: number): Vector2 {
         if (scalar === 0) {
-            throw new RangeError("Cannot divide the vector by zero.");
+            throw new RangeError('Cannot divide the vector by zero.')
         }
 
-        return this.scale(1 / scalar);
+        return this.scale(1 / scalar)
     }
 
     /**
@@ -185,7 +184,7 @@ export default class Vector2 {
      * @param vector Vector to dot.
      */
     public dot(vector: Vector2): number {
-        return this.x * vector.x + this.y * vector.y;
+        return this.x * vector.x + this.y * vector.y
     }
 
     /**
@@ -193,16 +192,16 @@ export default class Vector2 {
      * @param vector Vector to check.
      */
     public equals(vector: Vector2): boolean {
-        return this.x === vector.x && this.y === vector.y;
+        return this.x === vector.x && this.y === vector.y
     }
 
     /**
      * Floor X and Y properties of this vector.
      */
     public floor(): Vector2 {
-        this.x = Math.floor(this.x);
-        this.y = Math.floor(this.y);
-        return this;
+        this.x = Math.floor(this.x)
+        this.y = Math.floor(this.y)
+        return this
     }
 
     /**
@@ -210,14 +209,14 @@ export default class Vector2 {
      * @param vector Vector to check.
      */
     public isCollinearWith(vector: Vector2): boolean {
-        return this.x * vector.y === this.y * vector.x;
+        return this.x * vector.y === this.y * vector.x
     }
 
     /**
      * Check if this vector contains zero properties.
      */
     public isZero(): boolean {
-        return this.x === 0 && this.y === 0;
+        return this.x === 0 && this.y === 0
     }
 
     /**
@@ -226,9 +225,9 @@ export default class Vector2 {
      * @param alpha The interpolant. Clamped to the range [0, 1].
      */
     public lerp(vector: Vector2, alpha: number) {
-        this.x += (vector.x - this.x) * alpha;
-        this.y += (vector.y - this.y) * alpha;
-        return this;
+        this.x += (vector.x - this.x) * alpha
+        this.y += (vector.y - this.y) * alpha
+        return this
     }
 
     /**
@@ -236,14 +235,14 @@ export default class Vector2 {
      * @param vector Vector to mix with.
      * @param amount The percentage of mixin. Clamped to the range [0, 1].
      */
-    public mix(vector: Vector2, amount: number = 0.5): Vector2 {
+    public mix(vector: Vector2, amount = 0.5): Vector2 {
         if (amount < 0 || amount > 1) {
-            throw new RangeError("amount must be between 0 and 1.");
+            throw new RangeError('amount must be between 0 and 1.')
         }
 
-        this.x = (1 - amount) * this.x + amount * vector.x;
-        this.y = (1 - amount) * this.y + amount * vector.y;
-        return this;
+        this.x = (1 - amount) * this.x + amount * vector.x
+        this.y = (1 - amount) * this.y + amount * vector.y
+        return this
     }
 
     /**
@@ -251,16 +250,16 @@ export default class Vector2 {
      * @param vector Vector to multiply with.
      */
     public multiply(vector: Vector2): Vector2 {
-        this.x *= vector.x;
-        this.y *= vector.y;
-        return this;
+        this.x *= vector.x
+        this.y *= vector.y
+        return this
     }
 
     /**
      * Negate this vector
      */
     public negate(): Vector2 {
-        return this.scale(-1);
+        return this.scale(-1)
     }
 
     /**
@@ -268,7 +267,7 @@ export default class Vector2 {
      * @see https://en.wikipedia.org/wiki/Normal_(geometry)
      */
     public normal(): Vector2 {
-        return this.perpendicular().normalize();
+        return this.perpendicular().normalize()
     }
 
     /**
@@ -276,14 +275,14 @@ export default class Vector2 {
      * @see http://www.fundza.com/vectors/normalize/
      */
     public normalize(): Vector2 {
-        return this.divideScalar(this.magnitude);
+        return this.divideScalar(this.magnitude)
     }
 
     /**
      * Return a NEW vector which is perpendicular to this one.
      */
     public perpendicular(): Vector2 {
-        return new Vector2(this.y, -this.x);
+        return new Vector2(this.y, -this.x)
     }
 
     /**
@@ -291,9 +290,9 @@ export default class Vector2 {
      * @param angle Rotate this vector by this number.
      */
     public rotate(angle: number): Vector2 {
-        this.x = this.x * Math.cos(angle) - this.y * Math.sin(angle);
-        this.y = this.x * Math.sin(angle) + this.y * Math.cos(angle);
-        return this;
+        this.x = this.x * Math.cos(angle) - this.y * Math.sin(angle)
+        this.y = this.x * Math.sin(angle) + this.y * Math.cos(angle)
+        return this
     }
 
     /**
@@ -302,23 +301,23 @@ export default class Vector2 {
      * @param angle Rotate the vector by this number.
      */
     public rotateAround(center: Vector2, angle: number): Vector2 {
-        const c: number = Math.cos(angle);
-        const s: number = Math.sin(angle);
-        const x: number = this.x - center.x;
-        const y: number = this.y - center.y;
+        const c: number = Math.cos(angle)
+        const s: number = Math.sin(angle)
+        const x: number = this.x - center.x
+        const y: number = this.y - center.y
 
-        this.x = x * c - y * s + center.x;
-        this.y = x * s + y * c + center.y;
-        return this;
+        this.x = x * c - y * s + center.x
+        this.y = x * s + y * c + center.y
+        return this
     }
 
     /**
      * Round X and Y properties of this vector.
      */
     public round(): Vector2 {
-        this.x = Math.round(this.x);
-        this.y = Math.round(this.y);
-        return this;
+        this.x = Math.round(this.x)
+        this.y = Math.round(this.y)
+        return this
     }
 
     /**
@@ -326,9 +325,9 @@ export default class Vector2 {
      * @param factor The factor to scale the vector with.
      */
     public scale(factor: number): Vector2 {
-        this.x *= factor;
-        this.y *= factor;
-        return this;
+        this.x *= factor
+        this.y *= factor
+        return this
     }
 
     /**
@@ -336,9 +335,9 @@ export default class Vector2 {
      * @param vector Vector to subtract with.
      */
     public sub(vector: Vector2): Vector2 {
-        this.x -= vector.x;
-        this.y -= vector.y;
-        return this;
+        this.x -= vector.x
+        this.y -= vector.y
+        return this
     }
 
     /**
@@ -346,17 +345,16 @@ export default class Vector2 {
      * @param scalar Number to subtract with.
      */
     public subScalar(scalar: number): Vector2 {
-        this.x -= scalar;
-        this.y -= scalar;
-        return this;
+        this.x -= scalar
+        this.y -= scalar
+        return this
     }
 
     /**
      * Set X and Y properties of this vector to zero.
      */
     public zero(): Vector2 {
-        this.x = this.y = 0;
-        return this;
+        this.x = this.y = 0
+        return this
     }
-
 }

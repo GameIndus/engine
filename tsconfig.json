@@ -4,13 +4,10 @@
     "module": "commonjs",
     "sourceMap": true,
     "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "esModuleInterop": true,
     "baseUrl": "./src"
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "tests"
-  ]
+  "include": ["src"]
 }

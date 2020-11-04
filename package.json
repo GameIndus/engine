@@ -7,7 +7,8 @@
     "build": "webpack --mode production",
     "test": "jest",
     "testWithCoverage": "jest --coverage",
-    "tslint": "tslint -t json -o tslint-report.json --project . --force"
+    "format": "prettier --write src/**/*.ts",
+    "lint": "eslint --fix src/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -22,18 +23,45 @@
     "url": "https://github.com/GameIndus/engine/issues"
   },
   "homepage": "https://github.com/GameIndus/engine#readme",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
-    "@types/jest": "^24.0.13",
-    "@types/node": "^11.13.13",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^11.15.35",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
     "clean-webpack-plugin": "^2.0.2",
-    "jest": "^24.8.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.3.0",
+    "jest": "^24.9.0",
     "jest-sonar-reporter": "^2.0.0",
-    "ts-jest": "^24.0.2",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.1.2",
+    "ts-jest": "^24.3.0",
     "ts-loader": "^5.4.5",
-    "tslint": "^5.17.0",
-    "tslint-webpack-plugin": "^2.0.4",
-    "typescript": "^3.5.1",
-    "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2"
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": "prettier --write"
   }
 }

@@ -1,26 +1,26 @@
 export namespace Key {
     export function fromCode(code: number): Key {
-        return code;
+        return code
     }
 
     export function fromName(name: string): Key {
-        return Key.codeFromName(name);
+        return Key.codeFromName(name)
     }
 
     export function codeFromName(name: string): number {
-        return Key.fromName(name);
+        return Key.fromName(name)
     }
 
     export function nameFromCode(code: number): string {
-        return Key[Key.fromCode(code)];
+        return Key[Key.fromCode(code)]
     }
 
     export function toString(key: Key): string {
-        return Key[key];
+        return Key[key]
     }
 
     export function toCode(key: Key): number {
-        return key;
+        return key
     }
 }
 

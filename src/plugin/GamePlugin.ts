@@ -1,33 +1,32 @@
-import Game from "../core/Game";
+import Game from '../core/Game'
 
 export default abstract class GamePlugin {
+    private _id: number
 
-    private _id: number;
+    private _name: string
 
-    private _name: string;
+    private _registered: boolean
 
-    private _registered: boolean;
-
-    private _game: Game | null;
+    private _game: Game | null
 
     protected constructor(name: string) {
-        this._id = -1;
-        this._name = name;
-        this._registered = false;
-        this._game = null;
+        this._id = -1
+        this._name = name
+        this._registered = false
+        this._game = null
     }
 
     public get id(): number {
-        return this._id;
+        return this._id
     }
 
     protected get game(): Game | null {
-        return this._game;
+        return this._game
     }
 
-    public abstract onEnable(): void;
+    public abstract onEnable(): void
 
-    public abstract onDisable(): void;
+    public abstract onDisable(): void
 
     public onPreRender(): void {
         // Not implemented
@@ -55,28 +54,27 @@ export default abstract class GamePlugin {
 
     public register(game: Game, id: number): boolean {
         if (this._registered) {
-            return false;
+            return false
         }
 
-        this._registered = true;
-        this._game = game;
-        this._id = id;
+        this._registered = true
+        this._game = game
+        this._id = id
 
-        this.onEnable();
-        return true;
+        this.onEnable()
+        return true
     }
 
     public unregister(): boolean {
         if (!this._registered) {
-            return false;
+            return false
         }
 
-        this._registered = false;
-        this._game = null;
-        this._id = -1;
+        this._registered = false
+        this._game = null
+        this._id = -1
 
-        this.onDisable();
-        return true;
+        this.onDisable()
+        return true
     }
-
 }

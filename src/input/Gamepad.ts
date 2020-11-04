@@ -1,3 +1,1 @@
-export default class GamePad {
-
-}
+export default class GamePad {}
