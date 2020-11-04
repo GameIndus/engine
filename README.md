@@ -50,7 +50,8 @@ Created for the new-generation GameIndus platform :rocket:
 
 * **Typescript**, an open-source programming language developed and maintained by Microsoft. It enables us to have a more reliable and maintainable code with classes and namespaces.
 * **Webpack** to compile all Typescript code into a native JavaScript code readable by all modern browsers. It also provides a file watching system to help us when we develop the engine.
-* **TSLint**, an extensible static analysis tool that checks TypeScript code for readability, maintainability, and functionality errors.
+* **ESLint**, an extensible static analysis tool that checks TypeScript code for readability, maintainability, and functionality errors.
+* **Prettier**, this is a code formater for TypeScript and other languages...
 * **Jest**, a delightful JavaScript Testing Framework with a focus on simplicity.
 
 All these tools are working together thanks to NodeJs. You can find all used packages in the Node config file.
