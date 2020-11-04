@@ -4,21 +4,25 @@ dist: xenial
 node_js:
   - "12"
 
+git:
+  depth: false
+
 addons:
   sonarcloud:
     organization: "gameindus"
 
 install:
-- npm install
+  - npm install
 
 script:
-- npm run build
-- npm run testWithCoverage
-- sonar-scanner
+  - npm run build
+  - npm run testWithCoverage
+  - npm run lint:report
+  - sonar-scanner
 
 cache:
   directories:
-  - node_modules
-  - node_cache
-  - $HOME/.npm
-  - $HOME/.sonar/cache
+    - node_modules
+    - node_cache
+    - $HOME/.npm
+    - $HOME/.sonar/cache

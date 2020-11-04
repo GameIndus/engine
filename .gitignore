@@ -14,5 +14,5 @@ yarn-debug.log*
 yarn-error.log*
 
 # reports
-tslint-report.json
+eslint-report.json
 test-report.xml

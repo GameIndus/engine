@@ -8,7 +8,8 @@
     "test": "jest",
     "testWithCoverage": "jest --coverage",
     "format": "prettier --write src/**/*.ts",
-    "lint": "eslint --fix src/**/*.ts"
+    "lint": "eslint --fix src/**/*.ts",
+    "lint:report": "eslint -f json -o eslint-report.json src/**/*.ts"
   },
   "repository": {
     "type": "git",
