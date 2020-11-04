@@ -7,8 +7,8 @@ import Vector2 from "../math/Vector2";
 import Game from "./Game";
 
 interface MoveAxis {
-    x: boolean,
-    y: boolean
+    x: boolean;
+    y: boolean;
 }
 
 export default class Camera {
@@ -148,5 +148,7 @@ export default class Camera {
         this.game.canvas.context.restore();
     }
 
-    public _update(): void {}
+    public _update(): void {
+        // TODO
+    }
 }

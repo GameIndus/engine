@@ -8,8 +8,6 @@ import Behavior from "./behavior/Behavior";
 import Graphics from "./Graphics";
 import Group from "./Group";
 
-
-
 export default abstract class GameObject {
 
     protected game: Game;

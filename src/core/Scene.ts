@@ -44,8 +44,6 @@ export default class Scene {
         this._gameobjects = [];
         this._camera = camera || new Camera(game);
         this._cameras = [];
-
-        this.camera.begin()
     }
 
     public get id(): number {
@@ -186,8 +184,6 @@ export default class Scene {
         for (const gameobject of this._sortedGameobjects) {
             gameobject.render(this.game.graphics, time);
         }
-
-        this.camera.end();
     }
 
 }
