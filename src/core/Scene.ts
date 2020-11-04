@@ -25,7 +25,7 @@ export default class Scene {
 
     private readonly _gameobjects: GameObject[];
 
-    private _camera?: Camera;
+    private _camera: Camera;
 
     private _cameras: Camera[];
 
@@ -37,13 +37,15 @@ export default class Scene {
 
     private _counterCameraId: number = 0;
 
-    public constructor(game: Game, name: string) {
+    public constructor(game: Game, name: string, camera?: Camera) {
         this.game = game;
         this._id = -1;
         this._name = name;
         this._gameobjects = [];
-        this._camera = undefined;
+        this._camera = camera || new Camera(game);
         this._cameras = [];
+
+        this.camera.begin()
     }
 
     public get id(): number {
@@ -56,6 +58,14 @@ export default class Scene {
 
     public get gameobjects(): GameObject[] {
         return this._gameobjects;
+    }
+
+    public get camera(): Camera {
+        return this._camera;
+    }
+
+    public set camera(camera: Camera) {
+        this._camera = camera;
     }
 
     public add(gameobject: GameObject): GameObject {
@@ -74,6 +84,8 @@ export default class Scene {
 
         this._counterCameraId++;
 
+        // TODO Change???
+        if (camera.id === 0) { this.camera = camera; }
         this._cameras.push(camera);
         return camera;
     }
@@ -174,6 +186,8 @@ export default class Scene {
         for (const gameobject of this._sortedGameobjects) {
             gameobject.render(this.game.graphics, time);
         }
+
+        this.camera.end();
     }
 
 }

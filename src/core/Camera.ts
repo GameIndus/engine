@@ -137,32 +137,16 @@ export default class Camera {
         this._deadZone.y = this._viewport.height / 2;
     }
 
-    public _update(): void {
-        if (this.target) {
-            if (this.canMoveOn.x) {
-                if (this.target.position.x - this.position.x + this._deadZone.x > this.viewport.width) {
-                    console.log("X > "+ (this.target.position.x - (this.viewport.width - this._deadZone.x)));
-                    this.position.setX(this.target.position.x - (this.viewport.width - this._deadZone.x));
-                } else if (this.target.position.x - this._deadZone.x < this.position.x) {
-                    console.log("X > "+ (this.target.position.x - this._deadZone.x));
-                    this.position.setX(this.target.position.x - this._deadZone.x);
-                }
-            }
-            if (this.canMoveOn.y) {
-                if (this.target.position.y - this.position.y + this._deadZone.y > this.viewport.height) {
-                    //console.log("Y > "+ (this.target.position.y - (this.viewport.height - this._deadZone.y)));
-                    this.position.setY(this.target.position.y - (this.viewport.height - this._deadZone.y));
-                    this.game.canvas.context.restore();
+    public begin() {
+        const ctx = this.game.canvas.context;
 
-                }else if (this.target.position.x - this._deadZone.y < this.position.x) {
-                    //console.log("Y > "+ (this.target.position.y - this._deadZone.y));
-                    this.position.setY(this.target.position.y - this._deadZone.y);
-                }
-            }
-
-            if (!this.velocity.isZero()) {
-                this.game.canvas.context.translate(this.position.x, this.position.y);
-            }
-        }
+        ctx.save();
+        ctx.scale(this.zoom, this.zoom);
     }
+
+    public end() {
+        this.game.canvas.context.restore();
+    }
+
+    public _update(): void {}
 }
