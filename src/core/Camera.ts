@@ -22,7 +22,6 @@ export default class Camera {
 
     private _zoom: number
 
-    /// private _velocity: Vector2 = new Vector2();
     private _velocity: Vector2 = new Vector2(1, 1)
 
     private _target: GameObject
