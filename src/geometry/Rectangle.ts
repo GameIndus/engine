@@ -110,7 +110,7 @@ export default class Rectangle implements Shape {
         }
     }
 
-    public getSize(): RectangleSize {
+    public getSize(): Size {
         return { width: this.width, height: this.height }
     }
 
@@ -182,12 +182,12 @@ export const enum RectanglePosition {
 }
 
 export namespace RectangleSize {
-    export function clone(size: RectangleSize): RectangleSize {
+    export function clone(size: Size): Size {
         return { width: size.width, height: size.height }
     }
 }
 
-export interface RectangleSize {
+export interface Size {
     width: number
     height: number
 }

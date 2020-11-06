@@ -1,6 +1,6 @@
 import GameObject from '../gameobject/GameObject'
 import Position from '../geometry/Position'
-import { RectangleSize } from '../geometry/Rectangle'
+import { Size } from '../geometry/Rectangle'
 import Vector2 from '../math/Vector2'
 import Game from './Game'
 
@@ -18,11 +18,10 @@ export default class Camera {
 
     private _position: Position
 
-    private _viewport: RectangleSize
+    private _viewport: Size
 
     private _zoom: number
 
-    /// private _velocity: Vector2 = new Vector2();
     private _velocity: Vector2 = new Vector2(1, 1)
 
     private _target: GameObject
@@ -31,7 +30,7 @@ export default class Camera {
 
     private readonly _canMoveOn: MoveAxis
 
-    constructor(game: Game, name?: string, position?: Position, viewport?: RectangleSize, target?: GameObject) {
+    constructor(game: Game, name?: string, position?: Position, viewport?: Size, target?: GameObject) {
         this.game = game
         this._id = -1
         this._name = name || ''
@@ -66,11 +65,11 @@ export default class Camera {
         this._position = position
     }
 
-    public get viewport(): RectangleSize {
+    public get viewport(): Size {
         return this._viewport
     }
 
-    public set viewport(viewport: RectangleSize) {
+    public set viewport(viewport: Size) {
         this._viewport = viewport
     }
 

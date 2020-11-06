@@ -118,6 +118,10 @@ export default class Game {
         this.device.whenReady(this.boot, this)
     }
 
+    public get config(): GameConfig {
+        return this._config
+    }
+
     public get width(): number {
         return this._width
     }

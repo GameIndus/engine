@@ -7,7 +7,7 @@ export default class Device {
 
     private _deviceReadyAt: number
 
-    private _deviceReadyQueue: Array<[(device: Device) => void, any]>
+    private _deviceReadyQueue: Array<[(device: Device) => void, null]> // any -> null for Prettier !???
 
     private _operatingSystem: DeviceOS
 
@@ -19,7 +19,7 @@ export default class Device {
 
     private _pixelRatio: number
 
-    private _onInitialized: Signal
+    private readonly _onInitialized: Signal
 
     public constructor() {
         this._capabilities = []

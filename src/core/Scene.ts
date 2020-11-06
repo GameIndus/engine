@@ -5,7 +5,7 @@ import { Sprite, SpriteConfig } from '../gameobject/Sprite'
 import TextObject from '../gameobject/TextObject'
 import Point from '../geometry/Point'
 import Position from '../geometry/Position'
-import { RectangleSize } from '../geometry/Rectangle'
+import { Size } from '../geometry/Rectangle'
 import { ComplexShape, ShapeType } from '../geometry/Shape'
 import Color from '../math/Color'
 import Util from '../util/Util'
@@ -96,7 +96,7 @@ export default class Scene {
         return camera
     }
 
-    public createCamera(name: string, position?: Position, viewport?: RectangleSize, target?: GameObject): Camera {
+    public createCamera(name: string, position?: Position, viewport?: Size, target?: GameObject): Camera {
         const camera = new Camera(this.game, name, position, viewport, target)
         this.addCamera(camera)
         return camera
@@ -106,7 +106,7 @@ export default class Scene {
         name: string,
         shapeType?: ShapeType,
         position?: Position,
-        size?: RectangleSize | number,
+        size?: Size | number,
         color?: Color,
     ): GeometricObject {
         const geometricObject = new GeometricObject(this.game, name, shapeType, position, size, color)
@@ -119,7 +119,7 @@ export default class Scene {
         name: string,
         shape: ComplexShape,
         position?: Position,
-        size?: RectangleSize | number,
+        size?: Size | number,
         color?: Color,
     ): GeometricObject {
         const geometricObject = new GeometricObject(
@@ -169,7 +169,7 @@ export default class Scene {
         name: string,
         texture: string,
         position?: Position,
-        size?: RectangleSize | number,
+        size?: Size | number,
         config?: SpriteConfig,
     ): Sprite {
         const sprite = new Sprite(this.game, name, texture, position, size, config)

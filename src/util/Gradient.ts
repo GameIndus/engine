@@ -1,9 +1,9 @@
-import { RectangleSize } from '../geometry/Rectangle'
+import { Size } from '../geometry/Rectangle'
 import Color from '../math/Color'
 import Canvas from '../render/canvas/Canvas'
 
 export default class Gradient {
-    public static createRadialGradient(size?: RectangleSize, centerRadius?: number, ...colors: Color[]) {
+    public static createRadialGradient(size?: Size, centerRadius?: number, ...colors: Color[]): Gradient {
         const g = new Gradient(GradientType.RADIAL, size)
         g.colors = colors
         g._centerRadius = centerRadius || 5
@@ -18,11 +18,11 @@ export default class Gradient {
 
     private _type: GradientType
 
-    private _size: RectangleSize
+    private _size: Size
 
     private _colors: Color[]
 
-    public constructor(type?: GradientType, size?: RectangleSize, ...colors: Color[]) {
+    public constructor(type?: GradientType, size?: Size, ...colors: Color[]) {
         this._centerRadius = 0
         this._gradient = CanvasGradient.prototype
         this._type = type || GradientType.LINEAR
@@ -38,11 +38,11 @@ export default class Gradient {
         return this._type
     }
 
-    public get size(): RectangleSize {
+    public get size(): Size {
         return this._size
     }
 
-    public set size(size: RectangleSize) {
+    public set size(size: Size) {
         this._size = size
         this.generate()
     }

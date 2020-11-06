@@ -1,7 +1,7 @@
 import MathUtil from '../../util/Math'
 import Point from '../Point'
 import Position from '../Position'
-import { RectangleSize } from '../Rectangle'
+import { Size } from '../Rectangle'
 import { ComplexShape } from '../Shape'
 
 export default class Star implements ComplexShape {
@@ -13,7 +13,7 @@ export default class Star implements ComplexShape {
 
     private _spikes: number
 
-    private _lastSize: RectangleSize
+    private _lastSize: Size
 
     private _lastPosition?: Position
 
@@ -40,7 +40,7 @@ export default class Star implements ComplexShape {
         this._spikes = spikes
     }
 
-    public calculatePoints(position: Position, size: RectangleSize): Point[] {
+    public calculatePoints(position: Position, size: Size): Point[] {
         if (
             position.equals(this._lastPosition) &&
             size.width === this._lastSize.width &&

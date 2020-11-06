@@ -1,4 +1,4 @@
-import { RectangleSize } from '../../geometry/Rectangle'
+import { Size } from '../../geometry/Rectangle'
 
 export default class Canvas {
     protected initialized: boolean
@@ -32,7 +32,7 @@ export default class Canvas {
         return this._canvas
     }
 
-    public get size(): RectangleSize {
+    public get size(): Size {
         if (!this.element) {
             return { width: 0, height: 0 }
         }

@@ -1,7 +1,7 @@
 import Game from '../core/Game'
 import Point from '../geometry/Point'
 import Position from '../geometry/Position'
-import { RectangleSize } from '../geometry/Rectangle'
+import { Size } from '../geometry/Rectangle'
 import Vector2 from '../math/Vector2'
 import Animator from './animator/Animator'
 import Behavior from './behavior/Behavior'
@@ -27,7 +27,7 @@ export default abstract class GameObject {
 
     private _anchor: Point
 
-    private _size: RectangleSize
+    private _size: Size
 
     private _velocity: Vector2 = new Vector2()
 
@@ -110,11 +110,11 @@ export default abstract class GameObject {
         this._anchor = anchor
     }
 
-    public get size(): RectangleSize {
+    public get size(): Size {
         return this._size
     }
 
-    public set size(size: RectangleSize) {
+    public set size(size: Size) {
         this._size = size
     }
 
@@ -157,7 +157,7 @@ export default abstract class GameObject {
             )
     }
 
-    public get renderSize(): RectangleSize {
+    public get renderSize(): Size {
         return {
             height: this.size.height * this.scale,
             width: this.size.width * this.scale,

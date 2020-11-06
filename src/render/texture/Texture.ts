@@ -1,12 +1,12 @@
 import Game from '../../core/Game'
-import Rectangle, { RectangleSize } from '../../geometry/Rectangle'
+import Rectangle, { Size } from '../../geometry/Rectangle'
 import Gradient from '../../util/Gradient'
 import CanvasBuffer from '../canvas/CanvasBuffer'
 
 export default class Texture {
     private _game: Game
 
-    private _crop: Rectangle
+    private readonly _crop: Rectangle
 
     private _hasFrame: boolean
 
@@ -14,19 +14,13 @@ export default class Texture {
 
     private _buffer: CanvasBuffer
 
-    private _frame: RectangleSize
+    private readonly _frame: Size
 
     private _repeat: boolean
 
     private _valid = false
 
-    public constructor(
-        game: Game,
-        sourceName: string | null,
-        frame?: RectangleSize,
-        crop?: Rectangle,
-        repeat?: boolean,
-    ) {
+    public constructor(game: Game, sourceName: string | null, frame?: Size, crop?: Rectangle, repeat?: boolean) {
         this._game = game
 
         this._source =
@@ -65,7 +59,7 @@ export default class Texture {
         return this._buffer
     }
 
-    public get frame(): RectangleSize {
+    public get frame(): Size {
         return this._frame
     }
 

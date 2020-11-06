@@ -1,5 +1,5 @@
 import Game from '../../core/Game'
-import { RectangleSize } from '../../geometry/Rectangle'
+import { Size } from '../../geometry/Rectangle'
 import { Easing } from '../../tween/Easing'
 import Tween from '../../tween/Tween'
 import GameObject from '../GameObject'
@@ -59,7 +59,7 @@ export default class Animator {
     }
 
     public size(
-        sizeTo: RectangleSize,
+        sizeTo: Size,
         duration: number,
         easing?: Easing,
         delay?: number,

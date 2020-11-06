@@ -1,6 +1,6 @@
 import Position from '../geometry/Position'
 import Point from './Point'
-import { RectangleSize } from './Rectangle'
+import { Size } from './Rectangle'
 
 export default interface Shape {
     points: Point[]
@@ -9,7 +9,7 @@ export default interface Shape {
 export interface ComplexShape {
     points: Point[]
 
-    calculatePoints(position: Position, size: RectangleSize): Point[]
+    calculatePoints(position: Position, size: Size): Point[]
 }
 
 export enum ShapeType {
