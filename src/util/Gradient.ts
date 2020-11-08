@@ -1,6 +1,6 @@
 import { Size } from '../geometry/Rectangle'
 import Color from '../math/Color'
-import Canvas from '../render/canvas/Canvas'
+import Canvas from '../renderer/canvas/Canvas'
 
 export default class Gradient {
     public static createRadialGradient(size?: Size, centerRadius?: number, ...colors: Color[]): Gradient {

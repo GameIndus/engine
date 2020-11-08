@@ -5,8 +5,8 @@ import Rectangle from '../geometry/Rectangle'
 import { ComplexShape } from '../geometry/Shape'
 import Triangle from '../geometry/Triangle'
 import Color from '../math/Color'
-import Canvas from '../render/canvas/Canvas'
-import Texture from '../render/texture/Texture'
+import Canvas from '../renderer/canvas/Canvas'
+import Texture from '../renderer/texture/Texture'
 
 export default class Graphics {
     private canvas: Canvas

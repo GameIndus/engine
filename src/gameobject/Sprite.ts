@@ -1,7 +1,7 @@
 import Game from '../core/Game'
 import Position from '../geometry/Position'
 import Rectangle from '../geometry/Rectangle'
-import Texture from '../render/texture/Texture'
+import Texture from '../renderer/texture/Texture'
 import SpriteAnimation from './animator/SpriteAnimation'
 import GameObject from './GameObject'
 
